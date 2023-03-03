@@ -55,7 +55,6 @@ tasks:
 
   bob-generate:
     desc: run bob code generation
-    env:
-      PSQL_DSN: "postgres://mixer_usr:mixer_passs@localhost:5432/mixer"
+    dir: mixerserver
     cmds:
     - go run github.com/stephenafamo/bob/gen/bobgen-psql@latest

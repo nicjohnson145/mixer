@@ -1,0 +1,4 @@
+psql:
+  dsn: "postgres://mixer_usr:mixer_pass@localhost:5432/mixer?sslmode=disable"
+  output: internal/storage/models
+  wipe: true
