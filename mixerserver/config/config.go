@@ -1,0 +1,32 @@
+package config
+
+import (
+	"strings"
+
+	"github.com/spf13/viper"
+)
+
+const (
+	Debug = "debug"
+
+	DatabaseHost     = "database.host"
+	DatabasePort     = "database.port"
+	DatabaseUsername = "database.username"
+	DatabasePassword = "database.password"
+	DatabaseName     = "database.name"
+)
+
+func InitializeConfig() error {
+	viper.SetDefault(Debug, false)
+
+	viper.SetDefault(DatabaseName, "mixer")
+	viper.SetDefault(DatabaseHost, "localhost")
+	viper.SetDefault(DatabasePort, 5432)
+	viper.SetDefault(DatabaseUsername, "mixer_usr")
+	viper.SetDefault(DatabasePassword, "mixer_pass")
+
+	viper.AutomaticEnv()
+	viper.SetEnvKeyReplacer(strings.NewReplacer("-", "_"))
+
+	return nil
+}
