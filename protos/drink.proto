@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package mixer;
+
+option go_package = "github.com/nicjohnson145/mixer/mixerservice/protos";
+
+enum DrinkPublicity {
+  DrinkPublicity_Unspecified = 0;
+  DrinkPublicity_Public = 1;
+  DrinkPublicity_Private = 2;
+}
+
+message DrinkData {
+  string name = 1;
+  string primary_alcohol = 2;
+  string preferred_glass = 3;
+  repeated string ingredients = 4;
+  string instructions = 5;
+  string notes = 6;
+  DrinkPublicity publicity = 7;
+  bool under_development = 8;
+  repeated string tags = 9;
+  bool favorite = 10;
+}
+
+message Drink {
+  int64 id = 1;
+  string username = 2;
+  DrinkData drink_data = 3;
+}
+
+message CreateDrinkRequest {
+  DrinkData drink_data = 1;
+}
+
+message CreateDrinkResponse {
+  int64 id = 1;
+}
+
+message CopyDrinkResponse {
+  int64 id = 1;
+}
+
+message DeleteDrinkResponse {
+
+}
+
+message UpdateDrinkRequest {
+  DrinkData drink_data = 1;
+}
+
+message UpdateDrinkResponse {
+
+}
+
+message GetDrinksByUserResponse {
+  repeated Drink drinks = 1;
+}

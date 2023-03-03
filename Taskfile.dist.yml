@@ -1,0 +1,18 @@
+version: '3'
+
+tasks:
+  gen-go-protos:
+    desc: generate go protobuf bits
+    cmds:
+    - protoc -I./protos/ --go_out=mixerserver/protos/ --go_opt=paths=source_relative --go-grpc_out=mixerserver/protos/ --go-grpc_opt=paths=source_relative protos/*.proto
+
+  gen-dart-protos:
+    desc: generate dart protobuf bits
+    cmds:
+    - protoc -I./protos/ --dart_out=mixer/lib/protos protos/*.proto
+
+  protos:
+    desc: generate protobuf bits
+    cmds:
+    - task: gen-go-protos
+    - task: gen-dart-protos

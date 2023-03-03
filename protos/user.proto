@@ -1,0 +1,69 @@
+syntax = "proto3";
+
+package mixer;
+
+option go_package = "github.com/nicjohnson145/mixer/mixerservice/protos";
+
+message UserSettings {
+  bool public_profile = 1;
+}
+
+enum TokenType {
+  TokenType_Unspecified = 0;
+  TokenType_Refresh = 1;
+  TokenType_Access = 2;
+}
+
+message Claims {
+  string username = 1;
+  TokenType token_type = 2;
+}
+
+message RegisterNewUserRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message RegisterNewUserResponse {
+
+}
+
+message ChangePasswordRequest {
+  string new_password = 1;
+}
+
+message ChangePasswordResponse {
+
+}
+
+message LoginRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  string username = 1;
+  string access_token = 2;
+  string refresh_token = 3;
+}
+
+message GetPublicUsersResponse {
+  repeated string users = 1;
+}
+
+message RefreshTokenResponse {
+  string access_token = 1;
+  string refresh_token = 2;
+}
+
+message WriteSettingsRequest {
+  UserSettings user_settings = 1;
+}
+
+message WriteSettingsResponse {
+
+}
+
+message ReadSettingsResponse {
+  UserSettings user_settings = 1;
+}
