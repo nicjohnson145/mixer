@@ -3,20 +3,21 @@ package config
 import (
 	"strings"
 
+	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
 const (
 	Debug = "debug"
 
-	DatabaseHost     = "database.host"
-	DatabasePort     = "database.port"
-	DatabaseUsername = "database.username"
-	DatabasePassword = "database.password"
-	DatabaseName     = "database.name"
+	DatabaseHost     = "database-host"
+	DatabasePort     = "database-port"
+	DatabaseUsername = "database-username"
+	DatabasePassword = "database-password"
+	DatabaseName     = "database-name"
 )
 
-func InitializeConfig() error {
+func InitializeConfig(cmd *cobra.Command) error {
 	viper.SetDefault(Debug, false)
 
 	viper.SetDefault(DatabaseName, "mixer")
@@ -27,6 +28,7 @@ func InitializeConfig() error {
 
 	viper.AutomaticEnv()
 	viper.SetEnvKeyReplacer(strings.NewReplacer("-", "_"))
+	viper.BindPFlags(cmd.Flags())
 
 	return nil
 }

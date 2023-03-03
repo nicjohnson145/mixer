@@ -15,7 +15,7 @@ func Root() *cobra.Command {
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 			cmd.SilenceUsage = true
 			cmd.SilenceErrors = true
-			return config.InitializeConfig()
+			return config.InitializeConfig(cmd)
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
 			for {
@@ -25,6 +25,10 @@ func Root() *cobra.Command {
 			return nil
 		},
 	}
+
+	root.AddCommand(
+		Migrate(),
+	)
 
 	return root
 }
