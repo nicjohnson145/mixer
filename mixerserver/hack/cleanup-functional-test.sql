@@ -1,0 +1,9 @@
+BEGIN;
+
+DELETE FROM drink;
+DELETE FROM usr_setting;
+DELETE FROM usr;
+
+ALTER SEQUENCE drink_id_seq RESTART;
+
+COMMIT;

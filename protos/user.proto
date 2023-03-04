@@ -4,6 +4,8 @@ package mixer;
 
 option go_package = "github.com/nicjohnson145/mixer/mixerservice/protos";
 
+import "google/api/annotations.proto";
+
 message UserSettings {
   bool public_profile = 1;
 }
@@ -66,4 +68,14 @@ message WriteSettingsResponse {
 
 message ReadSettingsResponse {
   UserSettings user_settings = 1;
+}
+
+
+service UserService {
+  rpc RegisterNewUser(RegisterNewUserRequest) returns (RegisterNewUserResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/auth/register-user"
+      body: "*"
+    };
+  };
 }

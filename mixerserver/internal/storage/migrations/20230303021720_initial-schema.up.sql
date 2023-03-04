@@ -9,7 +9,8 @@ CREATE TABLE usr_setting (
     username TEXT NOT NULL,
     key TEXT NOT NULL,
     value TEXT NOT NULL,
-    PRIMARY KEY(username, key)
+    PRIMARY KEY(username, key),
+    FOREIGN KEY (username) REFERENCES usr(username) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE drink (

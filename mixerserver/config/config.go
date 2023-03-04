@@ -8,7 +8,9 @@ import (
 )
 
 const (
-	Port = "port"
+	GatewayPort = "gateway.port"
+	GRPCPort    = "grpc.port"
+
 	Debug = "debug"
 
 	DatabaseHost     = "database-host"
@@ -19,7 +21,8 @@ const (
 )
 
 func InitializeConfig(cmd *cobra.Command) error {
-	viper.SetDefault(Port, 8080)
+	viper.SetDefault(GatewayPort, 8080)
+	viper.SetDefault(GRPCPort, 50051)
 
 	viper.SetDefault(Debug, false)
 
