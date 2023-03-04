@@ -5,6 +5,7 @@
 // @dart = 2.12
 // ignore_for_file: annotate_overrides,camel_case_types,constant_identifier_names,directives_ordering,library_prefixes,non_constant_identifier_names,prefer_final_fields,return_of_invalid_type,unnecessary_const,unnecessary_import,unnecessary_this,unused_import,unused_shown_name
 
+import 'dart:async' as $async;
 import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
@@ -650,5 +651,15 @@ class ReadSettingsResponse extends $pb.GeneratedMessage {
   void clearUserSettings() => clearField(1);
   @$pb.TagNumber(1)
   UserSettings ensureUserSettings() => $_ensure(0);
+}
+
+class UserServiceApi {
+  $pb.RpcClient _client;
+  UserServiceApi(this._client);
+
+  $async.Future<RegisterNewUserResponse> registerNewUser($pb.ClientContext? ctx, RegisterNewUserRequest request) {
+    var emptyResponse = RegisterNewUserResponse();
+    return _client.invoke<RegisterNewUserResponse>(ctx, 'UserService', 'RegisterNewUser', request, emptyResponse);
+  }
 }
 

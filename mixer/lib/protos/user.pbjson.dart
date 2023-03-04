@@ -147,3 +147,18 @@ const ReadSettingsResponse$json = const {
 
 /// Descriptor for `ReadSettingsResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List readSettingsResponseDescriptor = $convert.base64Decode('ChRSZWFkU2V0dGluZ3NSZXNwb25zZRI4Cg11c2VyX3NldHRpbmdzGAEgASgLMhMubWl4ZXIuVXNlclNldHRpbmdzUgx1c2VyU2V0dGluZ3M=');
+const $core.Map<$core.String, $core.dynamic> UserServiceBase$json = const {
+  '1': 'UserService',
+  '2': const [
+    const {'1': 'RegisterNewUser', '2': '.mixer.RegisterNewUserRequest', '3': '.mixer.RegisterNewUserResponse', '4': const {}},
+  ],
+};
+
+@$core.Deprecated('Use userServiceDescriptor instead')
+const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> UserServiceBase$messageJson = const {
+  '.mixer.RegisterNewUserRequest': RegisterNewUserRequest$json,
+  '.mixer.RegisterNewUserResponse': RegisterNewUserResponse$json,
+};
+
+/// Descriptor for `UserService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
+final $typed_data.Uint8List userServiceDescriptor = $convert.base64Decode('CgtVc2VyU2VydmljZRJ3Cg9SZWdpc3Rlck5ld1VzZXISHS5taXhlci5SZWdpc3Rlck5ld1VzZXJSZXF1ZXN0Gh4ubWl4ZXIuUmVnaXN0ZXJOZXdVc2VyUmVzcG9uc2UiJYLT5JMCHyIaL2FwaS92MS9hdXRoL3JlZ2lzdGVyLXVzZXI6ASo=');

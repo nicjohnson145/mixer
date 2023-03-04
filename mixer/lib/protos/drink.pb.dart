@@ -5,6 +5,7 @@
 // @dart = 2.12
 // ignore_for_file: annotate_overrides,camel_case_types,constant_identifier_names,directives_ordering,library_prefixes,non_constant_identifier_names,prefer_final_fields,return_of_invalid_type,unnecessary_const,unnecessary_import,unnecessary_this,unused_import,unused_shown_name
 
+import 'dart:async' as $async;
 import 'dart:core' as $core;
 
 import 'package:fixnum/fixnum.dart' as $fixnum;
@@ -348,6 +349,102 @@ class CreateDrinkResponse extends $pb.GeneratedMessage {
   void clearId() => clearField(1);
 }
 
+class GetDrinkRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetDrinkRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'mixer'), createEmptyInstance: create)
+    ..aInt64(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
+    ..hasRequiredFields = false
+  ;
+
+  GetDrinkRequest._() : super();
+  factory GetDrinkRequest({
+    $fixnum.Int64? id,
+  }) {
+    final _result = create();
+    if (id != null) {
+      _result.id = id;
+    }
+    return _result;
+  }
+  factory GetDrinkRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetDrinkRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetDrinkRequest clone() => GetDrinkRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetDrinkRequest copyWith(void Function(GetDrinkRequest) updates) => super.copyWith((message) => updates(message as GetDrinkRequest)) as GetDrinkRequest; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static GetDrinkRequest create() => GetDrinkRequest._();
+  GetDrinkRequest createEmptyInstance() => create();
+  static $pb.PbList<GetDrinkRequest> createRepeated() => $pb.PbList<GetDrinkRequest>();
+  @$core.pragma('dart2js:noInline')
+  static GetDrinkRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetDrinkRequest>(create);
+  static GetDrinkRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $fixnum.Int64 get id => $_getI64(0);
+  @$pb.TagNumber(1)
+  set id($fixnum.Int64 v) { $_setInt64(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+}
+
+class GetDrinkResponse extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetDrinkResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'mixer'), createEmptyInstance: create)
+    ..aOM<Drink>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'drink', subBuilder: Drink.create)
+    ..hasRequiredFields = false
+  ;
+
+  GetDrinkResponse._() : super();
+  factory GetDrinkResponse({
+    Drink? drink,
+  }) {
+    final _result = create();
+    if (drink != null) {
+      _result.drink = drink;
+    }
+    return _result;
+  }
+  factory GetDrinkResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetDrinkResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetDrinkResponse clone() => GetDrinkResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetDrinkResponse copyWith(void Function(GetDrinkResponse) updates) => super.copyWith((message) => updates(message as GetDrinkResponse)) as GetDrinkResponse; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static GetDrinkResponse create() => GetDrinkResponse._();
+  GetDrinkResponse createEmptyInstance() => create();
+  static $pb.PbList<GetDrinkResponse> createRepeated() => $pb.PbList<GetDrinkResponse>();
+  @$core.pragma('dart2js:noInline')
+  static GetDrinkResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetDrinkResponse>(create);
+  static GetDrinkResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  Drink get drink => $_getN(0);
+  @$pb.TagNumber(1)
+  set drink(Drink v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasDrink() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearDrink() => clearField(1);
+  @$pb.TagNumber(1)
+  Drink ensureDrink() => $_ensure(0);
+}
+
 class CopyDrinkResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'CopyDrinkResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'mixer'), createEmptyInstance: create)
     ..aInt64(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
@@ -541,5 +638,19 @@ class GetDrinksByUserResponse extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.List<Drink> get drinks => $_getList(0);
+}
+
+class DrinkServiceApi {
+  $pb.RpcClient _client;
+  DrinkServiceApi(this._client);
+
+  $async.Future<CreateDrinkResponse> create_($pb.ClientContext? ctx, CreateDrinkRequest request) {
+    var emptyResponse = CreateDrinkResponse();
+    return _client.invoke<CreateDrinkResponse>(ctx, 'DrinkService', 'Create', request, emptyResponse);
+  }
+  $async.Future<GetDrinkResponse> read($pb.ClientContext? ctx, GetDrinkRequest request) {
+    var emptyResponse = GetDrinkResponse();
+    return _client.invoke<GetDrinkResponse>(ctx, 'DrinkService', 'Read', request, emptyResponse);
+  }
 }
 
