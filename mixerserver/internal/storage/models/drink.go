@@ -10,6 +10,8 @@ import (
 	"fmt"
 
 	"github.com/aarondl/opt/null"
+	"github.com/aarondl/opt/omit"
+	"github.com/aarondl/opt/omitnull"
 	"github.com/stephenafamo/bob"
 	"github.com/stephenafamo/bob/dialect/psql"
 	"github.com/stephenafamo/bob/dialect/psql/dialect"
@@ -19,7 +21,7 @@ import (
 
 // Drink is an object representing the database table.
 type Drink struct {
-	ID               int              `db:"id" json:"id" toml:"id" yaml:"id"`
+	ID               int              `db:"id,pk" json:"id" toml:"id" yaml:"id"`
 	Name             string           `db:"name" json:"name" toml:"name" yaml:"name"`
 	Username         string           `db:"username" json:"username" toml:"username" yaml:"username"`
 	PrimaryAlcohol   string           `db:"primary_alcohol" json:"primary_alcohol" toml:"primary_alcohol" yaml:"primary_alcohol"`
@@ -39,11 +41,11 @@ type Drink struct {
 // This should almost always be used instead of []Drink.
 type DrinkSlice []*Drink
 
-// DrinksView contains methods to work with the drink view
-var DrinksView = psql.NewViewx[*Drink, DrinkSlice]("", "drink")
+// DrinksTable contains methods to work with the drink table
+var DrinksTable = psql.NewTablex[*Drink, DrinkSlice, *DrinkSetter]("", "drink")
 
-// DrinksQuery is a query on the drink view
-type DrinksQuery = *psql.ViewQuery[*Drink, DrinkSlice]
+// DrinksQuery is a query on the drink table
+type DrinksQuery = *psql.TableQuery[*Drink, DrinkSlice, *DrinkSetter]
 
 // DrinksStmt is a prepared statment on drink
 type DrinksStmt = bob.QueryStmt[*Drink, DrinkSlice]
@@ -51,6 +53,24 @@ type DrinksStmt = bob.QueryStmt[*Drink, DrinkSlice]
 // drinkR is where relationships are stored.
 type drinkR struct {
 	UsernameUsr *Usr `db:"UsernameUsr" json:"UsernameUsr" toml:"UsernameUsr" yaml:"UsernameUsr"`
+}
+
+// DrinkSetter is used for insert/upsert/update operations
+// All values are optional, and do not have to be set
+// Generated columns are not included
+type DrinkSetter struct {
+	ID               omit.Val[int]        `db:"id,pk"`
+	Name             omit.Val[string]     `db:"name"`
+	Username         omit.Val[string]     `db:"username"`
+	PrimaryAlcohol   omit.Val[string]     `db:"primary_alcohol"`
+	PreferredGlass   omitnull.Val[string] `db:"preferred_glass"`
+	Ingredients      omit.Val[string]     `db:"ingredients"`
+	Instructions     omitnull.Val[string] `db:"instructions"`
+	Notes            omitnull.Val[string] `db:"notes"`
+	Publicity        omit.Val[int]        `db:"publicity"`
+	UnderDevelopment omit.Val[bool]       `db:"under_development"`
+	Tags             omitnull.Val[string] `db:"tags"`
+	Favorite         omit.Val[bool]       `db:"favorite"`
 }
 
 type drinkColumnNames struct {
@@ -130,7 +150,103 @@ func DrinkWhere[Q psql.Filterable]() drinkWhere[Q] {
 
 // Drinks begins a query on drink
 func Drinks(ctx context.Context, exec bob.Executor, mods ...bob.Mod[*dialect.SelectQuery]) DrinksQuery {
-	return DrinksView.Query(ctx, exec, mods...)
+	return DrinksTable.Query(ctx, exec, mods...)
+}
+
+// FindDrink retrieves a single record by primary key
+// If cols is empty Find will return all columns.
+func FindDrink(ctx context.Context, exec bob.Executor, IDPK int, cols ...string) (*Drink, error) {
+	if len(cols) == 0 {
+		return DrinksTable.Query(
+			ctx, exec,
+			SelectWhere.Drinks.ID.EQ(IDPK),
+		).One()
+	}
+
+	return DrinksTable.Query(
+		ctx, exec,
+		SelectWhere.Drinks.ID.EQ(IDPK),
+		sm.Columns(DrinksTable.Columns().Only(cols...)),
+	).One()
+}
+
+// DrinkExists checks the presence of a single record by primary key
+func DrinkExists(ctx context.Context, exec bob.Executor, IDPK int) (bool, error) {
+	return DrinksTable.Query(
+		ctx, exec,
+		SelectWhere.Drinks.ID.EQ(IDPK),
+	).Exists()
+}
+
+// Update uses an executor to update the Drink
+func (o *Drink) Update(ctx context.Context, exec bob.Executor, cols ...string) (int64, error) {
+	rowsAff, err := DrinksTable.Update(ctx, exec, o, cols...)
+	if err != nil {
+		return rowsAff, err
+	}
+
+	return rowsAff, nil
+}
+
+// Delete deletes a single Drink record with an executor
+func (o *Drink) Delete(ctx context.Context, exec bob.Executor) (int64, error) {
+	return DrinksTable.Delete(ctx, exec, o)
+}
+
+// Reload refreshes the Drink using the executor
+func (o *Drink) Reload(ctx context.Context, exec bob.Executor) error {
+	o2, err := DrinksTable.Query(
+		ctx, exec,
+		SelectWhere.Drinks.ID.EQ(o.ID),
+	).One()
+	if err != nil {
+		return err
+	}
+	o2.R = o.R
+	*o = *o2
+
+	return nil
+}
+
+func (o DrinkSlice) DeleteAll(ctx context.Context, exec bob.Executor) (int64, error) {
+	return DrinksTable.DeleteMany(ctx, exec, o...)
+}
+
+func (o DrinkSlice) UpdateAll(ctx context.Context, exec bob.Executor, vals DrinkSetter) (int64, error) {
+	rowsAff, err := DrinksTable.UpdateMany(ctx, exec, &vals, o...)
+	if err != nil {
+		return rowsAff, err
+	}
+
+	return rowsAff, nil
+}
+
+func (o DrinkSlice) ReloadAll(ctx context.Context, exec bob.Executor) error {
+	var mods []bob.Mod[*dialect.SelectQuery]
+
+	IDPK := make([]any, len(o))
+	for i, o := range o {
+		IDPK[i] = o.ID
+	}
+	mods = append(mods, sm.Where(DrinkColumns.ID.In(IDPK...)))
+
+	o2, err := Drinks(ctx, exec, mods...).All()
+	if err != nil {
+		return err
+	}
+
+	for _, old := range o {
+		for _, new := range o2 {
+			if new.ID != old.ID {
+				continue
+			}
+			new.R = old.R
+			*old = *new
+			break
+		}
+	}
+
+	return nil
 }
 
 // UsernameUsr starts a query for related objects on usr

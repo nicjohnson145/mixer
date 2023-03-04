@@ -5,10 +5,10 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/stephenafamo/bob"
 	"github.com/aarondl/opt/omit"
-
 	"github.com/nicjohnson145/mixer/mixerserver/internal/storage/models"
+	"github.com/stephenafamo/bob"
+
 	"github.com/rs/zerolog"
 )
 

@@ -13,7 +13,7 @@ CREATE TABLE usr_setting (
 );
 
 CREATE TABLE drink (
-    id SERIAL,
+    id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
     username TEXT NOT NULL,
     primary_alcohol TEXT NOT NULL,

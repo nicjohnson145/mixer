@@ -4,9 +4,14 @@
 package factory
 
 import (
+	"context"
+
 	"github.com/aarondl/opt/null"
+	"github.com/aarondl/opt/omit"
+	"github.com/aarondl/opt/omitnull"
 	"github.com/jaswdr/faker"
 	models "github.com/nicjohnson145/mixer/mixerserver/internal/storage/models"
+	"github.com/stephenafamo/bob"
 )
 
 type DrinkMod interface {
@@ -130,6 +135,63 @@ func (t DrinkTemplate) setModelRels(o *models.Drink) {
 
 }
 
+// BuildSetter returns an *models.DrinkSetter
+// this does nothing with the relationship templates
+func (o DrinkTemplate) BuildSetter() *models.DrinkSetter {
+	m := &models.DrinkSetter{}
+
+	if o.ID != nil {
+		m.ID = omit.From(o.ID())
+	}
+	if o.Name != nil {
+		m.Name = omit.From(o.Name())
+	}
+	if o.Username != nil {
+		m.Username = omit.From(o.Username())
+	}
+	if o.PrimaryAlcohol != nil {
+		m.PrimaryAlcohol = omit.From(o.PrimaryAlcohol())
+	}
+	if o.PreferredGlass != nil {
+		m.PreferredGlass = omitnull.FromNull(o.PreferredGlass())
+	}
+	if o.Ingredients != nil {
+		m.Ingredients = omit.From(o.Ingredients())
+	}
+	if o.Instructions != nil {
+		m.Instructions = omitnull.FromNull(o.Instructions())
+	}
+	if o.Notes != nil {
+		m.Notes = omitnull.FromNull(o.Notes())
+	}
+	if o.Publicity != nil {
+		m.Publicity = omit.From(o.Publicity())
+	}
+	if o.UnderDevelopment != nil {
+		m.UnderDevelopment = omit.From(o.UnderDevelopment())
+	}
+	if o.Tags != nil {
+		m.Tags = omitnull.FromNull(o.Tags())
+	}
+	if o.Favorite != nil {
+		m.Favorite = omit.From(o.Favorite())
+	}
+
+	return m
+}
+
+// BuildManySetter returns an []*models.DrinkSetter
+// this does nothing with the relationship templates
+func (o DrinkTemplate) BuildManySetter(number int) []*models.DrinkSetter {
+	m := make([]*models.DrinkSetter, number)
+
+	for i := range m {
+		m[i] = o.BuildSetter()
+	}
+
+	return m
+}
+
 // Build returns an *models.Drink
 // Related objects are also created and placed in the .R field
 // NOTE: Objects are not inserted into the database. Use DrinkTemplate.Create
@@ -151,6 +213,106 @@ func (o DrinkTemplate) BuildMany(number int) models.DrinkSlice {
 	}
 
 	return m
+}
+
+func ensureCreatableDrink(m *models.DrinkSetter) {
+	if m.Name.IsUnset() {
+		m.Name = omit.From(random[string](nil))
+	}
+	if m.Username.IsUnset() {
+		m.Username = omit.From(random[string](nil))
+	}
+	if m.PrimaryAlcohol.IsUnset() {
+		m.PrimaryAlcohol = omit.From(random[string](nil))
+	}
+	if m.Ingredients.IsUnset() {
+		m.Ingredients = omit.From(random[string](nil))
+	}
+	if m.Publicity.IsUnset() {
+		m.Publicity = omit.From(random[int](nil))
+	}
+	if m.UnderDevelopment.IsUnset() {
+		m.UnderDevelopment = omit.From(random[bool](nil))
+	}
+	if m.Favorite.IsUnset() {
+		m.Favorite = omit.From(random[bool](nil))
+	}
+}
+
+// insertOptRels creates and inserts any optional the relationships on *models.Drink
+// according to the relationships in the template.
+// any required relationship should have already exist on the model
+func (o *DrinkTemplate) insertOptRels(ctx context.Context, exec bob.Executor, m *models.Drink) (context.Context, error) {
+	var err error
+
+	return ctx, err
+}
+
+// Create builds a drink and inserts it into the database
+// Relations objects are also inserted and placed in the .R field
+func (o *DrinkTemplate) Create(ctx context.Context, exec bob.Executor) (*models.Drink, error) {
+	_, m, err := o.create(ctx, exec)
+	return m, err
+}
+
+// create builds a drink and inserts it into the database
+// Relations objects are also inserted and placed in the .R field
+// this returns a context that includes the newly inserted model
+func (o *DrinkTemplate) create(ctx context.Context, exec bob.Executor) (context.Context, *models.Drink, error) {
+	var err error
+	opt := o.BuildSetter()
+	ensureCreatableDrink(opt)
+
+	var rel0 *models.Usr
+	if o.r.UsernameUsr == nil {
+		var ok bool
+		rel0, ok = usrCtx.Value(ctx)
+		if !ok {
+			DrinkMods.WithNewUsernameUsr().Apply(o)
+		}
+	}
+	if o.r.UsernameUsr != nil {
+		ctx, rel0, err = o.r.UsernameUsr.o.create(ctx, exec)
+		if err != nil {
+			return ctx, nil, err
+		}
+	}
+	opt.Username = omit.From(rel0.Username)
+
+	m, err := models.DrinksTable.Insert(ctx, exec, opt)
+	if err != nil {
+		return ctx, nil, err
+	}
+	ctx = drinkCtx.WithValue(ctx, m)
+
+	m.R.UsernameUsr = rel0
+
+	ctx, err = o.insertOptRels(ctx, exec, m)
+	return ctx, m, err
+}
+
+// CreateMany builds multiple drinks and inserts them into the database
+// Relations objects are also inserted and placed in the .R field
+func (o DrinkTemplate) CreateMany(ctx context.Context, exec bob.Executor, number int) (models.DrinkSlice, error) {
+	_, m, err := o.createMany(ctx, exec, number)
+	return m, err
+}
+
+// createMany builds multiple drinks and inserts them into the database
+// Relations objects are also inserted and placed in the .R field
+// this returns a context that includes the newly inserted models
+func (o DrinkTemplate) createMany(ctx context.Context, exec bob.Executor, number int) (context.Context, models.DrinkSlice, error) {
+	var err error
+	m := make(models.DrinkSlice, number)
+
+	for i := range m {
+		ctx, m[i], err = o.create(ctx, exec)
+		if err != nil {
+			return ctx, nil, err
+		}
+	}
+
+	return ctx, m, nil
 }
 
 // Drink has methods that act as mods for the DrinkTemplate

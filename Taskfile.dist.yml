@@ -58,3 +58,10 @@ tasks:
     dir: mixerserver
     cmds:
     - go run github.com/stephenafamo/bob/gen/bobgen-psql@latest
+
+  local:
+    desc: run mixer locally
+    dir: mixerserver
+    cmds:
+    - task: build-server-binary
+    - ./mixerserver
