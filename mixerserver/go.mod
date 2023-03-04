@@ -4,12 +4,14 @@ go 1.20
 
 require (
 	github.com/aarondl/opt v0.0.0-20230114172057-b91f370c41f0
+	github.com/go-chi/chi/v5 v5.0.8
 	github.com/golang-migrate/migrate/v4 v4.15.2
 	github.com/jaswdr/faker v1.16.0
 	github.com/rs/zerolog v1.29.0
 	github.com/spf13/cobra v1.6.1
 	github.com/spf13/viper v1.15.0
 	github.com/stephenafamo/bob v0.15.6
+	golang.org/x/crypto v0.1.0
 	google.golang.org/protobuf v1.28.1
 )
 

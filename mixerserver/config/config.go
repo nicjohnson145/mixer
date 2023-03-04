@@ -8,6 +8,7 @@ import (
 )
 
 const (
+	Port = "port"
 	Debug = "debug"
 
 	DatabaseHost     = "database-host"
@@ -18,6 +19,8 @@ const (
 )
 
 func InitializeConfig(cmd *cobra.Command) error {
+	viper.SetDefault(Port, 8080)
+
 	viper.SetDefault(Debug, false)
 
 	viper.SetDefault(DatabaseName, "mixer")

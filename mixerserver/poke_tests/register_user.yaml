@@ -1,0 +1,7 @@
+calls:
+- name: create-user
+  url: http://localhost:8080/api/v1/auth/register-user
+  method: POST
+  body:
+    username: foo
+    password: foopass
