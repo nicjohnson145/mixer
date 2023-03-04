@@ -5,12 +5,16 @@ package models
 
 import (
 	"context"
+	"database/sql"
+	"errors"
+	"fmt"
 
 	"github.com/aarondl/opt/omit"
 	"github.com/stephenafamo/bob"
 	"github.com/stephenafamo/bob/dialect/psql"
 	"github.com/stephenafamo/bob/dialect/psql/dialect"
 	"github.com/stephenafamo/bob/dialect/psql/sm"
+	"github.com/stephenafamo/bob/orm"
 )
 
 // UsrSetting is an object representing the database table.
@@ -18,6 +22,8 @@ type UsrSetting struct {
 	Username string `db:"username,pk" json:"username" toml:"username" yaml:"username"`
 	Key      string `db:"key,pk" json:"key" toml:"key" yaml:"key"`
 	Value    string `db:"value" json:"value" toml:"value" yaml:"value"`
+
+	R usrSettingR `db:"-" json:"-" toml:"-" yaml:"-"`
 }
 
 // UsrSettingSlice is an alias for a slice of pointers to UsrSetting.
@@ -32,6 +38,11 @@ type UsrSettingsQuery = *psql.TableQuery[*UsrSetting, UsrSettingSlice, *UsrSetti
 
 // UsrSettingsStmt is a prepared statment on usr_setting
 type UsrSettingsStmt = bob.QueryStmt[*UsrSetting, UsrSettingSlice]
+
+// usrSettingR is where relationships are stored.
+type usrSettingR struct {
+	UsernameUsr *Usr `db:"UsernameUsr" json:"UsernameUsr" toml:"UsernameUsr" yaml:"UsernameUsr"`
+}
 
 // UsrSettingSetter is used for insert/upsert/update operations
 // All values are optional, and do not have to be set
@@ -130,7 +141,7 @@ func (o *UsrSetting) Reload(ctx context.Context, exec bob.Executor) error {
 	if err != nil {
 		return err
 	}
-
+	o2.R = o.R
 	*o = *o2
 
 	return nil
@@ -177,11 +188,158 @@ func (o UsrSettingSlice) ReloadAll(ctx context.Context, exec bob.Executor) error
 			if new.Username != old.Username {
 				continue
 			}
-
+			new.R = old.R
 			*old = *new
 			break
 		}
 	}
+
+	return nil
+}
+
+// UsernameUsr starts a query for related objects on usr
+func (o *UsrSetting) UsernameUsr(ctx context.Context, exec bob.Executor, mods ...bob.Mod[*dialect.SelectQuery]) UsrsQuery {
+	return Usrs(ctx, exec, append(mods,
+		sm.Where(UsrColumns.Username.EQ(psql.Arg(o.Username))),
+	)...)
+}
+
+func (os UsrSettingSlice) UsernameUsr(ctx context.Context, exec bob.Executor, mods ...bob.Mod[*dialect.SelectQuery]) UsrsQuery {
+	PKArgs := make([]any, 0, len(os))
+	for _, o := range os {
+		PKArgs = append(PKArgs, psql.ArgGroup(o.Username))
+	}
+
+	return Usrs(ctx, exec, append(mods,
+		sm.Where(psql.Group(UsrColumns.Username).In(PKArgs...)),
+	)...)
+}
+
+func (o *UsrSetting) Preload(name string, retrieved any) error {
+	if o == nil {
+		return nil
+	}
+
+	switch name {
+	case "UsernameUsr":
+		rel, ok := retrieved.(*Usr)
+		if !ok {
+			return fmt.Errorf("usrSetting cannot load %T as %q", retrieved, name)
+		}
+
+		o.R.UsernameUsr = rel
+
+		if rel != nil {
+			rel.R.UsernameUsrSettings = UsrSettingSlice{o}
+		}
+		return nil
+	default:
+		return fmt.Errorf("usrSetting has no relationship %q", name)
+	}
+}
+
+func PreloadUsrSettingUsernameUsr(opts ...psql.PreloadOption) psql.Preloader {
+	return psql.Preload[*Usr, UsrSlice](orm.Relationship{
+		Name: "UsernameUsr",
+		Sides: []orm.RelSide{
+			{
+				From:   "usr_setting",
+				To:     TableNames.Usrs,
+				ToExpr: UsrsTable.Name,
+				FromColumns: []string{
+					ColumnNames.UsrSettings.Username,
+				},
+				ToColumns: []string{
+					ColumnNames.Usrs.Username,
+				},
+			},
+		},
+	}, UsrsTable.Columns().Names(), opts...)
+}
+
+func ThenLoadUsrSettingUsernameUsr(queryMods ...bob.Mod[*dialect.SelectQuery]) psql.Loader {
+	return psql.Loader(func(ctx context.Context, exec bob.Executor, retrieved any) error {
+		loader, isLoader := retrieved.(interface {
+			LoadUsrSettingUsernameUsr(context.Context, bob.Executor, ...bob.Mod[*dialect.SelectQuery]) error
+		})
+		if !isLoader {
+			return fmt.Errorf("object %T cannot load UsrSettingUsernameUsr", retrieved)
+		}
+
+		return loader.LoadUsrSettingUsernameUsr(ctx, exec, queryMods...)
+	})
+}
+
+// LoadUsrSettingUsernameUsr loads the usrSetting's UsernameUsr into the .R struct
+func (o *UsrSetting) LoadUsrSettingUsernameUsr(ctx context.Context, exec bob.Executor, mods ...bob.Mod[*dialect.SelectQuery]) error {
+	if o == nil {
+		return nil
+	}
+
+	related, err := o.UsernameUsr(ctx, exec, mods...).One()
+	if err != nil && !errors.Is(err, sql.ErrNoRows) {
+		return err
+	}
+
+	related.R.UsernameUsrSettings = UsrSettingSlice{o}
+
+	o.R.UsernameUsr = related
+	return nil
+}
+
+// LoadUsrSettingUsernameUsr loads the usrSetting's UsernameUsr into the .R struct
+func (os UsrSettingSlice) LoadUsrSettingUsernameUsr(ctx context.Context, exec bob.Executor, mods ...bob.Mod[*dialect.SelectQuery]) error {
+	if len(os) == 0 {
+		return nil
+	}
+
+	usrs, err := os.UsernameUsr(ctx, exec, mods...).All()
+	if err != nil && !errors.Is(err, sql.ErrNoRows) {
+		return err
+	}
+
+	for _, rel := range usrs {
+		for _, o := range os {
+			if o.Username != rel.Username {
+				continue
+			}
+
+			rel.R.UsernameUsrSettings = append(rel.R.UsernameUsrSettings, o)
+
+			o.R.UsernameUsr = rel
+			break
+		}
+	}
+
+	return nil
+}
+
+func (o *UsrSetting) InsertUsernameUsr(ctx context.Context, exec bob.Executor, related *UsrSetter) error {
+	rel, err := UsrsTable.Insert(ctx, exec, related)
+	if err != nil {
+		return fmt.Errorf("inserting related objects: %w", err)
+	}
+	o.R.UsernameUsr = rel
+
+	o.Username = rel.Username
+
+	o.R.UsernameUsr.R.UsernameUsrSettings = UsrSettingSlice{o}
+
+	return nil
+}
+
+func (o *UsrSetting) AttachUsernameUsr(ctx context.Context, exec bob.Executor, rel *Usr) error {
+	var err error
+
+	o.Username = rel.Username
+
+	_, err = rel.Update(ctx, exec)
+	if err != nil {
+		return fmt.Errorf("inserting related objects: %w", err)
+	}
+	o.R.UsernameUsr = rel
+
+	rel.R.UsernameUsrSettings = append(rel.R.UsernameUsrSettings, o)
 
 	return nil
 }

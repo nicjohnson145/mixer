@@ -40,12 +40,17 @@ type UsrTemplate struct {
 }
 
 type usrR struct {
-	UsernameDrinks []*usrUsernameDrinksR
+	UsernameDrinks      []*usrUsernameDrinksR
+	UsernameUsrSettings []*usrUsernameUsrSettingsR
 }
 
 type usrUsernameDrinksR struct {
 	number int
 	o      *DrinkTemplate
+}
+type usrUsernameUsrSettingsR struct {
+	number int
+	o      *UsrSettingTemplate
 }
 
 // Apply mods to the UsrTemplate
@@ -96,6 +101,19 @@ func (t UsrTemplate) setModelRels(o *models.Usr) {
 			rel = append(rel, related...)
 		}
 		o.R.UsernameDrinks = rel
+	}
+
+	if t.r.UsernameUsrSettings != nil {
+		rel := models.UsrSettingSlice{}
+		for _, r := range t.r.UsernameUsrSettings {
+			related := r.o.toModels(r.number)
+			for _, rel := range related {
+				rel.Username = o.Username
+				rel.R.UsernameUsr = o
+			}
+			rel = append(rel, related...)
+		}
+		o.R.UsernameUsrSettings = rel
 	}
 
 }
@@ -174,6 +192,21 @@ func (o *UsrTemplate) insertOptRels(ctx context.Context, exec bob.Executor, m *m
 			}
 
 			err = m.AttachUsernameDrinks(ctx, exec, rel0...)
+			if err != nil {
+				return ctx, err
+			}
+		}
+	}
+
+	if o.r.UsernameUsrSettings != nil {
+		for _, r := range o.r.UsernameUsrSettings {
+			var rel1 models.UsrSettingSlice
+			ctx, rel1, err = r.o.createMany(ctx, exec, r.number)
+			if err != nil {
+				return ctx, err
+			}
+
+			err = m.AttachUsernameUsrSettings(ctx, exec, rel1...)
 			if err != nil {
 				return ctx, err
 			}
@@ -367,5 +400,45 @@ func (m usrMods) AddNewUsernameDrinks(number int, mods ...DrinkMod) UsrMod {
 func (m usrMods) WithoutUsernameDrinks() UsrMod {
 	return UsrModFunc(func(o *UsrTemplate) {
 		o.r.UsernameDrinks = nil
+	})
+}
+
+func (m usrMods) WithUsernameUsrSettings(number int, related *UsrSettingTemplate) UsrMod {
+	return UsrModFunc(func(o *UsrTemplate) {
+		o.r.UsernameUsrSettings = []*usrUsernameUsrSettingsR{{
+			number: number,
+			o:      related,
+		}}
+	})
+}
+
+func (m usrMods) WithNewUsernameUsrSettings(number int, mods ...UsrSettingMod) UsrMod {
+	return UsrModFunc(func(o *UsrTemplate) {
+
+		related := o.f.NewUsrSetting(mods...)
+		m.WithUsernameUsrSettings(number, related).Apply(o)
+	})
+}
+
+func (m usrMods) AddUsernameUsrSettings(number int, related *UsrSettingTemplate) UsrMod {
+	return UsrModFunc(func(o *UsrTemplate) {
+		o.r.UsernameUsrSettings = append(o.r.UsernameUsrSettings, &usrUsernameUsrSettingsR{
+			number: number,
+			o:      related,
+		})
+	})
+}
+
+func (m usrMods) AddNewUsernameUsrSettings(number int, mods ...UsrSettingMod) UsrMod {
+	return UsrModFunc(func(o *UsrTemplate) {
+
+		related := o.f.NewUsrSetting(mods...)
+		m.AddUsernameUsrSettings(number, related).Apply(o)
+	})
+}
+
+func (m usrMods) WithoutUsernameUsrSettings() UsrMod {
+	return UsrModFunc(func(o *UsrTemplate) {
+		o.r.UsernameUsrSettings = nil
 	})
 }

@@ -36,8 +36,16 @@ type UsrSettingTemplate struct {
 	Username func() string
 	Key      func() string
 	Value    func() string
+	r        usrSettingR
+	f        *factory
+}
 
-	f *factory
+type usrSettingR struct {
+	UsernameUsr *usrSettingUsernameUsrR
+}
+
+type usrSettingUsernameUsrR struct {
+	o *UsrTemplate
 }
 
 // Apply mods to the UsrSettingTemplate
@@ -79,7 +87,15 @@ func (o UsrSettingTemplate) toModels(number int) models.UsrSettingSlice {
 
 // setModelRels creates and sets the relationships on *models.UsrSetting
 // according to the relationships in the template. Nothing is inserted into the db
-func (t UsrSettingTemplate) setModelRels(o *models.UsrSetting) {}
+func (t UsrSettingTemplate) setModelRels(o *models.UsrSetting) {
+	if t.r.UsernameUsr != nil {
+		rel := t.r.UsernameUsr.o.toModel()
+		rel.R.UsernameUsrSettings = append(rel.R.UsernameUsrSettings, o)
+		o.Username = rel.Username
+		o.R.UsernameUsr = rel
+	}
+
+}
 
 // BuildSetter returns an *models.UsrSettingSetter
 // this does nothing with the relationship templates
@@ -170,11 +186,29 @@ func (o *UsrSettingTemplate) create(ctx context.Context, exec bob.Executor) (con
 	opt := o.BuildSetter()
 	ensureCreatableUsrSetting(opt)
 
+	var rel0 *models.Usr
+	if o.r.UsernameUsr == nil {
+		var ok bool
+		rel0, ok = usrCtx.Value(ctx)
+		if !ok {
+			UsrSettingMods.WithNewUsernameUsr().Apply(o)
+		}
+	}
+	if o.r.UsernameUsr != nil {
+		ctx, rel0, err = o.r.UsernameUsr.o.create(ctx, exec)
+		if err != nil {
+			return ctx, nil, err
+		}
+	}
+	opt.Username = omit.From(rel0.Username)
+
 	m, err := models.UsrSettingsTable.Insert(ctx, exec, opt)
 	if err != nil {
 		return ctx, nil, err
 	}
 	ctx = usrSettingCtx.WithValue(ctx, m)
+
+	m.R.UsernameUsr = rel0
 
 	ctx, err = o.insertOptRels(ctx, exec, m)
 	return ctx, m, err
@@ -343,5 +377,28 @@ func (m usrSettingMods) ensureValue(f *faker.Faker) UsrSettingMod {
 		o.Value = func() string {
 			return random[string](f)
 		}
+	})
+}
+
+func (m usrSettingMods) WithUsernameUsr(rel *UsrTemplate) UsrSettingMod {
+	return UsrSettingModFunc(func(o *UsrSettingTemplate) {
+		o.r.UsernameUsr = &usrSettingUsernameUsrR{
+			o: rel,
+		}
+	})
+}
+
+func (m usrSettingMods) WithNewUsernameUsr(mods ...UsrMod) UsrSettingMod {
+	return UsrSettingModFunc(func(o *UsrSettingTemplate) {
+
+		related := o.f.NewUsr(mods...)
+
+		m.WithUsernameUsr(related).Apply(o)
+	})
+}
+
+func (m usrSettingMods) WithoutUsernameUsr() UsrSettingMod {
+	return UsrSettingModFunc(func(o *UsrSettingTemplate) {
+		o.r.UsernameUsr = nil
 	})
 }

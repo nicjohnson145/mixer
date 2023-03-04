@@ -39,7 +39,8 @@ type UsrsStmt = bob.QueryStmt[*Usr, UsrSlice]
 
 // usrR is where relationships are stored.
 type usrR struct {
-	UsernameDrinks DrinkSlice `db:"UsernameDrinks" json:"UsernameDrinks" toml:"UsernameDrinks" yaml:"UsernameDrinks"`
+	UsernameDrinks      DrinkSlice      `db:"UsernameDrinks" json:"UsernameDrinks" toml:"UsernameDrinks" yaml:"UsernameDrinks"`
+	UsernameUsrSettings UsrSettingSlice `db:"UsernameUsrSettings" json:"UsernameUsrSettings" toml:"UsernameUsrSettings" yaml:"UsernameUsrSettings"`
 }
 
 // UsrSetter is used for insert/upsert/update operations
@@ -194,6 +195,24 @@ func (os UsrSlice) UsernameDrinks(ctx context.Context, exec bob.Executor, mods .
 	)...)
 }
 
+// UsernameUsrSettings starts a query for related objects on usr_setting
+func (o *Usr) UsernameUsrSettings(ctx context.Context, exec bob.Executor, mods ...bob.Mod[*dialect.SelectQuery]) UsrSettingsQuery {
+	return UsrSettings(ctx, exec, append(mods,
+		sm.Where(UsrSettingColumns.Username.EQ(psql.Arg(o.Username))),
+	)...)
+}
+
+func (os UsrSlice) UsernameUsrSettings(ctx context.Context, exec bob.Executor, mods ...bob.Mod[*dialect.SelectQuery]) UsrSettingsQuery {
+	PKArgs := make([]any, 0, len(os))
+	for _, o := range os {
+		PKArgs = append(PKArgs, psql.ArgGroup(o.Username))
+	}
+
+	return UsrSettings(ctx, exec, append(mods,
+		sm.Where(psql.Group(UsrSettingColumns.Username).In(PKArgs...)),
+	)...)
+}
+
 func (o *Usr) Preload(name string, retrieved any) error {
 	if o == nil {
 		return nil
@@ -207,6 +226,20 @@ func (o *Usr) Preload(name string, retrieved any) error {
 		}
 
 		o.R.UsernameDrinks = rels
+
+		for _, rel := range rels {
+			if rel != nil {
+				rel.R.UsernameUsr = o
+			}
+		}
+		return nil
+	case "UsernameUsrSettings":
+		rels, ok := retrieved.(UsrSettingSlice)
+		if !ok {
+			return fmt.Errorf("usr cannot load %T as %q", retrieved, name)
+		}
+
+		o.R.UsernameUsrSettings = rels
 
 		for _, rel := range rels {
 			if rel != nil {
@@ -281,6 +314,68 @@ func (os UsrSlice) LoadUsrUsernameDrinks(ctx context.Context, exec bob.Executor,
 	return nil
 }
 
+func ThenLoadUsrUsernameUsrSettings(queryMods ...bob.Mod[*dialect.SelectQuery]) psql.Loader {
+	return psql.Loader(func(ctx context.Context, exec bob.Executor, retrieved any) error {
+		loader, isLoader := retrieved.(interface {
+			LoadUsrUsernameUsrSettings(context.Context, bob.Executor, ...bob.Mod[*dialect.SelectQuery]) error
+		})
+		if !isLoader {
+			return fmt.Errorf("object %T cannot load UsrUsernameUsrSettings", retrieved)
+		}
+
+		return loader.LoadUsrUsernameUsrSettings(ctx, exec, queryMods...)
+	})
+}
+
+// LoadUsrUsernameUsrSettings loads the usr's UsernameUsrSettings into the .R struct
+func (o *Usr) LoadUsrUsernameUsrSettings(ctx context.Context, exec bob.Executor, mods ...bob.Mod[*dialect.SelectQuery]) error {
+	if o == nil {
+		return nil
+	}
+
+	related, err := o.UsernameUsrSettings(ctx, exec, mods...).All()
+	if err != nil && !errors.Is(err, sql.ErrNoRows) {
+		return err
+	}
+
+	for _, rel := range related {
+		rel.R.UsernameUsr = o
+	}
+
+	o.R.UsernameUsrSettings = related
+	return nil
+}
+
+// LoadUsrUsernameUsrSettings loads the usr's UsernameUsrSettings into the .R struct
+func (os UsrSlice) LoadUsrUsernameUsrSettings(ctx context.Context, exec bob.Executor, mods ...bob.Mod[*dialect.SelectQuery]) error {
+	if len(os) == 0 {
+		return nil
+	}
+
+	usrSettings, err := os.UsernameUsrSettings(ctx, exec, mods...).All()
+	if err != nil && !errors.Is(err, sql.ErrNoRows) {
+		return err
+	}
+
+	for _, o := range os {
+		o.R.UsernameUsrSettings = nil
+	}
+
+	for _, rel := range usrSettings {
+		for _, o := range os {
+			if o.Username != rel.Username {
+				continue
+			}
+
+			rel.R.UsernameUsr = o
+
+			o.R.UsernameUsrSettings = append(o.R.UsernameUsrSettings, rel)
+		}
+	}
+
+	return nil
+}
+
 func (o *Usr) InsertUsernameDrinks(ctx context.Context, exec bob.Executor, related ...*DrinkSetter) error {
 	var err error
 
@@ -318,6 +413,51 @@ func (o *Usr) AttachUsernameDrinks(ctx context.Context, exec bob.Executor, relat
 	}
 
 	o.R.UsernameDrinks = append(o.R.UsernameDrinks, related...)
+
+	for _, rel := range related {
+		rel.R.UsernameUsr = o
+	}
+
+	return nil
+}
+
+func (o *Usr) InsertUsernameUsrSettings(ctx context.Context, exec bob.Executor, related ...*UsrSettingSetter) error {
+	var err error
+
+	rels := related
+
+	for _, rel := range rels {
+		rel.Username = omit.From(o.Username)
+	}
+
+	newRels, err := UsrSettingsTable.InsertMany(ctx, exec, related...)
+	if err != nil {
+		return fmt.Errorf("inserting related objects: %w", err)
+	}
+	o.R.UsernameUsrSettings = append(o.R.UsernameUsrSettings, newRels...)
+
+	for _, rel := range newRels {
+		rel.R.UsernameUsr = o
+	}
+
+	return nil
+}
+
+func (o *Usr) AttachUsernameUsrSettings(ctx context.Context, exec bob.Executor, related ...*UsrSetting) error {
+
+	for _, rel := range related {
+		rel.Username = o.Username
+	}
+
+	if _, err := UsrSettingsTable.UpdateMany(
+		ctx, exec, &UsrSettingSetter{
+			Username: omit.From(o.Username),
+		}, related...,
+	); err != nil {
+		return fmt.Errorf("inserting related objects: %w", err)
+	}
+
+	o.R.UsernameUsrSettings = append(o.R.UsernameUsrSettings, related...)
 
 	for _, rel := range related {
 		rel.R.UsernameUsr = o
