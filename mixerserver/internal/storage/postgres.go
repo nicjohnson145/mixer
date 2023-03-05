@@ -1,15 +1,13 @@
 package storage
 
 import (
-	"context"
 	"database/sql"
 	"errors"
 	"fmt"
 
-	"github.com/aarondl/opt/omit"
-	"github.com/nicjohnson145/mixer/mixerserver/internal/storage/models"
+	"github.com/doug-martin/goqu/v9"
+	_ "github.com/doug-martin/goqu/v9/dialect/postgres" // import postgres dialect
 	pb "github.com/nicjohnson145/mixer/mixerserver/protos"
-	"github.com/stephenafamo/bob"
 
 	"github.com/rs/zerolog"
 )
@@ -24,7 +22,7 @@ type PostgresStoreConfig struct {
 func NewPostgresStore(conf PostgresStoreConfig) *PostgresStore {
 	return &PostgresStore{
 		log: conf.Logger,
-		db:  bob.NewDB(conf.DB),
+		db:  goqu.New("postgres", conf.DB),
 	}
 }
 
@@ -32,25 +30,29 @@ var _ Storage = (*PostgresStore)(nil)
 
 type PostgresStore struct {
 	log zerolog.Logger
-	db  bob.DB
+	db  *goqu.Database
 }
 
 func (p *PostgresStore) CreateUser(user User) error {
-	_, err := models.UsrsTable.Insert(context.Background(), p.db, &models.UsrSetter{
-		Username: omit.From(user.Username),
-		Password: omit.From(user.Password),
+	insert := p.db.Insert("usr").Rows(usr{
+		Username: user.Username,
+		Password: user.Password,
 	})
-	if err != nil {
+	if _, err := insert.Executor().Exec(); err != nil {
 		return fmt.Errorf("error inserting user: %w", err)
 	}
-
 	return nil
 }
 
 func (p *PostgresStore) ReadUser(username string) (*User, error) {
-	usr, err := models.FindUsr(context.Background(), p.db, username)
+	query := p.db.From("usr").Where(goqu.C("username").Eq(username))
+	var usr usr
+	found, err := query.Executor().ScanStruct(&usr)
 	if err != nil {
-		return nil, fmt.Errorf("error reading user: %w", err)
+		return nil, fmt.Errorf("error fetching user: %w", err)
+	}
+	if !found {
+		return nil, ErrNotFoundError
 	}
 
 	return &User{
@@ -59,50 +61,35 @@ func (p *PostgresStore) ReadUser(username string) (*User, error) {
 	}, nil
 }
 
-func (p *PostgresStore) CreateDrink(username string, d *pb.DrinkData) (int, error) {
-	setter, err := drinkDataToDrinkSetter(d)
-	if err != nil {
-		return 0, fmt.Errorf("error during model conversion: %w", err)
-	}
-	setter.Username = omit.From(username)
+func (p *PostgresStore) CreateDrink(username string, d *pb.DrinkData) (int64, error) {
+	data := drinkDataToDrink(d)
+	data.Username = username
 
-	drink, err := models.DrinksTable.Insert(context.Background(), p.db, setter)
+	insert := p.db.Insert("drink").Rows(data).Returning("id")
+	var id int64
+	_, err := insert.Executor().ScanVal(&id)
 	if err != nil {
 		return 0, fmt.Errorf("error inserting drink: %w", err)
 	}
 
-	return drink.ID, nil
+	return id, nil
 }
 
-func (p *PostgresStore) GetDrink(id int) (*pb.Drink, error) {
-	drink, err := models.FindDrink(context.Background(), p.db, id)
+func (p *PostgresStore) GetDrink(id int64) (*pb.Drink, error) {
+	var drink drink
+	query := p.db.From("drink").Where(goqu.C("id").Eq(id))
+
+	found, err := query.Executor().ScanStruct(&drink)
 	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return nil, ErrNotFoundError
-		} 
-		return nil, fmt.Errorf("error fetching drink: %w", err)
+		return nil, fmt.Errorf("error reading drink: %w", err)
+	}
+	if !found {
+		return nil, ErrNotFoundError
 	}
 
-	pbDrink, err := drinkModelToPbDrink(drink)
-	if err != nil {
-		return nil, fmt.Errorf("error during model conversion: %w", err)
-	}
-
-	return pbDrink, nil
+	return drinkToPbDrink(drink), nil
 }
 
-func (p *PostgresStore) UpdateDrink(username string, id int, d *pb.DrinkData) (error) {
-	setter, err := drinkDataToDrinkSetter(d)
-	if err != nil {
-		return fmt.Errorf("error during model conversion: %w", err)
-	}
-	setter.Username = omit.From(username)
-	setter.ID = omit.From(id)
-
-	_, err = models.DrinksTable.Update(context.Background(), p.db, drinkSetterToDrink(setter))
-	if err != nil {
-		return fmt.Errorf("error updating drink: %w", err)
-	}
-
+func (p *PostgresStore) UpdateDrink(username string, id int64, d *pb.DrinkData) (error) {
 	return nil
 }

@@ -13,7 +13,7 @@ type Storage interface {
 	CreateUser(u User) (error)
 	ReadUser(username string) (*User, error)
 
-	CreateDrink(username string, d *pb.DrinkData) (int, error)
-	GetDrink(id int) (*pb.Drink, error)
-	UpdateDrink(username string, id int, d *pb.DrinkData) (error)
+	CreateDrink(username string, d *pb.DrinkData) (int64, error)
+	GetDrink(id int64) (*pb.Drink, error)
+	UpdateDrink(username string, id int64, d *pb.DrinkData) (error)
 }

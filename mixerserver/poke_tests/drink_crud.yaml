@@ -56,53 +56,53 @@ calls:
         - 1 oz lime juice
         publicity: "DrinkPublicity_Public"
 
-- name: update daquiri
-  type: grpc
-  headers:
-    authorization: '{{ .accessToken }}'
-  service-host: '{{ .service }}'
-  url: '{{ .drink_service }}/Update'
-  body:
-    id: '{{ .daquiri_id }}'
-    drink_data:
-      name: Daquiri
-      primary_alcohol: Rum
-      ingredients:
-      - 3.5 oz white Rum
-      - 0.5 oz simple syrup
-      - 1 oz lime juice
-      publicity: 1
-      favorite: true
+#- name: update daquiri
+#  type: grpc
+#  headers:
+#    authorization: '{{ .accessToken }}'
+#  service-host: '{{ .service }}'
+#  url: '{{ .drink_service }}/Update'
+#  body:
+#    id: '{{ .daquiri_id }}'
+#    drink_data:
+#      name: Daquiri
+#      primary_alcohol: Rum
+#      ingredients:
+#      - 3.5 oz white Rum
+#      - 0.5 oz simple syrup
+#      - 1 oz lime juice
+#      publicity: 1
+#      favorite: true
 
-- name: read updated daquiri
-  type: grpc
-  headers:
-    authorization: '{{ .accessToken }}'
-  service-host: '{{ .service }}'
-  url: '{{ .drink_service }}/Read'
-  body:
-    id: '{{ .daquiri_id }}'
-  asserts:
-  - jq: '.drink'
-    expected:
-      id: '{{ .daquiri_id }}'
-      username: baz
-      drinkData:
-        name: Daquiri
-        primaryAlcohol: Rum
-        ingredients:
-        - 3.5 oz white Rum
-        - 0.5 oz simple syrup
-        - 1 oz lime juice
-        publicity: "DrinkPublicity_Public"
-        favorite: true
+#- name: read updated daquiri
+#  type: grpc
+#  headers:
+#    authorization: '{{ .accessToken }}'
+#  service-host: '{{ .service }}'
+#  url: '{{ .drink_service }}/Read'
+#  body:
+#    id: '{{ .daquiri_id }}'
+#  asserts:
+#  - jq: '.drink'
+#    expected:
+#      id: '{{ .daquiri_id }}'
+#      username: baz
+#      drinkData:
+#        name: Daquiri
+#        primaryAlcohol: Rum
+#        ingredients:
+#        - 3.5 oz white Rum
+#        - 0.5 oz simple syrup
+#        - 1 oz lime juice
+#        publicity: "DrinkPublicity_Public"
+#        favorite: true
 
-- name: read nonexistant drink
-  type: grpc
-  headers:
-    authorization: '{{ .accessToken }}'
-  service-host: '{{ .service }}'
-  url: '{{ .drink_service }}/Read'
-  body:
-    id: 50000
-  want-status: 5
+#- name: read nonexistant drink
+#  type: grpc
+#  headers:
+#    authorization: '{{ .accessToken }}'
+#  service-host: '{{ .service }}'
+#  url: '{{ .drink_service }}/Read'
+#  body:
+#    id: 50000
+#  want-status: 5

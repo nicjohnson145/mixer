@@ -80,12 +80,6 @@ tasks:
     cmds:
     - PGPASSWORD=mixer_pass psql -h localhost -U mixer_usr mixer
 
-  bob-generate:
-    desc: run bob code generation
-    dir: mixerserver
-    cmds:
-    - go run github.com/stephenafamo/bob/gen/bobgen-psql@latest
-
   local:
     desc: run mixer locally
     dir: mixerserver

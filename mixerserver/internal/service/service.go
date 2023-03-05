@@ -124,7 +124,7 @@ func (s *Service) Read(ctx context.Context, req *pb.GetDrinkRequest) (*pb.GetDri
 	if req.Id == 0 {
 		return nil, singleFieldViolation("id", "id must be set")
 	}
-	data, err := s.store.GetDrink(int(req.Id))
+	data, err := s.store.GetDrink(req.Id)
 	if err != nil {
 		s.log.Err(err).Msg("error reading drink")
 		return nil, wrapStorageErrors(err)
@@ -151,7 +151,7 @@ func (s *Service) Update(ctx context.Context, req *pb.UpdateDrinkRequest) (*pb.U
 	}
 
 	// TODO: pull from auth token
-	err = s.store.UpdateDrink(claims.Username, int(req.Id), req.DrinkData)
+	err = s.store.UpdateDrink(claims.Username, req.Id, req.DrinkData)
 	if err != nil {
 		s.log.Err(err).Msg("error persisting drink")
 		return nil, err
