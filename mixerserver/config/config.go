@@ -16,6 +16,8 @@ const (
 	JWTRefreshDuration = "jwt.refreshduration"
 	JWTAccessDuration  = "jwt.accessduration"
 
+	ProtectRegister = "protectregister"
+
 	Debug = "debug"
 
 	DatabaseHost     = "database-host"
@@ -28,6 +30,8 @@ const (
 func InitializeConfig(cmd *cobra.Command) error {
 	viper.SetDefault(GatewayPort, 8080)
 	viper.SetDefault(GRPCPort, 50051)
+
+	viper.SetDefault(ProtectRegister, true)
 
 	viper.SetDefault(JWTSigningKey, []byte("0RWq7c4Kl8HJeTAgdpLjxUYC4P2vEjzwOqW"))
 	viper.SetDefault(JWTRefreshDuration, 24 * 30 * time.Hour)

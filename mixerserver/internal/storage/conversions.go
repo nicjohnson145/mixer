@@ -50,6 +50,41 @@ func drinkDataToDrinkSetter(d *pb.DrinkData) (*models.DrinkSetter, error) {
 	return model, nil
 }
 
+func drinkSetterToDrink(setter *models.DrinkSetter) (*models.Drink) {
+	d := &models.Drink{
+		ID: setter.ID.GetOrZero(),
+		Name: setter.Name.GetOrZero(),
+		Username: setter.Username.GetOrZero(),
+		PrimaryAlcohol: setter.PrimaryAlcohol.GetOrZero(),
+		//PreferredGlass: setter.PreferredGlass.GetOrZero(),
+		Ingredients: setter.Ingredients.GetOrZero(),
+		//Instructions: setter.Instructions.GetOrZero(),
+		//Notes: setter.Notes.GetOrZero(),
+		Publicity: setter.Publicity.GetOrZero(),
+		UnderDevelopment: setter.UnderDevelopment.GetOrZero(),
+		//Tags: setter.Tags.GetOrZero(),
+		Favorite: setter.Favorite.GetOrZero(),
+	}
+
+	if setter.PreferredGlass.IsSet() {
+		d.PreferredGlass = setter.PreferredGlass.MustGetNull()
+	}
+
+	if setter.Instructions.IsSet() {
+		d.Instructions = setter.Instructions.MustGetNull()
+	}
+
+	if setter.Notes.IsSet() {
+		d.Notes = setter.Notes.MustGetNull()
+	}
+
+	if setter.Tags.IsSet() {
+		d.Tags = setter.Tags.MustGetNull()
+	}
+
+	return d
+}
+
 func drinkModelToPbDrink(model *models.Drink) (*pb.Drink, error) {
 	d := &pb.Drink{
 		Id: int64(model.ID),

@@ -68,6 +68,9 @@ func Root() *cobra.Command {
 
 			jwtExemptions := mapset.NewSet[string]()
 			jwtExemptions.Add("/mixer.UserService/Login")
+			if !viper.GetBool(config.ProtectRegister) {
+				jwtExemptions.Add("/mixer.UserService/RegisterNewUser")
+			}
 			jwtExemptions.Add("/grpc.reflection.v1alpha.ServerReflection/ServerReflectionInfo")
 
 			grpcServer := grpc.NewServer(

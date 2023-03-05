@@ -84,3 +84,19 @@ func (p *PostgresStore) GetDrink(id int) (*pb.Drink, error) {
 
 	return pbDrink, nil
 }
+
+func (p *PostgresStore) UpdateDrink(username string, id int, d *pb.DrinkData) (error) {
+	setter, err := drinkDataToDrinkSetter(d)
+	if err != nil {
+		return fmt.Errorf("error during model conversion: %w", err)
+	}
+	setter.Username = omit.From(username)
+	setter.ID = omit.From(id)
+
+	_, err = models.DrinksTable.Update(context.Background(), p.db, drinkSetterToDrink(setter))
+	if err != nil {
+		return fmt.Errorf("error updating drink: %w", err)
+	}
+
+	return nil
+}

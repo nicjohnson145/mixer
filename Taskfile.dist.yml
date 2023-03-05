@@ -91,6 +91,7 @@ tasks:
     dir: mixerserver
     env:
       JWT_SIGNINGKEY: $JWT_SIGNINGKEY
+      PROTECTREGISTER: "false"
     cmds:
     - task: build-server-binary
     - echo "using signing key $JWT_SIGNINGKEY"

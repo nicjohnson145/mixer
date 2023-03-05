@@ -131,6 +131,32 @@ func (s *Service) Read(ctx context.Context, req *pb.GetDrinkRequest) (*pb.GetDri
 	}
 
 	// TODO: check if auth token user can access this drink
-
 	return &pb.GetDrinkResponse{Drink: data}, nil
 }
+
+func (s *Service) Update(ctx context.Context, req *pb.UpdateDrinkRequest) (*pb.UpdateDrinkResponse, error) {
+	if err := validateDrinkWriteRequest(req.DrinkData); err != nil {
+		s.log.Err(err).Msg("error validating create request")
+		return nil, err
+	}
+
+	if req.Id == 0 {
+		return nil, singleFieldViolation("id", "id required for update")
+	}
+
+	claims, err := jwtClaimsFromCtx(ctx)
+	if err != nil {
+		s.log.Err(err).Msg("error pulling claims from context")
+		return nil, err
+	}
+
+	// TODO: pull from auth token
+	err = s.store.UpdateDrink(claims.Username, int(req.Id), req.DrinkData)
+	if err != nil {
+		s.log.Err(err).Msg("error persisting drink")
+		return nil, err
+	}
+
+	return &pb.UpdateDrinkResponse{}, nil
+}
+
