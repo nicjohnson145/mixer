@@ -68,7 +68,6 @@ func Root() *cobra.Command {
 
 			jwtExemptions := mapset.NewSet[string]()
 			jwtExemptions.Add("/mixer.UserService/Login")
-			jwtExemptions.Add("/mixer.UserService/RegisterNewUser")
 			jwtExemptions.Add("/grpc.reflection.v1alpha.ServerReflection/ServerReflectionInfo")
 
 			grpcServer := grpc.NewServer(
