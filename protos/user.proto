@@ -78,4 +78,6 @@ service UserService {
       body: "*"
     };
   };
+
+  rpc Login(LoginRequest) returns (LoginResponse);
 }

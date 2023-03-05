@@ -661,5 +661,9 @@ class UserServiceApi {
     var emptyResponse = RegisterNewUserResponse();
     return _client.invoke<RegisterNewUserResponse>(ctx, 'UserService', 'RegisterNewUser', request, emptyResponse);
   }
+  $async.Future<LoginResponse> login($pb.ClientContext? ctx, LoginRequest request) {
+    var emptyResponse = LoginResponse();
+    return _client.invoke<LoginResponse>(ctx, 'UserService', 'Login', request, emptyResponse);
+  }
 }
 
