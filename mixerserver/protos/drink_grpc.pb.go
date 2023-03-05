@@ -24,6 +24,7 @@ const _ = grpc.SupportPackageIsVersion7
 type DrinkServiceClient interface {
 	Create(ctx context.Context, in *CreateDrinkRequest, opts ...grpc.CallOption) (*CreateDrinkResponse, error)
 	Read(ctx context.Context, in *GetDrinkRequest, opts ...grpc.CallOption) (*GetDrinkResponse, error)
+	Update(ctx context.Context, in *UpdateDrinkRequest, opts ...grpc.CallOption) (*UpdateDrinkResponse, error)
 }
 
 type drinkServiceClient struct {
@@ -52,12 +53,22 @@ func (c *drinkServiceClient) Read(ctx context.Context, in *GetDrinkRequest, opts
 	return out, nil
 }
 
+func (c *drinkServiceClient) Update(ctx context.Context, in *UpdateDrinkRequest, opts ...grpc.CallOption) (*UpdateDrinkResponse, error) {
+	out := new(UpdateDrinkResponse)
+	err := c.cc.Invoke(ctx, "/mixer.DrinkService/Update", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // DrinkServiceServer is the server API for DrinkService service.
 // All implementations must embed UnimplementedDrinkServiceServer
 // for forward compatibility
 type DrinkServiceServer interface {
 	Create(context.Context, *CreateDrinkRequest) (*CreateDrinkResponse, error)
 	Read(context.Context, *GetDrinkRequest) (*GetDrinkResponse, error)
+	Update(context.Context, *UpdateDrinkRequest) (*UpdateDrinkResponse, error)
 	mustEmbedUnimplementedDrinkServiceServer()
 }
 
@@ -70,6 +81,9 @@ func (UnimplementedDrinkServiceServer) Create(context.Context, *CreateDrinkReque
 }
 func (UnimplementedDrinkServiceServer) Read(context.Context, *GetDrinkRequest) (*GetDrinkResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Read not implemented")
+}
+func (UnimplementedDrinkServiceServer) Update(context.Context, *UpdateDrinkRequest) (*UpdateDrinkResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
 func (UnimplementedDrinkServiceServer) mustEmbedUnimplementedDrinkServiceServer() {}
 
@@ -120,6 +134,24 @@ func _DrinkService_Read_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _DrinkService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateDrinkRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DrinkServiceServer).Update(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/mixer.DrinkService/Update",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DrinkServiceServer).Update(ctx, req.(*UpdateDrinkRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // DrinkService_ServiceDesc is the grpc.ServiceDesc for DrinkService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -134,6 +166,10 @@ var DrinkService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Read",
 			Handler:    _DrinkService_Read_Handler,
+		},
+		{
+			MethodName: "Update",
+			Handler:    _DrinkService_Update_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

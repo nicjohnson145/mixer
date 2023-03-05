@@ -18,11 +18,13 @@ export 'drink.pb.dart';
 abstract class DrinkServiceBase extends $pb.GeneratedService {
   $async.Future<$0.CreateDrinkResponse> create($pb.ServerContext ctx, $0.CreateDrinkRequest request);
   $async.Future<$0.GetDrinkResponse> read($pb.ServerContext ctx, $0.GetDrinkRequest request);
+  $async.Future<$0.UpdateDrinkResponse> update($pb.ServerContext ctx, $0.UpdateDrinkRequest request);
 
   $pb.GeneratedMessage createRequest($core.String method) {
     switch (method) {
       case 'Create': return $0.CreateDrinkRequest();
       case 'Read': return $0.GetDrinkRequest();
+      case 'Update': return $0.UpdateDrinkRequest();
       default: throw $core.ArgumentError('Unknown method: $method');
     }
   }
@@ -31,6 +33,7 @@ abstract class DrinkServiceBase extends $pb.GeneratedService {
     switch (method) {
       case 'Create': return this.create(ctx, request as $0.CreateDrinkRequest);
       case 'Read': return this.read(ctx, request as $0.GetDrinkRequest);
+      case 'Update': return this.update(ctx, request as $0.UpdateDrinkRequest);
       default: throw $core.ArgumentError('Unknown method: $method');
     }
   }
