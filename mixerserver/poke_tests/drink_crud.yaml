@@ -1,12 +1,26 @@
 vars:
   service: "localhost:50051"
-  user_service: "mixer.DrinkService"
+  drink_service: "mixer.DrinkService"
+  user_service: "mixer.UserService"
 
 calls:
-- name: create daquiri
+- name: login baz
   type: grpc
   service-host: '{{ .service }}'
-  url: '{{ .user_service }}/Create'
+  url: '{{ .user_service }}/Login'
+  body:
+    username: baz
+    password: bazpass
+  exports:
+  - jq: '.accessToken'
+    as: 'accessToken'
+
+- name: create daquiri
+  type: grpc
+  headers:
+    authorization: '{{ .accessToken }}'
+  service-host: '{{ .service }}'
+  url: '{{ .drink_service }}/Create'
   body:
     drink_data:
       name: Daquiri
@@ -19,17 +33,20 @@ calls:
   exports:
   - jq: '.id'
     as: "daquiri_id"
+
 - name: read daquiri
   type: grpc
+  headers:
+    authorization: '{{ .accessToken }}'
   service-host: '{{ .service }}'
-  url: '{{ .user_service }}/Read'
+  url: '{{ .drink_service }}/Read'
   body:
     id: '{{ .daquiri_id }}'
   asserts:
   - jq: '.drink'
     expected:
       id: '{{ .daquiri_id }}'
-      username: foo
+      username: baz
       drinkData:
         name: Daquiri
         primaryAlcohol: Rum

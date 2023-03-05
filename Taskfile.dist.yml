@@ -1,6 +1,15 @@
 version: '3'
 
+vars:
+  SIGNING_KEY:
+    sh: "cat /dev/urandom | tr -dc 'a-zA-Z0-9' | head -c 35"
+
 tasks:
+  gen-signing-key:
+    desc: generate a random signingkey
+    cmds:
+    - echo -n "{{ .SIGNING_KEY }}"
+
   gen-go-protos:
     desc: generate go protobuf bits
     vars:
@@ -22,6 +31,12 @@ tasks:
     desc: generate dart protobuf bits
     cmds:
     - protoc -I./protos/ --dart_out=mixer/lib/protos protos/*.proto
+
+  go-generation:
+    desc: golang code generation that's not protobuf/DB related
+    dir: mixerserver
+    cmds:
+    - go generate ./...
 
   protos:
     desc: generate protobuf bits
@@ -74,8 +89,11 @@ tasks:
   local:
     desc: run mixer locally
     dir: mixerserver
+    env:
+      JWT_SIGNINGKEY: $JWT_SIGNINGKEY
     cmds:
     - task: build-server-binary
+    - echo "using signing key $JWT_SIGNINGKEY"
     - ./mixerserver
 
   clean-db:
@@ -90,8 +108,23 @@ tasks:
     cmds:
     - PGPASSWORD=mixer_pass psql -h localhost -U mixer_usr mixer -f {{ .SQL_FILE }}
 
+  gen-superuser-jwt:
+    desc: generate a superuser JWT
+    preconditions:
+    - sh: '[ -n "$JWT_SIGNINGKEY" ]'
+      message: "JWT_SIGNINGKEY must be set"
+    env:
+      JWT_SIGNINGKEY: $JWT_SIGNINGKEY
+    cmds:
+    - ./mixerserver/hack/gen-jwt.sh
+
   poke-tests:
     desc: run functional tests locally with poke
+    preconditions:
+    - sh: '[ -n "$SUPERUSER_JWT" ]'
+      message: "SUPERUSER_JWT must be set"
+    env:
+      SUPERUSER_JWT: $SUPERUSER_JWT
     cmds:
     - task: clean-db
     - poke mixerserver/poke_tests/register_users.yaml

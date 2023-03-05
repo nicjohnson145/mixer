@@ -2,6 +2,7 @@ package config
 
 import (
 	"strings"
+	"time"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -10,6 +11,10 @@ import (
 const (
 	GatewayPort = "gateway.port"
 	GRPCPort    = "grpc.port"
+
+	JWTSigningKey      = "jwt.signingkey"
+	JWTRefreshDuration = "jwt.refreshduration"
+	JWTAccessDuration  = "jwt.accessduration"
 
 	Debug = "debug"
 
@@ -23,6 +28,10 @@ const (
 func InitializeConfig(cmd *cobra.Command) error {
 	viper.SetDefault(GatewayPort, 8080)
 	viper.SetDefault(GRPCPort, 50051)
+
+	viper.SetDefault(JWTSigningKey, []byte("0RWq7c4Kl8HJeTAgdpLjxUYC4P2vEjzwOqW"))
+	viper.SetDefault(JWTRefreshDuration, 24 * 30 * time.Hour)
+	viper.SetDefault(JWTAccessDuration, 5 * time.Minute)
 
 	viper.SetDefault(Debug, false)
 

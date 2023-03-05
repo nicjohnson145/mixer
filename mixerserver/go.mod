@@ -4,6 +4,8 @@ go 1.20
 
 require (
 	github.com/aarondl/opt v0.0.0-20230114172057-b91f370c41f0
+	github.com/deckarep/golang-set/v2 v2.1.0
+	github.com/golang-jwt/jwt/v4 v4.1.0
 	github.com/golang-migrate/migrate/v4 v4.15.2
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.15.2
 	github.com/jaswdr/faker v1.16.0

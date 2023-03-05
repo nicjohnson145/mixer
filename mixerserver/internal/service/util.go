@@ -18,6 +18,11 @@ func hashPassword(pw string) (string, error) {
 	return string(hash), nil
 }
 
+func comparePasswords(hashedPw string, plainPw string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hashedPw), []byte(plainPw))
+	return err == nil
+}
+
 func fieldViolations(desc string, violations ...*errdetails.BadRequest_FieldViolation) error {
 	st := status.New(codes.InvalidArgument, desc)
 	br := &errdetails.BadRequest{
@@ -75,3 +80,4 @@ func validateDrinkWriteRequest(data *pb.DrinkData) error {
 
 	return fieldViolations("invalid drink write request", violations...)
 }
+

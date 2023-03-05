@@ -5,6 +5,7 @@ import (
 	"net"
 	"net/http"
 	"strings"
+	mapset "github.com/deckarep/golang-set/v2"
 
 	"github.com/nicjohnson145/mixer/mixerserver/config"
 	"github.com/nicjohnson145/mixer/mixerserver/internal/service"
@@ -47,20 +48,38 @@ func Root() *cobra.Command {
 				DB: db,
 			})
 
+			signingKey := []byte(viper.GetString(config.JWTSigningKey))
+
 			svcLogger := config.WithComponent(logger, "service")
-			service := service.NewService(service.ServiceConfig{
+			svc := service.NewService(service.ServiceConfig{
 				Logger: svcLogger,
 				Storage: store,
+				AccessGenerator: service.MakeGenerationFunc(
+					signingKey,
+					service.TokenTypeAccess,
+					viper.GetDuration(config.JWTAccessDuration),
+				),
+				RefreshGenerator: service.MakeGenerationFunc(
+					signingKey,
+					service.TokenTypeRefresh,
+					viper.GetDuration(config.JWTRefreshDuration),
+				),
 			})
+
+			jwtExemptions := mapset.NewSet[string]()
+			jwtExemptions.Add("/mixer.UserService/Login")
+			jwtExemptions.Add("/mixer.UserService/RegisterNewUser")
+			jwtExemptions.Add("/grpc.reflection.v1alpha.ServerReflection/ServerReflectionInfo")
 
 			grpcServer := grpc.NewServer(
 				grpc.ChainUnaryInterceptor(
 					methodLoggingInterceptor(svcLogger),
+					service.DefaultJWTInterceptor(signingKey, jwtExemptions, "/mixer.UserService/Refresh"),
 				),
 			)
 
-			pb.RegisterUserServiceServer(grpcServer, service)
-			pb.RegisterDrinkServiceServer(grpcServer, service)
+			pb.RegisterUserServiceServer(grpcServer, svc)
+			pb.RegisterDrinkServiceServer(grpcServer, svc)
 			reflection.Register(grpcServer)
 
 			port := ":" + viper.GetString(config.GRPCPort)

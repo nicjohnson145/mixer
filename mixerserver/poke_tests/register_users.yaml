@@ -5,6 +5,8 @@ vars:
 calls:
 - name: create-foo
   type: grpc
+  headers:
+    authorization: '{{ env "SUPERUSER_JWT" }}'
   service-host: '{{ .service }}'
   url: '{{ .user_service }}/RegisterNewUser'
   body:
@@ -12,6 +14,8 @@ calls:
     password: foopass
 - name: create-bar
   type: grpc
+  headers:
+    authorization: '{{ env "SUPERUSER_JWT" }}'
   service-host: '{{ .service }}'
   url: '{{ .user_service }}/RegisterNewUser'
   body:
@@ -19,6 +23,8 @@ calls:
     password: barpass
 - name: create-baz
   type: grpc
+  headers:
+    authorization: '{{ env "SUPERUSER_JWT" }}'
   service-host: '{{ .service }}'
   url: '{{ .user_service }}/RegisterNewUser'
   body:
