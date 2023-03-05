@@ -717,5 +717,9 @@ class DrinkServiceApi {
     var emptyResponse = UpdateDrinkResponse();
     return _client.invoke<UpdateDrinkResponse>(ctx, 'DrinkService', 'Update', request, emptyResponse);
   }
+  $async.Future<DeleteDrinkResponse> delete($pb.ClientContext? ctx, DeleteDrinkRequest request) {
+    var emptyResponse = DeleteDrinkResponse();
+    return _client.invoke<DeleteDrinkResponse>(ctx, 'DrinkService', 'Delete', request, emptyResponse);
+  }
 }
 

@@ -74,4 +74,5 @@ service DrinkService {
   rpc Create(CreateDrinkRequest) returns (CreateDrinkResponse);
   rpc Read(GetDrinkRequest) returns (GetDrinkResponse);
   rpc Update(UpdateDrinkRequest) returns (UpdateDrinkResponse);
+  rpc Delete(DeleteDrinkRequest) returns (DeleteDrinkResponse);
 }

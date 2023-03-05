@@ -152,6 +152,7 @@ const $core.Map<$core.String, $core.dynamic> DrinkServiceBase$json = const {
     const {'1': 'Create', '2': '.mixer.CreateDrinkRequest', '3': '.mixer.CreateDrinkResponse'},
     const {'1': 'Read', '2': '.mixer.GetDrinkRequest', '3': '.mixer.GetDrinkResponse'},
     const {'1': 'Update', '2': '.mixer.UpdateDrinkRequest', '3': '.mixer.UpdateDrinkResponse'},
+    const {'1': 'Delete', '2': '.mixer.DeleteDrinkRequest', '3': '.mixer.DeleteDrinkResponse'},
   ],
 };
 
@@ -165,7 +166,9 @@ const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> DrinkServi
   '.mixer.Drink': Drink$json,
   '.mixer.UpdateDrinkRequest': UpdateDrinkRequest$json,
   '.mixer.UpdateDrinkResponse': UpdateDrinkResponse$json,
+  '.mixer.DeleteDrinkRequest': DeleteDrinkRequest$json,
+  '.mixer.DeleteDrinkResponse': DeleteDrinkResponse$json,
 };
 
 /// Descriptor for `DrinkService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
-final $typed_data.Uint8List drinkServiceDescriptor = $convert.base64Decode('CgxEcmlua1NlcnZpY2USPwoGQ3JlYXRlEhkubWl4ZXIuQ3JlYXRlRHJpbmtSZXF1ZXN0GhoubWl4ZXIuQ3JlYXRlRHJpbmtSZXNwb25zZRI3CgRSZWFkEhYubWl4ZXIuR2V0RHJpbmtSZXF1ZXN0GhcubWl4ZXIuR2V0RHJpbmtSZXNwb25zZRI/CgZVcGRhdGUSGS5taXhlci5VcGRhdGVEcmlua1JlcXVlc3QaGi5taXhlci5VcGRhdGVEcmlua1Jlc3BvbnNl');
+final $typed_data.Uint8List drinkServiceDescriptor = $convert.base64Decode('CgxEcmlua1NlcnZpY2USPwoGQ3JlYXRlEhkubWl4ZXIuQ3JlYXRlRHJpbmtSZXF1ZXN0GhoubWl4ZXIuQ3JlYXRlRHJpbmtSZXNwb25zZRI3CgRSZWFkEhYubWl4ZXIuR2V0RHJpbmtSZXF1ZXN0GhcubWl4ZXIuR2V0RHJpbmtSZXNwb25zZRI/CgZVcGRhdGUSGS5taXhlci5VcGRhdGVEcmlua1JlcXVlc3QaGi5taXhlci5VcGRhdGVEcmlua1Jlc3BvbnNlEj8KBkRlbGV0ZRIZLm1peGVyLkRlbGV0ZURyaW5rUmVxdWVzdBoaLm1peGVyLkRlbGV0ZURyaW5rUmVzcG9uc2U=');
