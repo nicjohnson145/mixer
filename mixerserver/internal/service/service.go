@@ -74,12 +74,13 @@ func (s *Service) Read(ctx context.Context, req *pb.GetDrinkRequest) (*pb.GetDri
 	if req.Id == 0 {
 		return nil, singleFieldViolation("id", "id must be set")
 	}
-	// TODO: pull from auth token
-	data, err := s.store.GetDrink("foo", int(req.Id))
+	data, err := s.store.GetDrink(int(req.Id))
 	if err != nil {
 		s.log.Err(err).Msg("error reading drink")
 		return nil, err
 	}
+
+	// TODO: check if auth token user can access this drink
 
 	return &pb.GetDrinkResponse{Drink: data}, nil
 }

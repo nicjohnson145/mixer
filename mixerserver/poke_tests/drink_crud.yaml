@@ -26,16 +26,15 @@ calls:
   body:
     id: '{{ .daquiri_id }}'
   asserts:
-  - jq: '.'
+  - jq: '.drink'
     expected:
-      drink:
-        id: '{{ .daquiri_id }}'
-        username: foo
-        drinkData:
-          name: Daquiri
-          primaryAlcohol: Rum
-          ingredients:
-          - 2.5 oz white Rum
-          - 0.5 oz simple syrup
-          - 1 oz lime juice
-          publicity: "DrinkPublicity_Public"
+      id: '{{ .daquiri_id }}'
+      username: foo
+      drinkData:
+        name: Daquiri
+        primaryAlcohol: Rum
+        ingredients:
+        - 2.5 oz white Rum
+        - 0.5 oz simple syrup
+        - 1 oz lime juice
+        publicity: "DrinkPublicity_Public"

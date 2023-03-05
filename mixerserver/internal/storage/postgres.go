@@ -71,7 +71,7 @@ func (p *PostgresStore) CreateDrink(username string, d *pb.DrinkData) (int, erro
 	return drink.ID, nil
 }
 
-func (p *PostgresStore) GetDrink(username string, id int) (*pb.Drink, error) {
+func (p *PostgresStore) GetDrink(id int) (*pb.Drink, error) {
 	drink, err := models.FindDrink(context.Background(), p.db, id)
 	if err != nil {
 		return nil, fmt.Errorf("error fetching drink: %w", err)
