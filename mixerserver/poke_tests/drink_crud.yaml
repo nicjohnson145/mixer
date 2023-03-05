@@ -96,3 +96,13 @@ calls:
         - 1 oz lime juice
         publicity: "DrinkPublicity_Public"
         favorite: true
+
+- name: read nonexistant drink
+  type: grpc
+  headers:
+    authorization: '{{ .accessToken }}'
+  service-host: '{{ .service }}'
+  url: '{{ .drink_service }}/Read'
+  body:
+    id: 50000
+  want-status: 5

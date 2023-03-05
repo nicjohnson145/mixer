@@ -127,7 +127,7 @@ func (s *Service) Read(ctx context.Context, req *pb.GetDrinkRequest) (*pb.GetDri
 	data, err := s.store.GetDrink(int(req.Id))
 	if err != nil {
 		s.log.Err(err).Msg("error reading drink")
-		return nil, err
+		return nil, wrapStorageErrors(err)
 	}
 
 	// TODO: check if auth token user can access this drink

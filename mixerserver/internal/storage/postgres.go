@@ -3,6 +3,7 @@ package storage
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 
 	"github.com/aarondl/opt/omit"
@@ -12,6 +13,8 @@ import (
 
 	"github.com/rs/zerolog"
 )
+
+var ErrNotFoundError = errors.New("not found")
 
 type PostgresStoreConfig struct {
 	Logger zerolog.Logger
@@ -74,6 +77,9 @@ func (p *PostgresStore) CreateDrink(username string, d *pb.DrinkData) (int, erro
 func (p *PostgresStore) GetDrink(id int) (*pb.Drink, error) {
 	drink, err := models.FindDrink(context.Background(), p.db, id)
 	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, ErrNotFoundError
+		} 
 		return nil, fmt.Errorf("error fetching drink: %w", err)
 	}
 

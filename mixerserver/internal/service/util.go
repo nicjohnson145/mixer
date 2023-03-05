@@ -1,6 +1,9 @@
 package service
 
 import (
+	"errors"
+
+	"github.com/nicjohnson145/mixer/mixerserver/internal/storage"
 	pb "github.com/nicjohnson145/mixer/mixerserver/protos"
 	"github.com/rs/zerolog/log"
 	"golang.org/x/crypto/bcrypt"
@@ -81,3 +84,12 @@ func validateDrinkWriteRequest(data *pb.DrinkData) error {
 	return fieldViolations("invalid drink write request", violations...)
 }
 
+
+func wrapStorageErrors(err error) error {
+	switch true {
+	case errors.Is(err, storage.ErrNotFoundError):
+		return status.Error(codes.NotFound, "not found")
+	default:
+		return err
+	}
+}
