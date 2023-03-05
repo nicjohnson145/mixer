@@ -25,14 +25,15 @@ type Service struct {
 	log   zerolog.Logger
 	store storage.Storage
 	pb.UnimplementedUserServiceServer
+	pb.UnimplementedDrinkServiceServer
 }
 
 func (s *Service) RegisterNewUser(ctx context.Context, req *pb.RegisterNewUserRequest) (*pb.RegisterNewUserResponse, error) {
 	if req.Username == "" {
-		return nil, singleFieldViolation("username", "username is required", "")
+		return nil, singleFieldViolation("username", "username is required")
 	}
 	if req.Password == "" {
-		return nil, singleFieldViolation("password", "password is required", "")
+		return nil, singleFieldViolation("password", "password is required")
 	}
 
 	hashedPw, err := hashPassword(req.Password)
@@ -52,3 +53,34 @@ func (s *Service) RegisterNewUser(ctx context.Context, req *pb.RegisterNewUserRe
 
 	return &pb.RegisterNewUserResponse{}, nil
 }
+
+func (s *Service) Create(ctx context.Context, req *pb.CreateDrinkRequest) (*pb.CreateDrinkResponse, error) {
+	if err := validateDrinkWriteRequest(req.DrinkData); err != nil {
+		s.log.Err(err).Msg("error validating create request")
+		return nil, err
+	}
+
+	// TODO: pull from auth token
+	id, err := s.store.CreateDrink("foo", req.DrinkData)
+	if err != nil {
+		s.log.Err(err).Msg("error persisting drink")
+		return nil, err
+	}
+
+	return &pb.CreateDrinkResponse{Id: int64(id)}, nil
+}
+
+func (s *Service) Read(ctx context.Context, req *pb.GetDrinkRequest) (*pb.GetDrinkResponse, error) {
+	if req.Id == 0 {
+		return nil, singleFieldViolation("id", "id must be set")
+	}
+	// TODO: pull from auth token
+	data, err := s.store.GetDrink("foo", int(req.Id))
+	if err != nil {
+		s.log.Err(err).Msg("error reading drink")
+		return nil, err
+	}
+
+	return &pb.GetDrinkResponse{Drink: data}, nil
+}
+

@@ -1,0 +1,41 @@
+vars:
+  service: "localhost:50051"
+  user_service: "mixer.DrinkService"
+
+calls:
+- name: create daquiri
+  type: grpc
+  service-host: '{{ .service }}'
+  url: '{{ .user_service }}/Create'
+  body:
+    drink_data:
+      name: Daquiri
+      primary_alcohol: Rum
+      ingredients:
+      - 2.5 oz white Rum
+      - 0.5 oz simple syrup
+      - 1 oz lime juice
+      publicity: 1
+  exports:
+  - jq: '.id'
+    as: "daquiri_id"
+- name: read daquiri
+  type: grpc
+  service-host: '{{ .service }}'
+  url: '{{ .user_service }}/Read'
+  body:
+    id: '{{ .daquiri_id }}'
+  asserts:
+  - jq: '.'
+    expected:
+      drink:
+        id: '{{ .daquiri_id }}'
+        username: foo
+        drinkData:
+          name: Daquiri
+          primaryAlcohol: Rum
+          ingredients:
+          - 2.5 oz white Rum
+          - 0.5 oz simple syrup
+          - 1 oz lime juice
+          publicity: "DrinkPublicity_Public"

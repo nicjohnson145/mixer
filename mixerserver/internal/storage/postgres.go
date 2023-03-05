@@ -7,6 +7,7 @@ import (
 
 	"github.com/aarondl/opt/omit"
 	"github.com/nicjohnson145/mixer/mixerserver/internal/storage/models"
+	pb "github.com/nicjohnson145/mixer/mixerserver/protos"
 	"github.com/stephenafamo/bob"
 
 	"github.com/rs/zerolog"
@@ -53,4 +54,33 @@ func (p *PostgresStore) ReadUser(username string) (*User, error) {
 		Username: usr.Username,
 		Password: usr.Password,
 	}, nil
+}
+
+func (p *PostgresStore) CreateDrink(username string, d *pb.DrinkData) (int, error) {
+	setter, err := drinkDataToDrinkSetter(d)
+	if err != nil {
+		return 0, fmt.Errorf("error during model conversion: %w", err)
+	}
+	setter.Username = omit.From(username)
+
+	drink, err := models.DrinksTable.Insert(context.Background(), p.db, setter)
+	if err != nil {
+		return 0, fmt.Errorf("error inserting drink: %w", err)
+	}
+
+	return drink.ID, nil
+}
+
+func (p *PostgresStore) GetDrink(username string, id int) (*pb.Drink, error) {
+	drink, err := models.FindDrink(context.Background(), p.db, id)
+	if err != nil {
+		return nil, fmt.Errorf("error fetching drink: %w", err)
+	}
+
+	pbDrink, err := drinkModelToPbDrink(drink)
+	if err != nil {
+		return nil, fmt.Errorf("error during model conversion: %w", err)
+	}
+
+	return pbDrink, nil
 }

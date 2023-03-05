@@ -60,6 +60,7 @@ func Root() *cobra.Command {
 			)
 
 			pb.RegisterUserServiceServer(grpcServer, service)
+			pb.RegisterDrinkServiceServer(grpcServer, service)
 			reflection.Register(grpcServer)
 
 			port := ":" + viper.GetString(config.GRPCPort)
