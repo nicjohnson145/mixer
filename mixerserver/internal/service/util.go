@@ -94,5 +94,8 @@ func wrapStorageErrors(err error) error {
 }
 
 func canViewDrink(claims *JWTClaims, d *pb.Drink) bool {
+	if claims.IsSuperuser {
+		return true
+	}
 	return d.Username == claims.Username || d.DrinkData.Publicity == pb.DrinkPublicity_DrinkPublicity_Public
 }
