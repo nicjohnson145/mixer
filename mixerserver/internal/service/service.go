@@ -137,7 +137,7 @@ func (s *Service) ReadDrink(ctx context.Context, req *pb.GetDrinkRequest) (*pb.G
 		return nil, err
 	}
 
-	if !canViewDrink(claims.Username, data) {
+	if !canViewDrink(claims, data) {
 		return nil, status.Error(codes.NotFound, "not found")
 	}
 
@@ -187,7 +187,7 @@ func (s *Service) ListDrinks(ctx context.Context, req *pb.ListDrinkRequest) (*pb
 	}
 
 	filteredDrinks := lo.Filter(drinks, func(d *pb.Drink, _ int) bool {
-		return canViewDrink(claims.Username, d)
+		return canViewDrink(claims, d)
 	})
 
 	return &pb.ListDrinkResponse{
