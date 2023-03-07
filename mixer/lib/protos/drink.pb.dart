@@ -701,6 +701,94 @@ class GetDrinksByUserResponse extends $pb.GeneratedMessage {
   $core.List<Drink> get drinks => $_getList(0);
 }
 
+class ListDrinkRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ListDrinkRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'mixer'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'username')
+    ..hasRequiredFields = false
+  ;
+
+  ListDrinkRequest._() : super();
+  factory ListDrinkRequest({
+    $core.String? username,
+  }) {
+    final _result = create();
+    if (username != null) {
+      _result.username = username;
+    }
+    return _result;
+  }
+  factory ListDrinkRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ListDrinkRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ListDrinkRequest clone() => ListDrinkRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ListDrinkRequest copyWith(void Function(ListDrinkRequest) updates) => super.copyWith((message) => updates(message as ListDrinkRequest)) as ListDrinkRequest; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static ListDrinkRequest create() => ListDrinkRequest._();
+  ListDrinkRequest createEmptyInstance() => create();
+  static $pb.PbList<ListDrinkRequest> createRepeated() => $pb.PbList<ListDrinkRequest>();
+  @$core.pragma('dart2js:noInline')
+  static ListDrinkRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ListDrinkRequest>(create);
+  static ListDrinkRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get username => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set username($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasUsername() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearUsername() => clearField(1);
+}
+
+class ListDrinkResponse extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ListDrinkResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'mixer'), createEmptyInstance: create)
+    ..pc<Drink>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'drinks', $pb.PbFieldType.PM, subBuilder: Drink.create)
+    ..hasRequiredFields = false
+  ;
+
+  ListDrinkResponse._() : super();
+  factory ListDrinkResponse({
+    $core.Iterable<Drink>? drinks,
+  }) {
+    final _result = create();
+    if (drinks != null) {
+      _result.drinks.addAll(drinks);
+    }
+    return _result;
+  }
+  factory ListDrinkResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ListDrinkResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ListDrinkResponse clone() => ListDrinkResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ListDrinkResponse copyWith(void Function(ListDrinkResponse) updates) => super.copyWith((message) => updates(message as ListDrinkResponse)) as ListDrinkResponse; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static ListDrinkResponse create() => ListDrinkResponse._();
+  ListDrinkResponse createEmptyInstance() => create();
+  static $pb.PbList<ListDrinkResponse> createRepeated() => $pb.PbList<ListDrinkResponse>();
+  @$core.pragma('dart2js:noInline')
+  static ListDrinkResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ListDrinkResponse>(create);
+  static ListDrinkResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<Drink> get drinks => $_getList(0);
+}
+
 class DrinkServiceApi {
   $pb.RpcClient _client;
   DrinkServiceApi(this._client);
@@ -720,6 +808,10 @@ class DrinkServiceApi {
   $async.Future<DeleteDrinkResponse> delete($pb.ClientContext? ctx, DeleteDrinkRequest request) {
     var emptyResponse = DeleteDrinkResponse();
     return _client.invoke<DeleteDrinkResponse>(ctx, 'DrinkService', 'Delete', request, emptyResponse);
+  }
+  $async.Future<ListDrinkResponse> list($pb.ClientContext? ctx, ListDrinkRequest request) {
+    var emptyResponse = ListDrinkResponse();
+    return _client.invoke<ListDrinkResponse>(ctx, 'DrinkService', 'List', request, emptyResponse);
   }
 }
 

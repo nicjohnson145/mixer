@@ -70,9 +70,18 @@ message GetDrinksByUserResponse {
   repeated Drink drinks = 1;
 }
 
+message ListDrinkRequest {
+  string username = 1;
+}
+
+message ListDrinkResponse {
+  repeated Drink drinks = 1;
+}
+
 service DrinkService {
   rpc Create(CreateDrinkRequest) returns (CreateDrinkResponse);
   rpc Read(GetDrinkRequest) returns (GetDrinkResponse);
   rpc Update(UpdateDrinkRequest) returns (UpdateDrinkResponse);
   rpc Delete(DeleteDrinkRequest) returns (DeleteDrinkResponse);
+  rpc List(ListDrinkRequest) returns (ListDrinkResponse);
 }

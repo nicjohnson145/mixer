@@ -26,6 +26,7 @@ type DrinkServiceClient interface {
 	Read(ctx context.Context, in *GetDrinkRequest, opts ...grpc.CallOption) (*GetDrinkResponse, error)
 	Update(ctx context.Context, in *UpdateDrinkRequest, opts ...grpc.CallOption) (*UpdateDrinkResponse, error)
 	Delete(ctx context.Context, in *DeleteDrinkRequest, opts ...grpc.CallOption) (*DeleteDrinkResponse, error)
+	List(ctx context.Context, in *ListDrinkRequest, opts ...grpc.CallOption) (*ListDrinkResponse, error)
 }
 
 type drinkServiceClient struct {
@@ -72,6 +73,15 @@ func (c *drinkServiceClient) Delete(ctx context.Context, in *DeleteDrinkRequest,
 	return out, nil
 }
 
+func (c *drinkServiceClient) List(ctx context.Context, in *ListDrinkRequest, opts ...grpc.CallOption) (*ListDrinkResponse, error) {
+	out := new(ListDrinkResponse)
+	err := c.cc.Invoke(ctx, "/mixer.DrinkService/List", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // DrinkServiceServer is the server API for DrinkService service.
 // All implementations must embed UnimplementedDrinkServiceServer
 // for forward compatibility
@@ -80,6 +90,7 @@ type DrinkServiceServer interface {
 	Read(context.Context, *GetDrinkRequest) (*GetDrinkResponse, error)
 	Update(context.Context, *UpdateDrinkRequest) (*UpdateDrinkResponse, error)
 	Delete(context.Context, *DeleteDrinkRequest) (*DeleteDrinkResponse, error)
+	List(context.Context, *ListDrinkRequest) (*ListDrinkResponse, error)
 	mustEmbedUnimplementedDrinkServiceServer()
 }
 
@@ -98,6 +109,9 @@ func (UnimplementedDrinkServiceServer) Update(context.Context, *UpdateDrinkReque
 }
 func (UnimplementedDrinkServiceServer) Delete(context.Context, *DeleteDrinkRequest) (*DeleteDrinkResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
+}
+func (UnimplementedDrinkServiceServer) List(context.Context, *ListDrinkRequest) (*ListDrinkResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
 }
 func (UnimplementedDrinkServiceServer) mustEmbedUnimplementedDrinkServiceServer() {}
 
@@ -184,6 +198,24 @@ func _DrinkService_Delete_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _DrinkService_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListDrinkRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DrinkServiceServer).List(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/mixer.DrinkService/List",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DrinkServiceServer).List(ctx, req.(*ListDrinkRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // DrinkService_ServiceDesc is the grpc.ServiceDesc for DrinkService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -206,6 +238,10 @@ var DrinkService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Delete",
 			Handler:    _DrinkService_Delete_Handler,
+		},
+		{
+			MethodName: "List",
+			Handler:    _DrinkService_List_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

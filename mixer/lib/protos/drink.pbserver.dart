@@ -20,6 +20,7 @@ abstract class DrinkServiceBase extends $pb.GeneratedService {
   $async.Future<$0.GetDrinkResponse> read($pb.ServerContext ctx, $0.GetDrinkRequest request);
   $async.Future<$0.UpdateDrinkResponse> update($pb.ServerContext ctx, $0.UpdateDrinkRequest request);
   $async.Future<$0.DeleteDrinkResponse> delete($pb.ServerContext ctx, $0.DeleteDrinkRequest request);
+  $async.Future<$0.ListDrinkResponse> list($pb.ServerContext ctx, $0.ListDrinkRequest request);
 
   $pb.GeneratedMessage createRequest($core.String method) {
     switch (method) {
@@ -27,6 +28,7 @@ abstract class DrinkServiceBase extends $pb.GeneratedService {
       case 'Read': return $0.GetDrinkRequest();
       case 'Update': return $0.UpdateDrinkRequest();
       case 'Delete': return $0.DeleteDrinkRequest();
+      case 'List': return $0.ListDrinkRequest();
       default: throw $core.ArgumentError('Unknown method: $method');
     }
   }
@@ -37,6 +39,7 @@ abstract class DrinkServiceBase extends $pb.GeneratedService {
       case 'Read': return this.read(ctx, request as $0.GetDrinkRequest);
       case 'Update': return this.update(ctx, request as $0.UpdateDrinkRequest);
       case 'Delete': return this.delete(ctx, request as $0.DeleteDrinkRequest);
+      case 'List': return this.list(ctx, request as $0.ListDrinkRequest);
       default: throw $core.ArgumentError('Unknown method: $method');
     }
   }
