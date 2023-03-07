@@ -103,23 +103,8 @@ tasks:
     cmds:
     - PGPASSWORD=mixer_pass psql -h localhost -U mixer_usr mixer -f {{ .SQL_FILE }}
 
-  gen-superuser-jwt:
-    desc: generate a superuser JWT
-    preconditions:
-    - sh: '[ -n "$JWT_SIGNINGKEY" ]'
-      message: "JWT_SIGNINGKEY must be set"
-    env:
-      JWT_SIGNINGKEY: $JWT_SIGNINGKEY
-    cmds:
-    - ./mixerserver/hack/gen-jwt.sh
-
   poke-tests:
     desc: run functional tests locally with poke
-    preconditions:
-    - sh: '[ -n "$SUPERUSER_JWT" ]'
-      message: "SUPERUSER_JWT must be set"
-    env:
-      SUPERUSER_JWT: $SUPERUSER_JWT
     cmds:
     - task: clean-db
     - poke mixerserver/poke_tests/register_users.yaml
