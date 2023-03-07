@@ -54,7 +54,7 @@ func (s *Service) RegisterNewUser(ctx context.Context, req *pb.RegisterNewUserRe
 	})
 	if err != nil {
 		s.log.Err(err).Msg("error persisting user")
-		return nil, status.Errorf(codes.Internal, "error persisting user")
+		return nil, wrapStorageErrors(err)
 	}
 
 	return &pb.RegisterNewUserResponse{}, nil
@@ -114,7 +114,7 @@ func (s *Service) CreateDrink(ctx context.Context, req *pb.CreateDrinkRequest) (
 	id, err := s.store.CreateDrink(claims.Username, req.DrinkData)
 	if err != nil {
 		s.log.Err(err).Msg("error persisting drink")
-		return nil, err
+		return nil, wrapStorageErrors(err)
 	}
 
 	return &pb.CreateDrinkResponse{Id: int64(id)}, nil
@@ -154,7 +154,7 @@ func (s *Service) UpdateDrink(ctx context.Context, req *pb.UpdateDrinkRequest) (
 	err = s.store.UpdateDrink(claims.Username, req.Id, req.DrinkData)
 	if err != nil {
 		s.log.Err(err).Msg("error persisting drink")
-		return nil, err
+		return nil, wrapStorageErrors(err)
 	}
 
 	return &pb.UpdateDrinkResponse{}, nil
@@ -168,7 +168,7 @@ func (s *Service) ListDrinks(ctx context.Context, req *pb.ListDrinkRequest) (*pb
 	drinks, err := s.store.ListDrinkByUsername(req.Username)
 	if err != nil {
 		s.log.Err(err).Msg("error listing drinks")
-		return nil, err
+		return nil, wrapStorageErrors(err)
 	}
 
 	return &pb.ListDrinkResponse{
