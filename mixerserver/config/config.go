@@ -34,8 +34,8 @@ func InitializeConfig(cmd *cobra.Command) error {
 	viper.SetDefault(ProtectRegister, true)
 
 	viper.SetDefault(JWTSigningKey, []byte("0RWq7c4Kl8HJeTAgdpLjxUYC4P2vEjzwOqW"))
-	viper.SetDefault(JWTRefreshDuration, 24 * 30 * time.Hour)
-	viper.SetDefault(JWTAccessDuration, 5 * time.Minute)
+	viper.SetDefault(JWTRefreshDuration, 24*30*time.Hour)
+	viper.SetDefault(JWTAccessDuration, 5*time.Minute)
 
 	viper.SetDefault(Debug, false)
 

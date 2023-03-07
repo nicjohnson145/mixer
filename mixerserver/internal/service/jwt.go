@@ -109,18 +109,17 @@ func jwtClaimsFromCtx(ctx context.Context) (*JWTClaims, error) {
 	return claims, nil
 }
 
-
 type GenerationFunc func(u *storage.User) (string, error)
 
 func MakeGenerationFunc(signingKey []byte, tokenType TokenType, expiration time.Duration) GenerationFunc {
 	return func(u *storage.User) (string, error) {
 		now := time.Now()
 		return generateJWTStr(signingKey, JWTClaims{
-			TokenType: tokenType,
-			Username: u.Username,
+			TokenType:   tokenType,
+			Username:    u.Username,
 			IsSuperuser: false,
 			RegisteredClaims: jwt.RegisteredClaims{
-				IssuedAt: jwt.NewNumericDate(now),
+				IssuedAt:  jwt.NewNumericDate(now),
 				ExpiresAt: jwt.NewNumericDate(now.Add(expiration)),
 			},
 		})

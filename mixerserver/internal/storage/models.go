@@ -16,12 +16,12 @@ type drink struct {
 	Username         string         `db:"username"`
 	PrimaryAlcohol   string         `db:"primary_alcohol"`
 	PreferredGlass   sql.NullString `db:"preferred_glass" goqu:"defaultifempty"`
-	Ingredients      *stringList     `db:"ingredients"`
+	Ingredients      *stringList    `db:"ingredients"`
 	Instructions     sql.NullString `db:"instructions" goqu:"defaultifempty"`
 	Notes            sql.NullString `db:"notes" goqu:"defaultifempty"`
 	Publicity        int64          `db:"publicity"`
 	UnderDevelopment bool           `db:"under_development"`
-	Tags             *stringList     `db:"tags" goqu:"defaultifempty"`
+	Tags             *stringList    `db:"tags" goqu:"defaultifempty"`
 	Favorite         bool           `db:"favorite"`
 }
 

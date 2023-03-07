@@ -41,38 +41,38 @@ func fieldViolations(desc string, violations ...*errdetails.BadRequest_FieldViol
 
 func singleFieldViolation(fieldName string, desc string) error {
 	return fieldViolations(desc, &errdetails.BadRequest_FieldViolation{
-		Field: fieldName,
+		Field:       fieldName,
 		Description: desc,
 	})
 }
 
 func validateDrinkWriteRequest(data *pb.DrinkData) error {
 	violations := []*errdetails.BadRequest_FieldViolation{}
-	
+
 	if data.Name == "" {
 		violations = append(violations, &errdetails.BadRequest_FieldViolation{
-			Field: "name",
+			Field:       "name",
 			Description: "name is required",
 		})
 	}
 
 	if data.PrimaryAlcohol == "" {
 		violations = append(violations, &errdetails.BadRequest_FieldViolation{
-			Field: "primary_alcohol",
+			Field:       "primary_alcohol",
 			Description: "primary_alcohol is required",
 		})
 	}
 
 	if data.Publicity == pb.DrinkPublicity_DrinkPublicity_Unspecified {
 		violations = append(violations, &errdetails.BadRequest_FieldViolation{
-			Field: "publicity",
+			Field:       "publicity",
 			Description: "publicity is required",
 		})
 	}
 
 	if len(data.Ingredients) == 0 {
 		violations = append(violations, &errdetails.BadRequest_FieldViolation{
-			Field: "ingredients",
+			Field:       "ingredients",
 			Description: "drinks must have at least one ingredient",
 		})
 	}
@@ -84,7 +84,6 @@ func validateDrinkWriteRequest(data *pb.DrinkData) error {
 	return fieldViolations("invalid drink write request", violations...)
 }
 
-
 func wrapStorageErrors(err error) error {
 	switch true {
 	case errors.Is(err, storage.ErrNotFoundError):
@@ -94,6 +93,6 @@ func wrapStorageErrors(err error) error {
 	}
 }
 
-func canViewDrink(username string, d *pb.Drink) bool{
+func canViewDrink(username string, d *pb.Drink) bool {
 	return d.Username == username || d.DrinkData.Publicity == pb.DrinkPublicity_DrinkPublicity_Public
 }

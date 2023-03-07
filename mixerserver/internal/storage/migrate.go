@@ -37,4 +37,3 @@ func Migrate(db *sql.DB) error {
 
 	return nil
 }
-

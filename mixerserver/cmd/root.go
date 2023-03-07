@@ -2,10 +2,10 @@ package cmd
 
 import (
 	"context"
+	mapset "github.com/deckarep/golang-set/v2"
 	"net"
 	"net/http"
 	"strings"
-	mapset "github.com/deckarep/golang-set/v2"
 
 	"github.com/nicjohnson145/mixer/mixerserver/config"
 	"github.com/nicjohnson145/mixer/mixerserver/internal/service"
@@ -45,14 +45,14 @@ func Root() *cobra.Command {
 
 			store := storage.NewPostgresStore(storage.PostgresStoreConfig{
 				Logger: config.WithComponent(logger, "storage"),
-				DB: db,
+				DB:     db,
 			})
 
 			signingKey := []byte(viper.GetString(config.JWTSigningKey))
 
 			svcLogger := config.WithComponent(logger, "service")
 			svc := service.NewService(service.ServiceConfig{
-				Logger: svcLogger,
+				Logger:  svcLogger,
 				Storage: store,
 				AccessGenerator: service.MakeGenerationFunc(
 					signingKey,

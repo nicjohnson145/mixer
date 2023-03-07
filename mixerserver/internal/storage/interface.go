@@ -10,11 +10,11 @@ type User struct {
 }
 
 type Storage interface {
-	CreateUser(u User) (error)
+	CreateUser(u User) error
 	ReadUser(username string) (*User, error)
 
 	CreateDrink(username string, d *pb.DrinkData) (int64, error)
 	GetDrink(id int64) (*pb.Drink, error)
-	UpdateDrink(username string, id int64, d *pb.DrinkData) (error)
+	UpdateDrink(username string, id int64, d *pb.DrinkData) error
 	ListDrinkByUsername(username string) ([]*pb.Drink, error)
 }

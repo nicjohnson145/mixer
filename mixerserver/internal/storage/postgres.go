@@ -91,7 +91,7 @@ func (p *PostgresStore) GetDrink(id int64) (*pb.Drink, error) {
 	return drinkToPbDrink(drink), nil
 }
 
-func (p *PostgresStore) UpdateDrink(username string, id int64, d *pb.DrinkData) (error) {
+func (p *PostgresStore) UpdateDrink(username string, id int64, d *pb.DrinkData) error {
 	data := drinkDataToDrink(d)
 	data.Username = username
 
@@ -110,7 +110,6 @@ func (p *PostgresStore) UpdateDrink(username string, id int64, d *pb.DrinkData) 
 
 	return nil
 }
-
 
 func (p *PostgresStore) ListDrinkByUsername(username string) ([]*pb.Drink, error) {
 	var drinks []drink
