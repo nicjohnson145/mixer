@@ -124,3 +124,22 @@ func (p *PostgresStore) ListDrinkByUsername(username string) ([]*pb.Drink, error
 		return drinkToPbDrink(d)
 	}), nil
 }
+
+func (p *PostgresStore) DeleteDrink(id int64) error {
+	query := p.db.Delete("drink").Where(goqu.C("id").Eq(id))
+
+	result, err := query.Executor().Exec()
+	if err != nil {
+		return fmt.Errorf("error deleting drink: %w", err)
+	}
+
+	numRows, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("error determining number of affected rows: %w", err)
+	}
+	if numRows == 0 {
+		return ErrNotFoundError
+	}
+
+	return nil
+}

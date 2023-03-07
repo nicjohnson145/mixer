@@ -139,3 +139,25 @@ calls:
     expected:
     - "Daquiri"
     - "Bee's Knees"
+
+- name: delete drinko
+  type: grpc
+  headers:
+    authorization: '{{ .accessToken }}'
+  service-host: '{{ .service }}'
+  url: '{{ .drink_service }}/DeleteDrink'
+  body:
+    id: '{{ .daquiri_id }}'
+
+- name: list drinks after delete
+  type: grpc
+  headers:
+    authorization: '{{ .accessToken }}'
+  service-host: '{{ .service }}'
+  url: '{{ .drink_service }}/ListDrinks'
+  body:
+    username: baz
+  asserts:
+  - jq: '.drinks | [.[] | .drinkData.name]'
+    expected:
+    - "Bee's Knees"

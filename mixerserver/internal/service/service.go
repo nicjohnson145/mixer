@@ -194,3 +194,31 @@ func (s *Service) ListDrinks(ctx context.Context, req *pb.ListDrinkRequest) (*pb
 		Drinks: filteredDrinks,
 	}, nil
 }
+
+func (s *Service) DeleteDrink(ctx context.Context, req *pb.DeleteDrinkRequest) (*pb.DeleteDrinkResponse, error) {
+	if req.Id == 0 {
+		return nil, singleFieldViolation("id", "id is required")
+	}
+
+	claims, err := jwtClaimsFromCtx(ctx)
+	if err != nil {
+		s.log.Err(err).Msg("error pulling claims from context")
+		return nil, err
+	}
+
+	drink, err := s.store.GetDrink(req.Id)
+	if err != nil {
+		return nil, wrapStorageErrors(err)
+	}
+
+	if drink.Username != claims.Username {
+		return nil, status.Error(codes.NotFound, "not found")
+	}
+
+	err = s.store.DeleteDrink(req.Id)
+	if err != nil {
+		return nil, wrapStorageErrors(err)
+	}
+
+	return &pb.DeleteDrinkResponse{}, nil
+}
