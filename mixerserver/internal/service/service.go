@@ -110,7 +110,6 @@ func (s *Service) CreateDrink(ctx context.Context, req *pb.CreateDrinkRequest) (
 		return nil, err
 	}
 
-	// TODO: pull from auth token
 	id, err := s.store.CreateDrink(claims.Username, req.DrinkData)
 	if err != nil {
 		s.log.Err(err).Msg("error persisting drink")
@@ -130,7 +129,16 @@ func (s *Service) ReadDrink(ctx context.Context, req *pb.GetDrinkRequest) (*pb.G
 		return nil, wrapStorageErrors(err)
 	}
 
-	// TODO: check if auth token user can access this drink
+	claims, err := jwtClaimsFromCtx(ctx)
+	if err != nil {
+		s.log.Err(err).Msg("error pulling claims from context")
+		return nil, err
+	}
+
+	if data.Username != claims.Username && data.DrinkData.Publicity != pb.DrinkPublicity_DrinkPublicity_Public {
+		return nil, status.Error(codes.NotFound, "not found")
+	}
+
 	return &pb.GetDrinkResponse{Drink: data}, nil
 }
 

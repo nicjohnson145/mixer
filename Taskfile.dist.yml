@@ -124,3 +124,4 @@ tasks:
     - task: clean-db
     - poke mixerserver/poke_tests/register_users.yaml
     - poke mixerserver/poke_tests/drink_crud.yaml
+    - poke mixerserver/poke_tests/read_other_users_drinks.yaml
