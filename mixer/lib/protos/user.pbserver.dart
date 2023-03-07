@@ -18,11 +18,13 @@ export 'user.pb.dart';
 abstract class UserServiceBase extends $pb.GeneratedService {
   $async.Future<$1.RegisterNewUserResponse> registerNewUser($pb.ServerContext ctx, $1.RegisterNewUserRequest request);
   $async.Future<$1.LoginResponse> login($pb.ServerContext ctx, $1.LoginRequest request);
+  $async.Future<$1.ListUsersResponse> listUsers($pb.ServerContext ctx, $1.ListUsersRequest request);
 
   $pb.GeneratedMessage createRequest($core.String method) {
     switch (method) {
       case 'RegisterNewUser': return $1.RegisterNewUserRequest();
       case 'Login': return $1.LoginRequest();
+      case 'ListUsers': return $1.ListUsersRequest();
       default: throw $core.ArgumentError('Unknown method: $method');
     }
   }
@@ -31,6 +33,7 @@ abstract class UserServiceBase extends $pb.GeneratedService {
     switch (method) {
       case 'RegisterNewUser': return this.registerNewUser(ctx, request as $1.RegisterNewUserRequest);
       case 'Login': return this.login(ctx, request as $1.LoginRequest);
+      case 'ListUsers': return this.listUsers(ctx, request as $1.ListUsersRequest);
       default: throw $core.ArgumentError('Unknown method: $method');
     }
   }

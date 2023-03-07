@@ -99,16 +99,23 @@ const LoginResponse$json = const {
 
 /// Descriptor for `LoginResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List loginResponseDescriptor = $convert.base64Decode('Cg1Mb2dpblJlc3BvbnNlEhoKCHVzZXJuYW1lGAEgASgJUgh1c2VybmFtZRIhCgxhY2Nlc3NfdG9rZW4YAiABKAlSC2FjY2Vzc1Rva2VuEiMKDXJlZnJlc2hfdG9rZW4YAyABKAlSDHJlZnJlc2hUb2tlbg==');
-@$core.Deprecated('Use getPublicUsersResponseDescriptor instead')
-const GetPublicUsersResponse$json = const {
-  '1': 'GetPublicUsersResponse',
+@$core.Deprecated('Use listUsersRequestDescriptor instead')
+const ListUsersRequest$json = const {
+  '1': 'ListUsersRequest',
+};
+
+/// Descriptor for `ListUsersRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List listUsersRequestDescriptor = $convert.base64Decode('ChBMaXN0VXNlcnNSZXF1ZXN0');
+@$core.Deprecated('Use listUsersResponseDescriptor instead')
+const ListUsersResponse$json = const {
+  '1': 'ListUsersResponse',
   '2': const [
     const {'1': 'users', '3': 1, '4': 3, '5': 9, '10': 'users'},
   ],
 };
 
-/// Descriptor for `GetPublicUsersResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getPublicUsersResponseDescriptor = $convert.base64Decode('ChZHZXRQdWJsaWNVc2Vyc1Jlc3BvbnNlEhQKBXVzZXJzGAEgAygJUgV1c2Vycw==');
+/// Descriptor for `ListUsersResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List listUsersResponseDescriptor = $convert.base64Decode('ChFMaXN0VXNlcnNSZXNwb25zZRIUCgV1c2VycxgBIAMoCVIFdXNlcnM=');
 @$core.Deprecated('Use refreshTokenResponseDescriptor instead')
 const RefreshTokenResponse$json = const {
   '1': 'RefreshTokenResponse',
@@ -152,6 +159,7 @@ const $core.Map<$core.String, $core.dynamic> UserServiceBase$json = const {
   '2': const [
     const {'1': 'RegisterNewUser', '2': '.mixer.RegisterNewUserRequest', '3': '.mixer.RegisterNewUserResponse', '4': const {}},
     const {'1': 'Login', '2': '.mixer.LoginRequest', '3': '.mixer.LoginResponse'},
+    const {'1': 'ListUsers', '2': '.mixer.ListUsersRequest', '3': '.mixer.ListUsersResponse'},
   ],
 };
 
@@ -161,7 +169,9 @@ const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> UserServic
   '.mixer.RegisterNewUserResponse': RegisterNewUserResponse$json,
   '.mixer.LoginRequest': LoginRequest$json,
   '.mixer.LoginResponse': LoginResponse$json,
+  '.mixer.ListUsersRequest': ListUsersRequest$json,
+  '.mixer.ListUsersResponse': ListUsersResponse$json,
 };
 
 /// Descriptor for `UserService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
-final $typed_data.Uint8List userServiceDescriptor = $convert.base64Decode('CgtVc2VyU2VydmljZRJ3Cg9SZWdpc3Rlck5ld1VzZXISHS5taXhlci5SZWdpc3Rlck5ld1VzZXJSZXF1ZXN0Gh4ubWl4ZXIuUmVnaXN0ZXJOZXdVc2VyUmVzcG9uc2UiJYLT5JMCHyIaL2FwaS92MS9hdXRoL3JlZ2lzdGVyLXVzZXI6ASoSMgoFTG9naW4SEy5taXhlci5Mb2dpblJlcXVlc3QaFC5taXhlci5Mb2dpblJlc3BvbnNl');
+final $typed_data.Uint8List userServiceDescriptor = $convert.base64Decode('CgtVc2VyU2VydmljZRJ3Cg9SZWdpc3Rlck5ld1VzZXISHS5taXhlci5SZWdpc3Rlck5ld1VzZXJSZXF1ZXN0Gh4ubWl4ZXIuUmVnaXN0ZXJOZXdVc2VyUmVzcG9uc2UiJYLT5JMCHyIaL2FwaS92MS9hdXRoL3JlZ2lzdGVyLXVzZXI6ASoSMgoFTG9naW4SEy5taXhlci5Mb2dpblJlcXVlc3QaFC5taXhlci5Mb2dpblJlc3BvbnNlEj4KCUxpc3RVc2VycxIXLm1peGVyLkxpc3RVc2Vyc1JlcXVlc3QaGC5taXhlci5MaXN0VXNlcnNSZXNwb25zZQ==');

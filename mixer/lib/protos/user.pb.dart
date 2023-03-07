@@ -424,14 +424,43 @@ class LoginResponse extends $pb.GeneratedMessage {
   void clearRefreshToken() => clearField(3);
 }
 
-class GetPublicUsersResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetPublicUsersResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'mixer'), createEmptyInstance: create)
+class ListUsersRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ListUsersRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'mixer'), createEmptyInstance: create)
+    ..hasRequiredFields = false
+  ;
+
+  ListUsersRequest._() : super();
+  factory ListUsersRequest() => create();
+  factory ListUsersRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ListUsersRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ListUsersRequest clone() => ListUsersRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ListUsersRequest copyWith(void Function(ListUsersRequest) updates) => super.copyWith((message) => updates(message as ListUsersRequest)) as ListUsersRequest; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static ListUsersRequest create() => ListUsersRequest._();
+  ListUsersRequest createEmptyInstance() => create();
+  static $pb.PbList<ListUsersRequest> createRepeated() => $pb.PbList<ListUsersRequest>();
+  @$core.pragma('dart2js:noInline')
+  static ListUsersRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ListUsersRequest>(create);
+  static ListUsersRequest? _defaultInstance;
+}
+
+class ListUsersResponse extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ListUsersResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'mixer'), createEmptyInstance: create)
     ..pPS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'users')
     ..hasRequiredFields = false
   ;
 
-  GetPublicUsersResponse._() : super();
-  factory GetPublicUsersResponse({
+  ListUsersResponse._() : super();
+  factory ListUsersResponse({
     $core.Iterable<$core.String>? users,
   }) {
     final _result = create();
@@ -440,26 +469,26 @@ class GetPublicUsersResponse extends $pb.GeneratedMessage {
     }
     return _result;
   }
-  factory GetPublicUsersResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetPublicUsersResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  factory ListUsersResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ListUsersResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  GetPublicUsersResponse clone() => GetPublicUsersResponse()..mergeFromMessage(this);
+  ListUsersResponse clone() => ListUsersResponse()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  GetPublicUsersResponse copyWith(void Function(GetPublicUsersResponse) updates) => super.copyWith((message) => updates(message as GetPublicUsersResponse)) as GetPublicUsersResponse; // ignore: deprecated_member_use
+  ListUsersResponse copyWith(void Function(ListUsersResponse) updates) => super.copyWith((message) => updates(message as ListUsersResponse)) as ListUsersResponse; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
-  static GetPublicUsersResponse create() => GetPublicUsersResponse._();
-  GetPublicUsersResponse createEmptyInstance() => create();
-  static $pb.PbList<GetPublicUsersResponse> createRepeated() => $pb.PbList<GetPublicUsersResponse>();
+  static ListUsersResponse create() => ListUsersResponse._();
+  ListUsersResponse createEmptyInstance() => create();
+  static $pb.PbList<ListUsersResponse> createRepeated() => $pb.PbList<ListUsersResponse>();
   @$core.pragma('dart2js:noInline')
-  static GetPublicUsersResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetPublicUsersResponse>(create);
-  static GetPublicUsersResponse? _defaultInstance;
+  static ListUsersResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ListUsersResponse>(create);
+  static ListUsersResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.String> get users => $_getList(0);
@@ -664,6 +693,10 @@ class UserServiceApi {
   $async.Future<LoginResponse> login($pb.ClientContext? ctx, LoginRequest request) {
     var emptyResponse = LoginResponse();
     return _client.invoke<LoginResponse>(ctx, 'UserService', 'Login', request, emptyResponse);
+  }
+  $async.Future<ListUsersResponse> listUsers($pb.ClientContext? ctx, ListUsersRequest request) {
+    var emptyResponse = ListUsersResponse();
+    return _client.invoke<ListUsersResponse>(ctx, 'UserService', 'ListUsers', request, emptyResponse);
   }
 }
 
