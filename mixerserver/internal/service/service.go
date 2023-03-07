@@ -137,7 +137,7 @@ func (s *Service) ReadDrink(ctx context.Context, req *pb.GetDrinkRequest) (*pb.G
 		return nil, err
 	}
 
-	if data.Username != claims.Username && data.DrinkData.Publicity != pb.DrinkPublicity_DrinkPublicity_Public {
+	if !canViewDrink(claims.Username, data) {
 		return nil, status.Error(codes.NotFound, "not found")
 	}
 
@@ -160,7 +160,6 @@ func (s *Service) UpdateDrink(ctx context.Context, req *pb.UpdateDrinkRequest) (
 		return nil, err
 	}
 
-	// TODO: pull from auth token
 	err = s.store.UpdateDrink(claims.Username, req.Id, req.DrinkData)
 	if err != nil {
 		s.log.Err(err).Msg("error persisting drink")
@@ -188,7 +187,7 @@ func (s *Service) ListDrinks(ctx context.Context, req *pb.ListDrinkRequest) (*pb
 	}
 
 	filteredDrinks := lo.Filter(drinks, func(d *pb.Drink, _ int) bool {
-		return d.DrinkData.Publicity == pb.DrinkPublicity_DrinkPublicity_Public || d.Username == claims.Username
+		return canViewDrink(claims.Username, d)
 	})
 
 	return &pb.ListDrinkResponse{

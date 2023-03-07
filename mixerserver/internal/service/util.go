@@ -93,3 +93,7 @@ func wrapStorageErrors(err error) error {
 		return err
 	}
 }
+
+func canViewDrink(username string, d *pb.Drink) bool{
+	return d.Username == username || d.DrinkData.Publicity == pb.DrinkPublicity_DrinkPublicity_Public
+}
