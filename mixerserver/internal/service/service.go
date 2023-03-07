@@ -2,9 +2,11 @@ package service
 
 import (
 	"context"
+
 	"github.com/nicjohnson145/mixer/mixerserver/internal/storage"
 	pb "github.com/nicjohnson145/mixer/mixerserver/protos"
 	"github.com/rs/zerolog"
+	"github.com/samber/lo"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -179,7 +181,17 @@ func (s *Service) ListDrinks(ctx context.Context, req *pb.ListDrinkRequest) (*pb
 		return nil, wrapStorageErrors(err)
 	}
 
+	claims, err := jwtClaimsFromCtx(ctx)
+	if err != nil {
+		s.log.Err(err).Msg("error pulling claims from context")
+		return nil, err
+	}
+
+	filteredDrinks := lo.Filter(drinks, func(d *pb.Drink, _ int) bool {
+		return d.DrinkData.Publicity == pb.DrinkPublicity_DrinkPublicity_Public || d.Username == claims.Username
+	})
+
 	return &pb.ListDrinkResponse{
-		Drinks: drinks,
+		Drinks: filteredDrinks,
 	}, nil
 }

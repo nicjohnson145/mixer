@@ -103,10 +103,21 @@ tasks:
     cmds:
     - PGPASSWORD=mixer_pass psql -h localhost -U mixer_usr mixer -f {{ .SQL_FILE }}
 
+  remove-drinks:
+    internal: true
+    cmds:
+    - task: run-sql
+      vars:
+        SQL_FILE: ./mixerserver/hack/remove-drinks.sql
+
   poke-tests:
     desc: run functional tests locally with poke
     cmds:
     - task: clean-db
     - poke mixerserver/poke_tests/register_users.yaml
     - poke mixerserver/poke_tests/drink_crud.yaml
+    - task: remove-drinks
     - poke mixerserver/poke_tests/read_other_users_drinks.yaml
+    - task: remove-drinks
+    - poke mixerserver/poke_tests/list_drink_filtering.yaml
+    - task: remove-drinks

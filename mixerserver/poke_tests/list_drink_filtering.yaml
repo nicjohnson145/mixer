@@ -15,7 +15,7 @@ calls:
   - jq: '.accessToken'
     as: 'baz_token'
 
-- name: create public drink
+- name: create public drink one
   type: grpc
   headers:
     authorization: '{{ .baz_token }}'
@@ -23,13 +23,23 @@ calls:
   url: '{{ .drink_service }}/CreateDrink'
   body:
     drink_data:
-      name: Public Drink
+      name: Public Drink One
       primary_alcohol: Rum
       ingredients: ["2.5 oz Rum"]
       publicity: 1
-  exports:
-  - jq: '.id'
-    as: "public_id"
+
+- name: create public drink two
+  type: grpc
+  headers:
+    authorization: '{{ .baz_token }}'
+  service-host: '{{ .service }}'
+  url: '{{ .drink_service }}/CreateDrink'
+  body:
+    drink_data:
+      name: Public Drink Two
+      primary_alcohol: Rum
+      ingredients: ["2.5 oz Rum"]
+      publicity: 1
 
 - name: create private drink
   type: grpc
@@ -39,13 +49,10 @@ calls:
   url: '{{ .drink_service }}/CreateDrink'
   body:
     drink_data:
-      name: Private Drink
+      name: Private Drink One
       primary_alcohol: Rum
       ingredients: ["2.5 oz Rum"]
       publicity: 2
-  exports:
-  - jq: '.id'
-    as: "private_id"
 
 - name: login foo
   type: grpc
@@ -58,24 +65,31 @@ calls:
   - jq: '.accessToken'
     as: 'foo_token'
 
-- name: read public drink
+- name: list baz drinks as foo
   type: grpc
   headers:
     authorization: '{{ .foo_token }}'
   service-host: '{{ .service }}'
-  url: '{{ .drink_service }}/ReadDrink'
+  url: '{{ .drink_service }}/ListDrinks'
   body:
-    id: '{{ .public_id }}'
+    username: baz
   asserts:
-  - jq: '.drink.drinkData.name'
-    expected: Public Drink
+  - jq: '.drinks | [.[] | .drinkData.name]'
+    expected:
+    - Public Drink One
+    - Public Drink Two
 
-- name: read private drink
+- name: list baz drinks as baz
   type: grpc
   headers:
-    authorization: '{{ .foo_token }}'
+    authorization: '{{ .baz_token }}'
   service-host: '{{ .service }}'
-  url: '{{ .drink_service }}/ReadDrink'
+  url: '{{ .drink_service }}/ListDrinks'
   body:
-    id: '{{ .private_id }}'
-  want-status: 5
+    username: baz
+  asserts:
+  - jq: '.drinks | [.[] | .drinkData.name]'
+    expected:
+    - Public Drink One
+    - Public Drink Two
+    - Private Drink One
