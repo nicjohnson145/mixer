@@ -10,6 +10,7 @@ import (
 	pb "github.com/nicjohnson145/mixer/mixerserver/protos"
 
 	"github.com/rs/zerolog"
+	"github.com/samber/lo"
 )
 
 var ErrNotFoundError = errors.New("not found")
@@ -108,4 +109,19 @@ func (p *PostgresStore) UpdateDrink(username string, id int64, d *pb.DrinkData) 
 	}
 
 	return nil
+}
+
+
+func (p *PostgresStore) ListDrinkByUsername(username string) ([]*pb.Drink, error) {
+	var drinks []drink
+	query := p.db.From("drink").Where(goqu.C("username").Eq(username)).Order(goqu.C("id").Asc())
+
+	err := query.Executor().ScanStructs(&drinks)
+	if err != nil {
+		return nil, fmt.Errorf("error listing drinks by username: %w", err)
+	}
+
+	return lo.Map(drinks, func(d drink, _ int) *pb.Drink {
+		return drinkToPbDrink(d)
+	}), nil
 }

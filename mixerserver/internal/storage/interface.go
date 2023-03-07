@@ -16,4 +16,5 @@ type Storage interface {
 	CreateDrink(username string, d *pb.DrinkData) (int64, error)
 	GetDrink(id int64) (*pb.Drink, error)
 	UpdateDrink(username string, id int64, d *pb.DrinkData) (error)
+	ListDrinkByUsername(username string) ([]*pb.Drink, error)
 }

@@ -106,3 +106,36 @@ calls:
   body:
     id: 50000
   want-status: 5
+
+- name: create bees knees
+  type: grpc
+  headers:
+    authorization: '{{ .accessToken }}'
+  service-host: '{{ .service }}'
+  url: '{{ .drink_service }}/Create'
+  body:
+    drink_data:
+      name: Bee's Knees
+      primary_alcohol: Gin
+      ingredients:
+      - 0.75 oz honey syrup
+      - 0.75 oz lemon juice
+      - 2 oz gin
+      publicity: 1
+  exports:
+  - jq: '.id'
+    as: "bees_knees_id"
+
+- name: list drinks
+  type: grpc
+  headers:
+    authorization: '{{ .accessToken }}'
+  service-host: '{{ .service }}'
+  url: '{{ .drink_service }}/List'
+  body:
+    username: baz
+  asserts:
+  - jq: '.drinks | [.[] | .drinkData.name]'
+    expected:
+    - "Daquiri"
+    - "Bee's Knees"

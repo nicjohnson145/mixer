@@ -160,3 +160,18 @@ func (s *Service) Update(ctx context.Context, req *pb.UpdateDrinkRequest) (*pb.U
 	return &pb.UpdateDrinkResponse{}, nil
 }
 
+func (s *Service) List(ctx context.Context, req *pb.ListDrinkRequest) (*pb.ListDrinkResponse, error) {
+	if req.Username == "" {
+		return nil, singleFieldViolation("username", "username is required")
+	}
+
+	drinks, err := s.store.ListDrinkByUsername(req.Username)
+	if err != nil {
+		s.log.Err(err).Msg("error listing drinks")
+		return nil, err
+	}
+
+	return &pb.ListDrinkResponse{
+		Drinks: drinks,
+	}, nil
+}
