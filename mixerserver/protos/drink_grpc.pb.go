@@ -22,11 +22,11 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DrinkServiceClient interface {
-	Create(ctx context.Context, in *CreateDrinkRequest, opts ...grpc.CallOption) (*CreateDrinkResponse, error)
-	Read(ctx context.Context, in *GetDrinkRequest, opts ...grpc.CallOption) (*GetDrinkResponse, error)
-	Update(ctx context.Context, in *UpdateDrinkRequest, opts ...grpc.CallOption) (*UpdateDrinkResponse, error)
-	Delete(ctx context.Context, in *DeleteDrinkRequest, opts ...grpc.CallOption) (*DeleteDrinkResponse, error)
-	List(ctx context.Context, in *ListDrinkRequest, opts ...grpc.CallOption) (*ListDrinkResponse, error)
+	CreateDrink(ctx context.Context, in *CreateDrinkRequest, opts ...grpc.CallOption) (*CreateDrinkResponse, error)
+	ReadDrink(ctx context.Context, in *GetDrinkRequest, opts ...grpc.CallOption) (*GetDrinkResponse, error)
+	UpdateDrink(ctx context.Context, in *UpdateDrinkRequest, opts ...grpc.CallOption) (*UpdateDrinkResponse, error)
+	DeleteDrink(ctx context.Context, in *DeleteDrinkRequest, opts ...grpc.CallOption) (*DeleteDrinkResponse, error)
+	ListDrinks(ctx context.Context, in *ListDrinkRequest, opts ...grpc.CallOption) (*ListDrinkResponse, error)
 }
 
 type drinkServiceClient struct {
@@ -37,45 +37,45 @@ func NewDrinkServiceClient(cc grpc.ClientConnInterface) DrinkServiceClient {
 	return &drinkServiceClient{cc}
 }
 
-func (c *drinkServiceClient) Create(ctx context.Context, in *CreateDrinkRequest, opts ...grpc.CallOption) (*CreateDrinkResponse, error) {
+func (c *drinkServiceClient) CreateDrink(ctx context.Context, in *CreateDrinkRequest, opts ...grpc.CallOption) (*CreateDrinkResponse, error) {
 	out := new(CreateDrinkResponse)
-	err := c.cc.Invoke(ctx, "/mixer.DrinkService/Create", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/mixer.DrinkService/CreateDrink", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *drinkServiceClient) Read(ctx context.Context, in *GetDrinkRequest, opts ...grpc.CallOption) (*GetDrinkResponse, error) {
+func (c *drinkServiceClient) ReadDrink(ctx context.Context, in *GetDrinkRequest, opts ...grpc.CallOption) (*GetDrinkResponse, error) {
 	out := new(GetDrinkResponse)
-	err := c.cc.Invoke(ctx, "/mixer.DrinkService/Read", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/mixer.DrinkService/ReadDrink", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *drinkServiceClient) Update(ctx context.Context, in *UpdateDrinkRequest, opts ...grpc.CallOption) (*UpdateDrinkResponse, error) {
+func (c *drinkServiceClient) UpdateDrink(ctx context.Context, in *UpdateDrinkRequest, opts ...grpc.CallOption) (*UpdateDrinkResponse, error) {
 	out := new(UpdateDrinkResponse)
-	err := c.cc.Invoke(ctx, "/mixer.DrinkService/Update", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/mixer.DrinkService/UpdateDrink", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *drinkServiceClient) Delete(ctx context.Context, in *DeleteDrinkRequest, opts ...grpc.CallOption) (*DeleteDrinkResponse, error) {
+func (c *drinkServiceClient) DeleteDrink(ctx context.Context, in *DeleteDrinkRequest, opts ...grpc.CallOption) (*DeleteDrinkResponse, error) {
 	out := new(DeleteDrinkResponse)
-	err := c.cc.Invoke(ctx, "/mixer.DrinkService/Delete", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/mixer.DrinkService/DeleteDrink", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *drinkServiceClient) List(ctx context.Context, in *ListDrinkRequest, opts ...grpc.CallOption) (*ListDrinkResponse, error) {
+func (c *drinkServiceClient) ListDrinks(ctx context.Context, in *ListDrinkRequest, opts ...grpc.CallOption) (*ListDrinkResponse, error) {
 	out := new(ListDrinkResponse)
-	err := c.cc.Invoke(ctx, "/mixer.DrinkService/List", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/mixer.DrinkService/ListDrinks", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -86,11 +86,11 @@ func (c *drinkServiceClient) List(ctx context.Context, in *ListDrinkRequest, opt
 // All implementations must embed UnimplementedDrinkServiceServer
 // for forward compatibility
 type DrinkServiceServer interface {
-	Create(context.Context, *CreateDrinkRequest) (*CreateDrinkResponse, error)
-	Read(context.Context, *GetDrinkRequest) (*GetDrinkResponse, error)
-	Update(context.Context, *UpdateDrinkRequest) (*UpdateDrinkResponse, error)
-	Delete(context.Context, *DeleteDrinkRequest) (*DeleteDrinkResponse, error)
-	List(context.Context, *ListDrinkRequest) (*ListDrinkResponse, error)
+	CreateDrink(context.Context, *CreateDrinkRequest) (*CreateDrinkResponse, error)
+	ReadDrink(context.Context, *GetDrinkRequest) (*GetDrinkResponse, error)
+	UpdateDrink(context.Context, *UpdateDrinkRequest) (*UpdateDrinkResponse, error)
+	DeleteDrink(context.Context, *DeleteDrinkRequest) (*DeleteDrinkResponse, error)
+	ListDrinks(context.Context, *ListDrinkRequest) (*ListDrinkResponse, error)
 	mustEmbedUnimplementedDrinkServiceServer()
 }
 
@@ -98,20 +98,20 @@ type DrinkServiceServer interface {
 type UnimplementedDrinkServiceServer struct {
 }
 
-func (UnimplementedDrinkServiceServer) Create(context.Context, *CreateDrinkRequest) (*CreateDrinkResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
+func (UnimplementedDrinkServiceServer) CreateDrink(context.Context, *CreateDrinkRequest) (*CreateDrinkResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateDrink not implemented")
 }
-func (UnimplementedDrinkServiceServer) Read(context.Context, *GetDrinkRequest) (*GetDrinkResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Read not implemented")
+func (UnimplementedDrinkServiceServer) ReadDrink(context.Context, *GetDrinkRequest) (*GetDrinkResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ReadDrink not implemented")
 }
-func (UnimplementedDrinkServiceServer) Update(context.Context, *UpdateDrinkRequest) (*UpdateDrinkResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
+func (UnimplementedDrinkServiceServer) UpdateDrink(context.Context, *UpdateDrinkRequest) (*UpdateDrinkResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateDrink not implemented")
 }
-func (UnimplementedDrinkServiceServer) Delete(context.Context, *DeleteDrinkRequest) (*DeleteDrinkResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
+func (UnimplementedDrinkServiceServer) DeleteDrink(context.Context, *DeleteDrinkRequest) (*DeleteDrinkResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteDrink not implemented")
 }
-func (UnimplementedDrinkServiceServer) List(context.Context, *ListDrinkRequest) (*ListDrinkResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
+func (UnimplementedDrinkServiceServer) ListDrinks(context.Context, *ListDrinkRequest) (*ListDrinkResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListDrinks not implemented")
 }
 func (UnimplementedDrinkServiceServer) mustEmbedUnimplementedDrinkServiceServer() {}
 
@@ -126,92 +126,92 @@ func RegisterDrinkServiceServer(s grpc.ServiceRegistrar, srv DrinkServiceServer)
 	s.RegisterService(&DrinkService_ServiceDesc, srv)
 }
 
-func _DrinkService_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _DrinkService_CreateDrink_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateDrinkRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(DrinkServiceServer).Create(ctx, in)
+		return srv.(DrinkServiceServer).CreateDrink(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/mixer.DrinkService/Create",
+		FullMethod: "/mixer.DrinkService/CreateDrink",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DrinkServiceServer).Create(ctx, req.(*CreateDrinkRequest))
+		return srv.(DrinkServiceServer).CreateDrink(ctx, req.(*CreateDrinkRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _DrinkService_Read_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _DrinkService_ReadDrink_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetDrinkRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(DrinkServiceServer).Read(ctx, in)
+		return srv.(DrinkServiceServer).ReadDrink(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/mixer.DrinkService/Read",
+		FullMethod: "/mixer.DrinkService/ReadDrink",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DrinkServiceServer).Read(ctx, req.(*GetDrinkRequest))
+		return srv.(DrinkServiceServer).ReadDrink(ctx, req.(*GetDrinkRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _DrinkService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _DrinkService_UpdateDrink_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateDrinkRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(DrinkServiceServer).Update(ctx, in)
+		return srv.(DrinkServiceServer).UpdateDrink(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/mixer.DrinkService/Update",
+		FullMethod: "/mixer.DrinkService/UpdateDrink",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DrinkServiceServer).Update(ctx, req.(*UpdateDrinkRequest))
+		return srv.(DrinkServiceServer).UpdateDrink(ctx, req.(*UpdateDrinkRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _DrinkService_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _DrinkService_DeleteDrink_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteDrinkRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(DrinkServiceServer).Delete(ctx, in)
+		return srv.(DrinkServiceServer).DeleteDrink(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/mixer.DrinkService/Delete",
+		FullMethod: "/mixer.DrinkService/DeleteDrink",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DrinkServiceServer).Delete(ctx, req.(*DeleteDrinkRequest))
+		return srv.(DrinkServiceServer).DeleteDrink(ctx, req.(*DeleteDrinkRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _DrinkService_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _DrinkService_ListDrinks_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ListDrinkRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(DrinkServiceServer).List(ctx, in)
+		return srv.(DrinkServiceServer).ListDrinks(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/mixer.DrinkService/List",
+		FullMethod: "/mixer.DrinkService/ListDrinks",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DrinkServiceServer).List(ctx, req.(*ListDrinkRequest))
+		return srv.(DrinkServiceServer).ListDrinks(ctx, req.(*ListDrinkRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -224,24 +224,24 @@ var DrinkService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*DrinkServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Create",
-			Handler:    _DrinkService_Create_Handler,
+			MethodName: "CreateDrink",
+			Handler:    _DrinkService_CreateDrink_Handler,
 		},
 		{
-			MethodName: "Read",
-			Handler:    _DrinkService_Read_Handler,
+			MethodName: "ReadDrink",
+			Handler:    _DrinkService_ReadDrink_Handler,
 		},
 		{
-			MethodName: "Update",
-			Handler:    _DrinkService_Update_Handler,
+			MethodName: "UpdateDrink",
+			Handler:    _DrinkService_UpdateDrink_Handler,
 		},
 		{
-			MethodName: "Delete",
-			Handler:    _DrinkService_Delete_Handler,
+			MethodName: "DeleteDrink",
+			Handler:    _DrinkService_DeleteDrink_Handler,
 		},
 		{
-			MethodName: "List",
-			Handler:    _DrinkService_List_Handler,
+			MethodName: "ListDrinks",
+			Handler:    _DrinkService_ListDrinks_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

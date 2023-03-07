@@ -16,30 +16,30 @@ import 'drink.pbjson.dart';
 export 'drink.pb.dart';
 
 abstract class DrinkServiceBase extends $pb.GeneratedService {
-  $async.Future<$0.CreateDrinkResponse> create($pb.ServerContext ctx, $0.CreateDrinkRequest request);
-  $async.Future<$0.GetDrinkResponse> read($pb.ServerContext ctx, $0.GetDrinkRequest request);
-  $async.Future<$0.UpdateDrinkResponse> update($pb.ServerContext ctx, $0.UpdateDrinkRequest request);
-  $async.Future<$0.DeleteDrinkResponse> delete($pb.ServerContext ctx, $0.DeleteDrinkRequest request);
-  $async.Future<$0.ListDrinkResponse> list($pb.ServerContext ctx, $0.ListDrinkRequest request);
+  $async.Future<$0.CreateDrinkResponse> createDrink($pb.ServerContext ctx, $0.CreateDrinkRequest request);
+  $async.Future<$0.GetDrinkResponse> readDrink($pb.ServerContext ctx, $0.GetDrinkRequest request);
+  $async.Future<$0.UpdateDrinkResponse> updateDrink($pb.ServerContext ctx, $0.UpdateDrinkRequest request);
+  $async.Future<$0.DeleteDrinkResponse> deleteDrink($pb.ServerContext ctx, $0.DeleteDrinkRequest request);
+  $async.Future<$0.ListDrinkResponse> listDrinks($pb.ServerContext ctx, $0.ListDrinkRequest request);
 
   $pb.GeneratedMessage createRequest($core.String method) {
     switch (method) {
-      case 'Create': return $0.CreateDrinkRequest();
-      case 'Read': return $0.GetDrinkRequest();
-      case 'Update': return $0.UpdateDrinkRequest();
-      case 'Delete': return $0.DeleteDrinkRequest();
-      case 'List': return $0.ListDrinkRequest();
+      case 'CreateDrink': return $0.CreateDrinkRequest();
+      case 'ReadDrink': return $0.GetDrinkRequest();
+      case 'UpdateDrink': return $0.UpdateDrinkRequest();
+      case 'DeleteDrink': return $0.DeleteDrinkRequest();
+      case 'ListDrinks': return $0.ListDrinkRequest();
       default: throw $core.ArgumentError('Unknown method: $method');
     }
   }
 
   $async.Future<$pb.GeneratedMessage> handleCall($pb.ServerContext ctx, $core.String method, $pb.GeneratedMessage request) {
     switch (method) {
-      case 'Create': return this.create(ctx, request as $0.CreateDrinkRequest);
-      case 'Read': return this.read(ctx, request as $0.GetDrinkRequest);
-      case 'Update': return this.update(ctx, request as $0.UpdateDrinkRequest);
-      case 'Delete': return this.delete(ctx, request as $0.DeleteDrinkRequest);
-      case 'List': return this.list(ctx, request as $0.ListDrinkRequest);
+      case 'CreateDrink': return this.createDrink(ctx, request as $0.CreateDrinkRequest);
+      case 'ReadDrink': return this.readDrink(ctx, request as $0.GetDrinkRequest);
+      case 'UpdateDrink': return this.updateDrink(ctx, request as $0.UpdateDrinkRequest);
+      case 'DeleteDrink': return this.deleteDrink(ctx, request as $0.DeleteDrinkRequest);
+      case 'ListDrinks': return this.listDrinks(ctx, request as $0.ListDrinkRequest);
       default: throw $core.ArgumentError('Unknown method: $method');
     }
   }

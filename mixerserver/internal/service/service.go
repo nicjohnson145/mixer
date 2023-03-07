@@ -98,7 +98,7 @@ func (s *Service) Login(ctx context.Context, req *pb.LoginRequest) (*pb.LoginRes
 	}, nil
 }
 
-func (s *Service) Create(ctx context.Context, req *pb.CreateDrinkRequest) (*pb.CreateDrinkResponse, error) {
+func (s *Service) CreateDrink(ctx context.Context, req *pb.CreateDrinkRequest) (*pb.CreateDrinkResponse, error) {
 	if err := validateDrinkWriteRequest(req.DrinkData); err != nil {
 		s.log.Err(err).Msg("error validating create request")
 		return nil, err
@@ -120,7 +120,7 @@ func (s *Service) Create(ctx context.Context, req *pb.CreateDrinkRequest) (*pb.C
 	return &pb.CreateDrinkResponse{Id: int64(id)}, nil
 }
 
-func (s *Service) Read(ctx context.Context, req *pb.GetDrinkRequest) (*pb.GetDrinkResponse, error) {
+func (s *Service) ReadDrink(ctx context.Context, req *pb.GetDrinkRequest) (*pb.GetDrinkResponse, error) {
 	if req.Id == 0 {
 		return nil, singleFieldViolation("id", "id must be set")
 	}
@@ -134,7 +134,7 @@ func (s *Service) Read(ctx context.Context, req *pb.GetDrinkRequest) (*pb.GetDri
 	return &pb.GetDrinkResponse{Drink: data}, nil
 }
 
-func (s *Service) Update(ctx context.Context, req *pb.UpdateDrinkRequest) (*pb.UpdateDrinkResponse, error) {
+func (s *Service) UpdateDrink(ctx context.Context, req *pb.UpdateDrinkRequest) (*pb.UpdateDrinkResponse, error) {
 	if err := validateDrinkWriteRequest(req.DrinkData); err != nil {
 		s.log.Err(err).Msg("error validating create request")
 		return nil, err
@@ -160,7 +160,7 @@ func (s *Service) Update(ctx context.Context, req *pb.UpdateDrinkRequest) (*pb.U
 	return &pb.UpdateDrinkResponse{}, nil
 }
 
-func (s *Service) List(ctx context.Context, req *pb.ListDrinkRequest) (*pb.ListDrinkResponse, error) {
+func (s *Service) ListDrinks(ctx context.Context, req *pb.ListDrinkRequest) (*pb.ListDrinkResponse, error) {
 	if req.Username == "" {
 		return nil, singleFieldViolation("username", "username is required")
 	}

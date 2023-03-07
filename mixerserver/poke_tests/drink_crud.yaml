@@ -20,7 +20,7 @@ calls:
   headers:
     authorization: '{{ .accessToken }}'
   service-host: '{{ .service }}'
-  url: '{{ .drink_service }}/Create'
+  url: '{{ .drink_service }}/CreateDrink'
   body:
     drink_data:
       name: Daquiri
@@ -39,7 +39,7 @@ calls:
   headers:
     authorization: '{{ .accessToken }}'
   service-host: '{{ .service }}'
-  url: '{{ .drink_service }}/Read'
+  url: '{{ .drink_service }}/ReadDrink'
   body:
     id: '{{ .daquiri_id }}'
   asserts:
@@ -61,7 +61,7 @@ calls:
   headers:
     authorization: '{{ .accessToken }}'
   service-host: '{{ .service }}'
-  url: '{{ .drink_service }}/Update'
+  url: '{{ .drink_service }}/UpdateDrink'
   body:
     id: '{{ .daquiri_id }}'
     drink_data:
@@ -79,7 +79,7 @@ calls:
   headers:
     authorization: '{{ .accessToken }}'
   service-host: '{{ .service }}'
-  url: '{{ .drink_service }}/Read'
+  url: '{{ .drink_service }}/ReadDrink'
   body:
     id: '{{ .daquiri_id }}'
   asserts:
@@ -102,7 +102,7 @@ calls:
   headers:
     authorization: '{{ .accessToken }}'
   service-host: '{{ .service }}'
-  url: '{{ .drink_service }}/Read'
+  url: '{{ .drink_service }}/ReadDrink'
   body:
     id: 50000
   want-status: 5
@@ -112,7 +112,7 @@ calls:
   headers:
     authorization: '{{ .accessToken }}'
   service-host: '{{ .service }}'
-  url: '{{ .drink_service }}/Create'
+  url: '{{ .drink_service }}/CreateDrink'
   body:
     drink_data:
       name: Bee's Knees
@@ -131,7 +131,7 @@ calls:
   headers:
     authorization: '{{ .accessToken }}'
   service-host: '{{ .service }}'
-  url: '{{ .drink_service }}/List'
+  url: '{{ .drink_service }}/ListDrinks'
   body:
     username: baz
   asserts:

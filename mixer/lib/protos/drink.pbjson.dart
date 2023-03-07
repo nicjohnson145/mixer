@@ -169,11 +169,11 @@ final $typed_data.Uint8List listDrinkResponseDescriptor = $convert.base64Decode(
 const $core.Map<$core.String, $core.dynamic> DrinkServiceBase$json = const {
   '1': 'DrinkService',
   '2': const [
-    const {'1': 'Create', '2': '.mixer.CreateDrinkRequest', '3': '.mixer.CreateDrinkResponse'},
-    const {'1': 'Read', '2': '.mixer.GetDrinkRequest', '3': '.mixer.GetDrinkResponse'},
-    const {'1': 'Update', '2': '.mixer.UpdateDrinkRequest', '3': '.mixer.UpdateDrinkResponse'},
-    const {'1': 'Delete', '2': '.mixer.DeleteDrinkRequest', '3': '.mixer.DeleteDrinkResponse'},
-    const {'1': 'List', '2': '.mixer.ListDrinkRequest', '3': '.mixer.ListDrinkResponse'},
+    const {'1': 'CreateDrink', '2': '.mixer.CreateDrinkRequest', '3': '.mixer.CreateDrinkResponse'},
+    const {'1': 'ReadDrink', '2': '.mixer.GetDrinkRequest', '3': '.mixer.GetDrinkResponse'},
+    const {'1': 'UpdateDrink', '2': '.mixer.UpdateDrinkRequest', '3': '.mixer.UpdateDrinkResponse'},
+    const {'1': 'DeleteDrink', '2': '.mixer.DeleteDrinkRequest', '3': '.mixer.DeleteDrinkResponse'},
+    const {'1': 'ListDrinks', '2': '.mixer.ListDrinkRequest', '3': '.mixer.ListDrinkResponse'},
   ],
 };
 
@@ -194,4 +194,4 @@ const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> DrinkServi
 };
 
 /// Descriptor for `DrinkService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
-final $typed_data.Uint8List drinkServiceDescriptor = $convert.base64Decode('CgxEcmlua1NlcnZpY2USPwoGQ3JlYXRlEhkubWl4ZXIuQ3JlYXRlRHJpbmtSZXF1ZXN0GhoubWl4ZXIuQ3JlYXRlRHJpbmtSZXNwb25zZRI3CgRSZWFkEhYubWl4ZXIuR2V0RHJpbmtSZXF1ZXN0GhcubWl4ZXIuR2V0RHJpbmtSZXNwb25zZRI/CgZVcGRhdGUSGS5taXhlci5VcGRhdGVEcmlua1JlcXVlc3QaGi5taXhlci5VcGRhdGVEcmlua1Jlc3BvbnNlEj8KBkRlbGV0ZRIZLm1peGVyLkRlbGV0ZURyaW5rUmVxdWVzdBoaLm1peGVyLkRlbGV0ZURyaW5rUmVzcG9uc2USOQoETGlzdBIXLm1peGVyLkxpc3REcmlua1JlcXVlc3QaGC5taXhlci5MaXN0RHJpbmtSZXNwb25zZQ==');
+final $typed_data.Uint8List drinkServiceDescriptor = $convert.base64Decode('CgxEcmlua1NlcnZpY2USRAoLQ3JlYXRlRHJpbmsSGS5taXhlci5DcmVhdGVEcmlua1JlcXVlc3QaGi5taXhlci5DcmVhdGVEcmlua1Jlc3BvbnNlEjwKCVJlYWREcmluaxIWLm1peGVyLkdldERyaW5rUmVxdWVzdBoXLm1peGVyLkdldERyaW5rUmVzcG9uc2USRAoLVXBkYXRlRHJpbmsSGS5taXhlci5VcGRhdGVEcmlua1JlcXVlc3QaGi5taXhlci5VcGRhdGVEcmlua1Jlc3BvbnNlEkQKC0RlbGV0ZURyaW5rEhkubWl4ZXIuRGVsZXRlRHJpbmtSZXF1ZXN0GhoubWl4ZXIuRGVsZXRlRHJpbmtSZXNwb25zZRI/CgpMaXN0RHJpbmtzEhcubWl4ZXIuTGlzdERyaW5rUmVxdWVzdBoYLm1peGVyLkxpc3REcmlua1Jlc3BvbnNl');

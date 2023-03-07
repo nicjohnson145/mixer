@@ -79,9 +79,9 @@ message ListDrinkResponse {
 }
 
 service DrinkService {
-  rpc Create(CreateDrinkRequest) returns (CreateDrinkResponse);
-  rpc Read(GetDrinkRequest) returns (GetDrinkResponse);
-  rpc Update(UpdateDrinkRequest) returns (UpdateDrinkResponse);
-  rpc Delete(DeleteDrinkRequest) returns (DeleteDrinkResponse);
-  rpc List(ListDrinkRequest) returns (ListDrinkResponse);
+  rpc CreateDrink(CreateDrinkRequest) returns (CreateDrinkResponse);
+  rpc ReadDrink(GetDrinkRequest) returns (GetDrinkResponse);
+  rpc UpdateDrink(UpdateDrinkRequest) returns (UpdateDrinkResponse);
+  rpc DeleteDrink(DeleteDrinkRequest) returns (DeleteDrinkResponse);
+  rpc ListDrinks(ListDrinkRequest) returns (ListDrinkResponse);
 }

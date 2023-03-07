@@ -793,25 +793,25 @@ class DrinkServiceApi {
   $pb.RpcClient _client;
   DrinkServiceApi(this._client);
 
-  $async.Future<CreateDrinkResponse> create_($pb.ClientContext? ctx, CreateDrinkRequest request) {
+  $async.Future<CreateDrinkResponse> createDrink($pb.ClientContext? ctx, CreateDrinkRequest request) {
     var emptyResponse = CreateDrinkResponse();
-    return _client.invoke<CreateDrinkResponse>(ctx, 'DrinkService', 'Create', request, emptyResponse);
+    return _client.invoke<CreateDrinkResponse>(ctx, 'DrinkService', 'CreateDrink', request, emptyResponse);
   }
-  $async.Future<GetDrinkResponse> read($pb.ClientContext? ctx, GetDrinkRequest request) {
+  $async.Future<GetDrinkResponse> readDrink($pb.ClientContext? ctx, GetDrinkRequest request) {
     var emptyResponse = GetDrinkResponse();
-    return _client.invoke<GetDrinkResponse>(ctx, 'DrinkService', 'Read', request, emptyResponse);
+    return _client.invoke<GetDrinkResponse>(ctx, 'DrinkService', 'ReadDrink', request, emptyResponse);
   }
-  $async.Future<UpdateDrinkResponse> update($pb.ClientContext? ctx, UpdateDrinkRequest request) {
+  $async.Future<UpdateDrinkResponse> updateDrink($pb.ClientContext? ctx, UpdateDrinkRequest request) {
     var emptyResponse = UpdateDrinkResponse();
-    return _client.invoke<UpdateDrinkResponse>(ctx, 'DrinkService', 'Update', request, emptyResponse);
+    return _client.invoke<UpdateDrinkResponse>(ctx, 'DrinkService', 'UpdateDrink', request, emptyResponse);
   }
-  $async.Future<DeleteDrinkResponse> delete($pb.ClientContext? ctx, DeleteDrinkRequest request) {
+  $async.Future<DeleteDrinkResponse> deleteDrink($pb.ClientContext? ctx, DeleteDrinkRequest request) {
     var emptyResponse = DeleteDrinkResponse();
-    return _client.invoke<DeleteDrinkResponse>(ctx, 'DrinkService', 'Delete', request, emptyResponse);
+    return _client.invoke<DeleteDrinkResponse>(ctx, 'DrinkService', 'DeleteDrink', request, emptyResponse);
   }
-  $async.Future<ListDrinkResponse> list($pb.ClientContext? ctx, ListDrinkRequest request) {
+  $async.Future<ListDrinkResponse> listDrinks($pb.ClientContext? ctx, ListDrinkRequest request) {
     var emptyResponse = ListDrinkResponse();
-    return _client.invoke<ListDrinkResponse>(ctx, 'DrinkService', 'List', request, emptyResponse);
+    return _client.invoke<ListDrinkResponse>(ctx, 'DrinkService', 'ListDrinks', request, emptyResponse);
   }
 }
 
