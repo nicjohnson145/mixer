@@ -79,3 +79,9 @@ type usr struct {
 	Username string `db:"username"`
 	Password string `db:"password"`
 }
+
+type usrSetting struct {
+	Username string `db:"usr_username"`
+	Key      string `db:"key"`
+	Value    string `db:"value"`
+}

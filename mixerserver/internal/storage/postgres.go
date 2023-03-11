@@ -62,6 +62,39 @@ func (p *PostgresStore) ReadUser(username string) (*User, error) {
 	}, nil
 }
 
+func (p *PostgresStore) GetPublicUsers() ([]string, error) {
+	query := p.db.From("usr").
+		Select("usr.username").
+		LeftOuterJoin(
+			goqu.T("usr_setting"),
+			goqu.On(
+				goqu.I("usr.username").Eq(goqu.I("usr_setting.usr_username")),
+			),
+		).
+		Where(
+			goqu.Or(
+				goqu.I("usr_setting.usr_username").Is(nil),
+				goqu.And(
+					goqu.I("usr_setting.key").Eq("public_profile"),
+					goqu.I("usr_setting.value").Neq("false"),
+				),
+			),
+		).
+		Order(goqu.I("usr.username").Asc())
+
+	var users []usr
+	if err := query.Executor().ScanStructs(&users); err != nil {
+		sql, _, _ := query.ToSQL()
+		fmt.Println(sql)
+		p.log.Err(err).Msg("error executing public users query")
+		return nil, fmt.Errorf("error fetching public users: %w", err)
+	}
+
+	return lo.Map(users, func(u usr, _ int) string {
+		return u.Username
+	}), nil
+}
+
 func (p *PostgresStore) CreateDrink(username string, d *pb.DrinkData) (int64, error) {
 	data := drinkDataToDrink(d)
 	data.Username = username

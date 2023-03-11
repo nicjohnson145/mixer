@@ -121,3 +121,4 @@ tasks:
     - task: remove-drinks
     - poke mixerserver/poke_tests/list_drink_filtering.yaml
     - task: remove-drinks
+    - poke mixerserver/poke_tests/list_users.yaml

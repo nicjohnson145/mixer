@@ -1,0 +1,27 @@
+vars:
+  service: "localhost:50051"
+  user_service: "mixer.UserService"
+
+calls:
+- name: login baz
+  type: grpc
+  service-host: '{{ .service }}'
+  url: '{{ .user_service }}/Login'
+  body:
+    username: baz
+    password: bazpass
+  exports:
+  - jq: '.accessToken'
+    as: 'accessToken'
+- name: list-users
+  type: grpc
+  service-host: '{{ .service }}'
+  url: '{{ .user_service }}/ListUsers'
+  headers:
+    authorization: '{{ .accessToken }}'
+  asserts:
+  - jq: '.users'
+    expected:
+    - bar
+    - baz
+    - foo

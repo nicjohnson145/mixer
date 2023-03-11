@@ -100,6 +100,17 @@ func (s *Service) Login(ctx context.Context, req *pb.LoginRequest) (*pb.LoginRes
 	}, nil
 }
 
+func (s *Service) ListUsers(ctx context.Context, req *pb.ListUsersRequest) (*pb.ListUsersResponse, error) {
+	users, err := s.store.GetPublicUsers()
+	if err != nil {
+		s.log.Err(err).Msg("error getting users")
+		return nil, wrapStorageErrors(err)
+	}
+	return &pb.ListUsersResponse{
+		Users: users,
+	}, nil
+}
+
 func (s *Service) CreateDrink(ctx context.Context, req *pb.CreateDrinkRequest) (*pb.CreateDrinkResponse, error) {
 	if err := validateDrinkWriteRequest(req.DrinkData); err != nil {
 		s.log.Err(err).Msg("error validating create request")
