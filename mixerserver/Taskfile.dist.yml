@@ -1,0 +1,90 @@
+version: '3'
+
+vars:
+  SIGNING_KEY:
+    sh: "cat /dev/urandom | tr -dc 'a-zA-Z0-9' | head -c 35"
+
+tasks:
+  gen-signing-key:
+    desc: generate a random signingkey
+    cmds:
+    - echo -n "{{ .SIGNING_KEY }}"
+
+  go-generation:
+    desc: golang code generation that's not protobuf/DB related
+    cmds:
+    - go generate ./...
+
+  make-migration:
+    desc: create a DB migration, requires name as argument
+    dir: internal/storage/migrations
+    cmds:
+    - migrate create -ext sql {{ .CLI_ARGS }}
+
+  build-server-binary:
+    desc: build the mixerserver binary locally
+    cmds:
+    - go build -o mixerserver
+
+  compose-supporting:
+    desc: start up supporting docker compose infrastructure
+    cmds:
+    - docker-compose up -d --wait postgres
+
+  compose-down:
+    desc: bring down compose stack
+    cmds:
+    - docker-compose down --volumes
+
+  migrate:
+    desc: execute migrations against a running postgres
+    cmds:
+    - task: build-server-binary
+    - ./mixerserver migrate
+
+  psql:
+    desc: psql to running postgres
+    cmds:
+    - PGPASSWORD=mixer_pass psql -h localhost -U mixer_usr mixer
+
+  local:
+    desc: run mixer locally
+    env:
+      JWT_SIGNINGKEY: $JWT_SIGNINGKEY
+      PROTECTREGISTER: "false"
+    cmds:
+    - task: build-server-binary
+    - echo "using signing key $JWT_SIGNINGKEY"
+    - ./mixerserver
+
+  clean-db:
+    desc: wipe DB data
+    cmds:
+    - task: run-sql
+      vars:
+        SQL_FILE: ./hack/cleanup-functional-test.sql
+
+  run-sql:
+    internal: true
+    cmds:
+    - PGPASSWORD=mixer_pass psql -h localhost -U mixer_usr mixer -f {{ .SQL_FILE }}
+
+  remove-drinks:
+    internal: true
+    cmds:
+    - task: run-sql
+      vars:
+        SQL_FILE: ./hack/remove-drinks.sql
+
+  poke-tests:
+    desc: run functional tests locally with poke
+    cmds:
+    - task: clean-db
+    - poke poke_tests/grpc/register_users.yaml
+    - poke poke_tests/grpc/drink_crud.yaml
+    - task: remove-drinks
+    - poke poke_tests/grpc/read_other_users_drinks.yaml
+    - task: remove-drinks
+    - poke poke_tests/grpc/list_drink_filtering.yaml
+    - task: remove-drinks
+    - poke poke_tests/grpc/list_users.yaml
