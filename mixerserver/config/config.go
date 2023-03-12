@@ -9,14 +9,15 @@ import (
 )
 
 const (
-	GatewayPort = "gateway.port"
-	GRPCPort    = "grpc.port"
+	GatewayPort     = "gateway.port"
+	GatewayGRPCHost = "gateway.grpc-host"
+	GRPCPort        = "grpc.port"
 
 	JWTSigningKey      = "jwt.signingkey"
-	JWTRefreshDuration = "jwt.refreshduration"
-	JWTAccessDuration  = "jwt.accessduration"
+	JWTRefreshDuration = "jwt.refresh-duration"
+	JWTAccessDuration  = "jwt.access-duration"
 
-	ProtectRegister = "protectregister"
+	ProtectRegister = "protect-register"
 
 	Debug = "debug"
 
@@ -29,6 +30,7 @@ const (
 
 func InitializeConfig(cmd *cobra.Command) error {
 	viper.SetDefault(GatewayPort, 8080)
+	viper.SetDefault(GatewayGRPCHost, "localhost")
 	viper.SetDefault(GRPCPort, 50051)
 
 	viper.SetDefault(ProtectRegister, true)
@@ -46,7 +48,7 @@ func InitializeConfig(cmd *cobra.Command) error {
 	viper.SetDefault(DatabasePassword, "mixer_pass")
 
 	viper.AutomaticEnv()
-	viper.SetEnvKeyReplacer(strings.NewReplacer("-", "_"))
+	viper.SetEnvKeyReplacer(strings.NewReplacer("-", "_", ".", "_"))
 	viper.BindPFlags(cmd.Flags())
 
 	return nil

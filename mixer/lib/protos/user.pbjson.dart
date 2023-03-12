@@ -158,8 +158,8 @@ const $core.Map<$core.String, $core.dynamic> UserServiceBase$json = const {
   '1': 'UserService',
   '2': const [
     const {'1': 'RegisterNewUser', '2': '.mixer.RegisterNewUserRequest', '3': '.mixer.RegisterNewUserResponse', '4': const {}},
-    const {'1': 'Login', '2': '.mixer.LoginRequest', '3': '.mixer.LoginResponse'},
-    const {'1': 'ListUsers', '2': '.mixer.ListUsersRequest', '3': '.mixer.ListUsersResponse'},
+    const {'1': 'Login', '2': '.mixer.LoginRequest', '3': '.mixer.LoginResponse', '4': const {}},
+    const {'1': 'ListUsers', '2': '.mixer.ListUsersRequest', '3': '.mixer.ListUsersResponse', '4': const {}},
   ],
 };
 
@@ -174,4 +174,4 @@ const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> UserServic
 };
 
 /// Descriptor for `UserService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
-final $typed_data.Uint8List userServiceDescriptor = $convert.base64Decode('CgtVc2VyU2VydmljZRJ3Cg9SZWdpc3Rlck5ld1VzZXISHS5taXhlci5SZWdpc3Rlck5ld1VzZXJSZXF1ZXN0Gh4ubWl4ZXIuUmVnaXN0ZXJOZXdVc2VyUmVzcG9uc2UiJYLT5JMCHyIaL2FwaS92MS9hdXRoL3JlZ2lzdGVyLXVzZXI6ASoSMgoFTG9naW4SEy5taXhlci5Mb2dpblJlcXVlc3QaFC5taXhlci5Mb2dpblJlc3BvbnNlEj4KCUxpc3RVc2VycxIXLm1peGVyLkxpc3RVc2Vyc1JlcXVlc3QaGC5taXhlci5MaXN0VXNlcnNSZXNwb25zZQ==');
+final $typed_data.Uint8List userServiceDescriptor = $convert.base64Decode('CgtVc2VyU2VydmljZRJyCg9SZWdpc3Rlck5ld1VzZXISHS5taXhlci5SZWdpc3Rlck5ld1VzZXJSZXF1ZXN0Gh4ubWl4ZXIuUmVnaXN0ZXJOZXdVc2VyUmVzcG9uc2UiIILT5JMCGiIVL2FwaS92MS9yZWdpc3Rlci11c2VyOgEqEkwKBUxvZ2luEhMubWl4ZXIuTG9naW5SZXF1ZXN0GhQubWl4ZXIuTG9naW5SZXNwb25zZSIYgtPkkwISIg0vYXBpL3YxL2xvZ2luOgEqElUKCUxpc3RVc2VycxIXLm1peGVyLkxpc3RVc2Vyc1JlcXVlc3QaGC5taXhlci5MaXN0VXNlcnNSZXNwb25zZSIVgtPkkwIPEg0vYXBpL3YxL3VzZXJz');

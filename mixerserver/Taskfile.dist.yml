@@ -26,6 +26,14 @@ tasks:
     cmds:
     - go build -o mixerserver
 
+  docker:
+    desc: build docker image
+    preconditions:
+    - sh: '[ -n "$TAG" ]'
+      message: "TAG must be set"
+    cmds:
+    - docker build . -t nicjohnson145/mixer:$TAG
+
   compose-supporting:
     desc: start up supporting docker compose infrastructure
     cmds:
@@ -51,11 +59,17 @@ tasks:
     desc: run mixer locally
     env:
       JWT_SIGNINGKEY: $JWT_SIGNINGKEY
-      PROTECTREGISTER: "false"
+      PROTECT_REGISTER: "false"
     cmds:
     - task: build-server-binary
     - echo "using signing key $JWT_SIGNINGKEY"
     - ./mixerserver
+
+  local-gateway:
+    desc: run mixer gateway locally
+    cmds:
+    - task: build-server-binary
+    - ./mixerserver gateway
 
   clean-db:
     desc: wipe DB data
@@ -80,11 +94,11 @@ tasks:
     desc: run functional tests locally with poke
     cmds:
     - task: clean-db
-    - poke poke_tests/grpc/register_users.yaml
-    - poke poke_tests/grpc/drink_crud.yaml
+    - poke poke_tests/register_users.yaml
+    - poke poke_tests/drink_crud.yaml
     - task: remove-drinks
-    - poke poke_tests/grpc/read_other_users_drinks.yaml
+    - poke poke_tests/read_other_users_drinks.yaml
     - task: remove-drinks
-    - poke poke_tests/grpc/list_drink_filtering.yaml
+    - poke poke_tests/list_drink_filtering.yaml
     - task: remove-drinks
-    - poke poke_tests/grpc/list_users.yaml
+    - poke poke_tests/list_users.yaml

@@ -1,12 +1,9 @@
 vars:
-  service: "localhost:50051"
-  user_service: "mixer.UserService"
+  api_url: "http://localhost:8080/api/v1"
 
 calls:
 - name: login baz
-  type: grpc
-  service-host: '{{ .service }}'
-  url: '{{ .user_service }}/Login'
+  url: '{{ .api_url }}/login'
   body:
     username: baz
     password: bazpass
@@ -14,9 +11,7 @@ calls:
   - jq: '.accessToken'
     as: 'accessToken'
 - name: list-users
-  type: grpc
-  service-host: '{{ .service }}'
-  url: '{{ .user_service }}/ListUsers'
+  url: '{{ .api_url }}/users'
   headers:
     authorization: '{{ .accessToken }}'
   asserts:

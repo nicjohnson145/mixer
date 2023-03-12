@@ -1,13 +1,9 @@
 vars:
-  service: "localhost:50051"
-  drink_service: "mixer.DrinkService"
-  user_service: "mixer.UserService"
+  api_url: "http://localhost:8080/api/v1"
 
 calls:
 - name: login baz
-  type: grpc
-  service-host: '{{ .service }}'
-  url: '{{ .user_service }}/Login'
+  url: '{{ .api_url }}/login'
   body:
     username: baz
     password: bazpass
@@ -16,11 +12,9 @@ calls:
     as: 'baz_token'
 
 - name: create public drink
-  type: grpc
   headers:
     authorization: '{{ .baz_token }}'
-  service-host: '{{ .service }}'
-  url: '{{ .drink_service }}/CreateDrink'
+  url: '{{ .api_url }}/drink'
   body:
     drink_data:
       name: Public Drink
@@ -32,11 +26,10 @@ calls:
     as: "public_id"
 
 - name: create private drink
-  type: grpc
   headers:
     authorization: '{{ .baz_token }}'
   service-host: '{{ .service }}'
-  url: '{{ .drink_service }}/CreateDrink'
+  url: '{{ .api_url }}/drink'
   body:
     drink_data:
       name: Private Drink
@@ -48,9 +41,7 @@ calls:
     as: "private_id"
 
 - name: login foo
-  type: grpc
-  service-host: '{{ .service }}'
-  url: '{{ .user_service }}/Login'
+  url: '{{ .api_url }}/login'
   body:
     username: foo
     password: foopass
@@ -59,23 +50,15 @@ calls:
     as: 'foo_token'
 
 - name: read public drink
-  type: grpc
   headers:
     authorization: '{{ .foo_token }}'
-  service-host: '{{ .service }}'
-  url: '{{ .drink_service }}/ReadDrink'
-  body:
-    id: '{{ .public_id }}'
+  url: '{{ .api_url }}/drink/{{ .public_id }}'
   asserts:
   - jq: '.drink.drinkData.name'
     expected: Public Drink
 
 - name: read private drink
-  type: grpc
   headers:
     authorization: '{{ .foo_token }}'
-  service-host: '{{ .service }}'
-  url: '{{ .drink_service }}/ReadDrink'
-  body:
-    id: '{{ .private_id }}'
-  want-status: 5
+  url: '{{ .api_url }}/drink/{{ .private_id }}'
+  want-status: 404

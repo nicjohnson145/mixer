@@ -1,13 +1,9 @@
 vars:
-  service: "localhost:50051"
-  drink_service: "mixer.DrinkService"
-  user_service: "mixer.UserService"
+  api_url: "http://localhost:8080/api/v1"
 
 calls:
 - name: login baz
-  type: grpc
-  service-host: '{{ .service }}'
-  url: '{{ .user_service }}/Login'
+  url: '{{ .api_url }}/login'
   body:
     username: baz
     password: bazpass
@@ -16,11 +12,9 @@ calls:
     as: 'accessToken'
 
 - name: create daquiri
-  type: grpc
   headers:
     authorization: '{{ .accessToken }}'
-  service-host: '{{ .service }}'
-  url: '{{ .drink_service }}/CreateDrink'
+  url: '{{ .api_url }}/drink'
   body:
     drink_data:
       name: Daquiri
@@ -35,13 +29,9 @@ calls:
     as: "daquiri_id"
 
 - name: read daquiri
-  type: grpc
   headers:
     authorization: '{{ .accessToken }}'
-  service-host: '{{ .service }}'
-  url: '{{ .drink_service }}/ReadDrink'
-  body:
-    id: '{{ .daquiri_id }}'
+  url: '{{ .api_url }}/drink/{{ .daquiri_id }}'
   asserts:
   - jq: '.drink'
     expected:
@@ -55,13 +45,17 @@ calls:
         - 0.5 oz simple syrup
         - 1 oz lime juice
         publicity: "DrinkPublicity_Public"
-
+        favorite: false
+        instructions: ""
+        notes: ""
+        preferredGlass: ""
+        tags: []
+        underDevelopment: false
 - name: update daquiri
-  type: grpc
   headers:
     authorization: '{{ .accessToken }}'
-  service-host: '{{ .service }}'
-  url: '{{ .drink_service }}/UpdateDrink'
+  url: '{{ .api_url }}/drink'
+  method: PUT
   body:
     id: '{{ .daquiri_id }}'
     drink_data:
@@ -75,13 +69,9 @@ calls:
       favorite: true
 
 - name: read updated daquiri
-  type: grpc
   headers:
     authorization: '{{ .accessToken }}'
-  service-host: '{{ .service }}'
-  url: '{{ .drink_service }}/ReadDrink'
-  body:
-    id: '{{ .daquiri_id }}'
+  url: '{{ .api_url }}/drink/{{ .daquiri_id }}'
   asserts:
   - jq: '.drink'
     expected:
@@ -96,23 +86,22 @@ calls:
         - 1 oz lime juice
         publicity: "DrinkPublicity_Public"
         favorite: true
+        instructions: ""
+        notes: ""
+        preferredGlass: ""
+        tags: []
+        underDevelopment: false
 
 - name: read nonexistant drink
-  type: grpc
   headers:
     authorization: '{{ .accessToken }}'
-  service-host: '{{ .service }}'
-  url: '{{ .drink_service }}/ReadDrink'
-  body:
-    id: 50000
-  want-status: 5
+  url: '{{ .api_url }}/drink/50000'
+  want-status: 404
 
 - name: create bees knees
-  type: grpc
   headers:
     authorization: '{{ .accessToken }}'
-  service-host: '{{ .service }}'
-  url: '{{ .drink_service }}/CreateDrink'
+  url: '{{ .api_url }}/drink'
   body:
     drink_data:
       name: Bee's Knees
@@ -127,36 +116,26 @@ calls:
     as: "bees_knees_id"
 
 - name: list drinks
-  type: grpc
   headers:
     authorization: '{{ .accessToken }}'
-  service-host: '{{ .service }}'
-  url: '{{ .drink_service }}/ListDrinks'
-  body:
-    username: baz
+  url: '{{ .api_url }}/drink/user/baz'
   asserts:
   - jq: '.drinks | [.[] | .drinkData.name]'
     expected:
     - "Daquiri"
     - "Bee's Knees"
 
-- name: delete drinko
-  type: grpc
+- name: delete drink
   headers:
     authorization: '{{ .accessToken }}'
   service-host: '{{ .service }}'
-  url: '{{ .drink_service }}/DeleteDrink'
-  body:
-    id: '{{ .daquiri_id }}'
+  url: '{{ .api_url }}/drink/{{ .daquiri_id }}'
+  method: DELETE
 
 - name: list drinks after delete
-  type: grpc
   headers:
     authorization: '{{ .accessToken }}'
-  service-host: '{{ .service }}'
-  url: '{{ .drink_service }}/ListDrinks'
-  body:
-    username: baz
+  url: '{{ .api_url }}/drink/user/baz'
   asserts:
   - jq: '.drinks | [.[] | .drinkData.name]'
     expected:

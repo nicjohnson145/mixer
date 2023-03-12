@@ -103,6 +103,7 @@ func Root() *cobra.Command {
 
 	root.AddCommand(
 		Migrate(),
+		Gateway(),
 	)
 
 	return root

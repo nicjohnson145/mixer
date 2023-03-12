@@ -4,6 +4,8 @@ package mixer;
 
 option go_package = "github.com/nicjohnson145/mixer/mixerservice/protos";
 
+import "google/api/annotations.proto";
+
 enum DrinkPublicity {
   DrinkPublicity_Unspecified = 0;
   DrinkPublicity_Public = 1;
@@ -79,9 +81,31 @@ message ListDrinkResponse {
 }
 
 service DrinkService {
-  rpc CreateDrink(CreateDrinkRequest) returns (CreateDrinkResponse);
-  rpc ReadDrink(GetDrinkRequest) returns (GetDrinkResponse);
-  rpc UpdateDrink(UpdateDrinkRequest) returns (UpdateDrinkResponse);
-  rpc DeleteDrink(DeleteDrinkRequest) returns (DeleteDrinkResponse);
-  rpc ListDrinks(ListDrinkRequest) returns (ListDrinkResponse);
+  rpc CreateDrink(CreateDrinkRequest) returns (CreateDrinkResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/drink"
+      body: "*"
+    };
+  };
+  rpc ReadDrink(GetDrinkRequest) returns (GetDrinkResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/drink/{id}"
+    };
+  };
+  rpc UpdateDrink(UpdateDrinkRequest) returns (UpdateDrinkResponse) {
+    option (google.api.http) = {
+      put: "/api/v1/drink"
+      body: "*"
+    };
+  };
+  rpc DeleteDrink(DeleteDrinkRequest) returns (DeleteDrinkResponse) {
+    option (google.api.http) = {
+      delete: "/api/v1/drink/{id}"
+    };
+  };
+  rpc ListDrinks(ListDrinkRequest) returns (ListDrinkResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/drink/user/{username}"
+    };
+  };
 }

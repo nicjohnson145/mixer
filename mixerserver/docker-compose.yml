@@ -16,10 +16,25 @@ services:
   mixer:
     build:
       context: .
-    image: nicjohnson145/mixerserver:${CI_COMMIT_REF_NAME:-develop}
+    image: nicjohnson145/mixerserver:${CI_COMMIT_REF_NAME:-latest}
     environment:
       DATABASE_HOST: postgres
+      PROTECT_REGISTER: "false"
+    ports:
+    - 50051:50051
     depends_on:
     - postgres
+  mixer-gateway:
+    build:
+      context: .
+    image: nicjohnson145/mixerserver:${CI_COMMIT_REF_NAME:-latest}
+    command:
+    - gateway
+    environment:
+      GATEWAY_GRPC_HOST: "mixer"
+    ports:
+    - 8080:8080
+    depends_on:
+    - mixer
 volumes:
   pg_data: {}

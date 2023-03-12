@@ -78,11 +78,20 @@ message ReadSettingsResponse {
 service UserService {
   rpc RegisterNewUser(RegisterNewUserRequest) returns (RegisterNewUserResponse) {
     option (google.api.http) = {
-      post: "/api/v1/auth/register-user"
+      post: "/api/v1/register-user"
       body: "*"
     };
   };
 
-  rpc Login(LoginRequest) returns (LoginResponse);
-  rpc ListUsers(ListUsersRequest) returns (ListUsersResponse);
+  rpc Login(LoginRequest) returns (LoginResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/login"
+      body: "*"
+    };
+  };
+  rpc ListUsers(ListUsersRequest) returns (ListUsersResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/users"
+    };
+  };
 }

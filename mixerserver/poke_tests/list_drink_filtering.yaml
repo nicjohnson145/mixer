@@ -1,13 +1,9 @@
 vars:
-  service: "localhost:50051"
-  drink_service: "mixer.DrinkService"
-  user_service: "mixer.UserService"
+  api_url: "http://localhost:8080/api/v1"
 
 calls:
 - name: login baz
-  type: grpc
-  service-host: '{{ .service }}'
-  url: '{{ .user_service }}/Login'
+  url: '{{ .api_url }}/login'
   body:
     username: baz
     password: bazpass
@@ -16,11 +12,9 @@ calls:
     as: 'baz_token'
 
 - name: create public drink one
-  type: grpc
   headers:
     authorization: '{{ .baz_token }}'
-  service-host: '{{ .service }}'
-  url: '{{ .drink_service }}/CreateDrink'
+  url: '{{ .api_url }}/drink'
   body:
     drink_data:
       name: Public Drink One
@@ -29,11 +23,9 @@ calls:
       publicity: 1
 
 - name: create public drink two
-  type: grpc
   headers:
     authorization: '{{ .baz_token }}'
-  service-host: '{{ .service }}'
-  url: '{{ .drink_service }}/CreateDrink'
+  url: '{{ .api_url }}/drink'
   body:
     drink_data:
       name: Public Drink Two
@@ -42,11 +34,9 @@ calls:
       publicity: 1
 
 - name: create private drink
-  type: grpc
   headers:
     authorization: '{{ .baz_token }}'
-  service-host: '{{ .service }}'
-  url: '{{ .drink_service }}/CreateDrink'
+  url: '{{ .api_url }}/drink'
   body:
     drink_data:
       name: Private Drink One
@@ -55,9 +45,7 @@ calls:
       publicity: 2
 
 - name: login foo
-  type: grpc
-  service-host: '{{ .service }}'
-  url: '{{ .user_service }}/Login'
+  url: '{{ .api_url }}/login'
   body:
     username: foo
     password: foopass
@@ -66,13 +54,9 @@ calls:
     as: 'foo_token'
 
 - name: list baz drinks as foo
-  type: grpc
   headers:
     authorization: '{{ .foo_token }}'
-  service-host: '{{ .service }}'
-  url: '{{ .drink_service }}/ListDrinks'
-  body:
-    username: baz
+  url: '{{ .api_url }}/drink/user/baz'
   asserts:
   - jq: '.drinks | [.[] | .drinkData.name]'
     expected:
@@ -80,13 +64,9 @@ calls:
     - Public Drink Two
 
 - name: list baz drinks as baz
-  type: grpc
   headers:
     authorization: '{{ .baz_token }}'
-  service-host: '{{ .service }}'
-  url: '{{ .drink_service }}/ListDrinks'
-  body:
-    username: baz
+  url: '{{ .api_url }}/drink/user/baz'
   asserts:
   - jq: '.drinks | [.[] | .drinkData.name]'
     expected:
