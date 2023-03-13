@@ -34,6 +34,15 @@ tasks:
     cmds:
     - docker build . -t nicjohnson145/mixer:$TAG
 
+  compose:
+    desc: start services in docker-compose
+    env:
+      JWT_SIGNINGKEY: $JWT_SIGNINGKEY
+      PROTECT_REGISTER: "false"
+    cmds:
+    - task: compose-supporting
+    - docker-compose up -d --wait mixer gateway
+
   compose-supporting:
     desc: start up supporting docker compose infrastructure
     cmds:

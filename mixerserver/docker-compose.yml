@@ -24,7 +24,7 @@ services:
     - 50051:50051
     depends_on:
     - postgres
-  mixer-gateway:
+  gateway:
     build:
       context: .
     image: nicjohnson145/mixerserver:${CI_COMMIT_REF_NAME:-latest}
