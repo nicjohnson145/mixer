@@ -68,7 +68,16 @@ func extractJWTFromMetadata(ctx context.Context, signingKey []byte) (*JWTClaims,
 		return nil, status.Error(codes.Unauthenticated, "authorization token is not provided")
 	}
 
-	token, err := jwt.ParseWithClaims(values[0], &JWTClaims{}, func(t *jwt.Token) (interface{}, error) {
+	claims, err := parseWithClaims(values[0], signingKey)
+	if err != nil {
+		return nil, err
+	}
+
+	return claims, nil
+}
+
+func parseWithClaims(token string, signingKey []byte) (*JWTClaims, error) {
+	parsed, err := jwt.ParseWithClaims(token, &JWTClaims{}, func(t *jwt.Token) (interface{}, error) {
 		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, status.Errorf(codes.PermissionDenied, "unexpected signing method: %v", t.Header["alg"])
 		}
@@ -79,12 +88,12 @@ func extractJWTFromMetadata(ctx context.Context, signingKey []byte) (*JWTClaims,
 		return nil, status.Errorf(codes.PermissionDenied, "error verifying JWT: %v", err)
 	}
 
-	claims, ok := token.Claims.(*JWTClaims)
+	claims, ok := parsed.Claims.(*JWTClaims)
 	if !ok {
 		return nil, status.Error(codes.PermissionDenied, "unable to convert claims to *JWTClaims")
 	}
 
-	if !token.Valid {
+	if !parsed.Valid {
 		return nil, status.Error(codes.PermissionDenied, "invalid JWT")
 	}
 
@@ -133,4 +142,12 @@ func generateJWTStr(signingKey []byte, claims JWTClaims) (string, error) {
 		return "", fmt.Errorf("error signing JWT: %w", err)
 	}
 	return tokenStr, nil
+}
+
+type ParseFunc func(token string) (*JWTClaims, error)
+
+func MakeParseFunc(signingKey []byte) ParseFunc {
+	return func(token string) (*JWTClaims, error) {
+		return parseWithClaims(token, signingKey)
+	}
 }

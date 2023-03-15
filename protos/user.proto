@@ -74,6 +74,9 @@ message ReadSettingsResponse {
   UserSettings user_settings = 1;
 }
 
+message RefreshTokenRequest {
+  string refresh_token = 1;
+}
 
 service UserService {
   rpc RegisterNewUser(RegisterNewUserRequest) returns (RegisterNewUserResponse) {
@@ -92,6 +95,13 @@ service UserService {
   rpc ListUsers(ListUsersRequest) returns (ListUsersResponse) {
     option (google.api.http) = {
       get: "/api/v1/users"
+    };
+  };
+
+  rpc RefreshToken(RefreshTokenRequest) returns (LoginResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/refresh"
+      body: "*"
     };
   };
 }

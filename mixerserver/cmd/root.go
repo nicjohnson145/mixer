@@ -64,10 +64,12 @@ func Root() *cobra.Command {
 					service.TokenTypeRefresh,
 					viper.GetDuration(config.JWTRefreshDuration),
 				),
+				ParseFunc: service.MakeParseFunc(signingKey),
 			})
 
 			jwtExemptions := mapset.NewSet[string]()
 			jwtExemptions.Add("/mixer.UserService/Login")
+			jwtExemptions.Add("/mixer.UserService/RefreshToken")
 			if !viper.GetBool(config.ProtectRegister) {
 				jwtExemptions.Add("/mixer.UserService/RegisterNewUser")
 			}

@@ -67,7 +67,7 @@ tasks:
   local:
     desc: run mixer locally
     env:
-      JWT_SIGNINGKEY: $JWT_SIGNINGKEY
+      JWT_SIGNINGKEY: OI69i6tf6AHWOVI7du58ZOoQCYXJjrPYT58
       PROTECT_REGISTER: "false"
     cmds:
     - task: build-server-binary
@@ -111,3 +111,4 @@ tasks:
     - poke poke_tests/list_drink_filtering.yaml
     - task: remove-drinks
     - poke poke_tests/list_users.yaml
+    - poke poke_tests/refresh.yaml

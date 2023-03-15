@@ -682,6 +682,53 @@ class ReadSettingsResponse extends $pb.GeneratedMessage {
   UserSettings ensureUserSettings() => $_ensure(0);
 }
 
+class RefreshTokenRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'RefreshTokenRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'mixer'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'refreshToken')
+    ..hasRequiredFields = false
+  ;
+
+  RefreshTokenRequest._() : super();
+  factory RefreshTokenRequest({
+    $core.String? refreshToken,
+  }) {
+    final _result = create();
+    if (refreshToken != null) {
+      _result.refreshToken = refreshToken;
+    }
+    return _result;
+  }
+  factory RefreshTokenRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory RefreshTokenRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  RefreshTokenRequest clone() => RefreshTokenRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  RefreshTokenRequest copyWith(void Function(RefreshTokenRequest) updates) => super.copyWith((message) => updates(message as RefreshTokenRequest)) as RefreshTokenRequest; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static RefreshTokenRequest create() => RefreshTokenRequest._();
+  RefreshTokenRequest createEmptyInstance() => create();
+  static $pb.PbList<RefreshTokenRequest> createRepeated() => $pb.PbList<RefreshTokenRequest>();
+  @$core.pragma('dart2js:noInline')
+  static RefreshTokenRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<RefreshTokenRequest>(create);
+  static RefreshTokenRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get refreshToken => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set refreshToken($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasRefreshToken() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearRefreshToken() => clearField(1);
+}
+
 class UserServiceApi {
   $pb.RpcClient _client;
   UserServiceApi(this._client);
@@ -697,6 +744,10 @@ class UserServiceApi {
   $async.Future<ListUsersResponse> listUsers($pb.ClientContext? ctx, ListUsersRequest request) {
     var emptyResponse = ListUsersResponse();
     return _client.invoke<ListUsersResponse>(ctx, 'UserService', 'ListUsers', request, emptyResponse);
+  }
+  $async.Future<LoginResponse> refreshToken($pb.ClientContext? ctx, RefreshTokenRequest request) {
+    var emptyResponse = LoginResponse();
+    return _client.invoke<LoginResponse>(ctx, 'UserService', 'RefreshToken', request, emptyResponse);
   }
 }
 

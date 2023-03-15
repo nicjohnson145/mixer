@@ -25,6 +25,7 @@ type UserServiceClient interface {
 	RegisterNewUser(ctx context.Context, in *RegisterNewUserRequest, opts ...grpc.CallOption) (*RegisterNewUserResponse, error)
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 	ListUsers(ctx context.Context, in *ListUsersRequest, opts ...grpc.CallOption) (*ListUsersResponse, error)
+	RefreshToken(ctx context.Context, in *RefreshTokenRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 }
 
 type userServiceClient struct {
@@ -62,6 +63,15 @@ func (c *userServiceClient) ListUsers(ctx context.Context, in *ListUsersRequest,
 	return out, nil
 }
 
+func (c *userServiceClient) RefreshToken(ctx context.Context, in *RefreshTokenRequest, opts ...grpc.CallOption) (*LoginResponse, error) {
+	out := new(LoginResponse)
+	err := c.cc.Invoke(ctx, "/mixer.UserService/RefreshToken", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServiceServer is the server API for UserService service.
 // All implementations must embed UnimplementedUserServiceServer
 // for forward compatibility
@@ -69,6 +79,7 @@ type UserServiceServer interface {
 	RegisterNewUser(context.Context, *RegisterNewUserRequest) (*RegisterNewUserResponse, error)
 	Login(context.Context, *LoginRequest) (*LoginResponse, error)
 	ListUsers(context.Context, *ListUsersRequest) (*ListUsersResponse, error)
+	RefreshToken(context.Context, *RefreshTokenRequest) (*LoginResponse, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
 
@@ -84,6 +95,9 @@ func (UnimplementedUserServiceServer) Login(context.Context, *LoginRequest) (*Lo
 }
 func (UnimplementedUserServiceServer) ListUsers(context.Context, *ListUsersRequest) (*ListUsersResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListUsers not implemented")
+}
+func (UnimplementedUserServiceServer) RefreshToken(context.Context, *RefreshTokenRequest) (*LoginResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RefreshToken not implemented")
 }
 func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
 
@@ -152,6 +166,24 @@ func _UserService_ListUsers_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserService_RefreshToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RefreshTokenRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).RefreshToken(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/mixer.UserService/RefreshToken",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).RefreshToken(ctx, req.(*RefreshTokenRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserService_ServiceDesc is the grpc.ServiceDesc for UserService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -170,6 +202,10 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListUsers",
 			Handler:    _UserService_ListUsers_Handler,
+		},
+		{
+			MethodName: "RefreshToken",
+			Handler:    _UserService_RefreshToken_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

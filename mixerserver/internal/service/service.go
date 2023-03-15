@@ -16,6 +16,7 @@ type ServiceConfig struct {
 	Storage          storage.Storage
 	RefreshGenerator GenerationFunc
 	AccessGenerator  GenerationFunc
+	ParseFunc        ParseFunc
 }
 
 func NewService(conf ServiceConfig) *Service {
@@ -23,7 +24,8 @@ func NewService(conf ServiceConfig) *Service {
 		log:              conf.Logger,
 		store:            conf.Storage,
 		accessGenerator:  conf.AccessGenerator,
-		RefreshGenerator: conf.RefreshGenerator,
+		refreshGenerator: conf.RefreshGenerator,
+		parseFunc:        conf.ParseFunc,
 	}
 }
 
@@ -31,7 +33,8 @@ type Service struct {
 	log              zerolog.Logger
 	store            storage.Storage
 	accessGenerator  GenerationFunc
-	RefreshGenerator GenerationFunc
+	refreshGenerator GenerationFunc
+	parseFunc        ParseFunc
 	pb.UnimplementedUserServiceServer
 	pb.UnimplementedDrinkServiceServer
 }
@@ -81,20 +84,29 @@ func (s *Service) Login(ctx context.Context, req *pb.LoginRequest) (*pb.LoginRes
 		return nil, status.Error(codes.PermissionDenied, "permission denied")
 	}
 
-	access, err := s.accessGenerator(user)
+	resp, err := s.generateTokens(user)
 	if err != nil {
-		s.log.Err(err).Msg("error generating access token")
-		return nil, status.Error(codes.PermissionDenied, "permission denied")
+		return nil, err
 	}
 
-	refresh, err := s.accessGenerator(user)
+	return resp, nil
+}
+
+func (s *Service) generateTokens(u *storage.User) (*pb.LoginResponse, error) {
+	access, err := s.accessGenerator(u)
+	if err != nil {
+		s.log.Err(err).Msg("error generating access token")
+		return nil, err
+	}
+
+	refresh, err := s.refreshGenerator(u)
 	if err != nil {
 		s.log.Err(err).Msg("error generating refresh token")
-		return nil, status.Error(codes.PermissionDenied, "permission denied")
+		return nil, err
 	}
 
 	return &pb.LoginResponse{
-		Username:     user.Username,
+		Username:     u.Username,
 		RefreshToken: refresh,
 		AccessToken:  access,
 	}, nil
@@ -109,6 +121,34 @@ func (s *Service) ListUsers(ctx context.Context, req *pb.ListUsersRequest) (*pb.
 	return &pb.ListUsersResponse{
 		Users: users,
 	}, nil
+}
+
+func (s *Service) RefreshToken(ctx context.Context, req *pb.RefreshTokenRequest) (*pb.LoginResponse, error) {
+	if req.RefreshToken == "" {
+		return nil, status.Error(codes.InvalidArgument, "refresh_token required")
+	}
+
+	claims, err := s.parseFunc(req.RefreshToken)
+	if err != nil {
+		return nil, err
+	}
+
+	if claims.TokenType != TokenTypeRefresh {
+		return nil, status.Error(codes.InvalidArgument, "token is not a refresh token")
+	}
+
+	user, err := s.store.ReadUser(claims.Username)
+	if err != nil {
+		s.log.Err(err).Msg("error reading user from claims")
+		return nil, status.Error(codes.PermissionDenied, "permission denied")
+	}
+
+	resp, err := s.generateTokens(user)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, nil
 }
 
 func (s *Service) CreateDrink(ctx context.Context, req *pb.CreateDrinkRequest) (*pb.CreateDrinkResponse, error) {
