@@ -53,7 +53,17 @@ class ApiSvc {
 
     Future<Result<void, ApiError>> refresh() async {
         await setAuth();
-        final resp = await http.post()
+        final resp = await http.post(
+            Uri.parse(Urls.refresh),
+            body: json.encode({"refresh_token": refreshToken}),
+        );
+
+        if (resp.statusCode != 200) {
+            return Error(ApiError(status_code: resp.statusCode, message: "unable to refresh"));
+        }
+        var body = jsonDecode(resp.body);
+        await Storage.saveLogin(LoginResponse.create()..mergeFromProto3Json(body));
+        return const Success(null);
     }
 
 }

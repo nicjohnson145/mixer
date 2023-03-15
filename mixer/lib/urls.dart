@@ -8,4 +8,5 @@ class Urls {
     static final String apiv1 = base + "/api/v1";
 
     static final String login = apiv1 + "/login";
+    static final String refresh = apiv1 + "/refresh";
 }
