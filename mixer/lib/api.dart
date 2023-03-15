@@ -1,4 +1,5 @@
 import 'package:mixer/protos/user.pb.dart';
+import 'package:mixer/protos/drink.pb.dart';
 import 'package:mixer/urls.dart';
 import 'package:mixer/user_storage.dart';
 import 'dart:convert';
@@ -34,7 +35,7 @@ class ApiSvc {
         request.password = password;
 
         final resp = await http.post(
-            Uri.parse(Urls.login),
+            Uri.parse(Urls.login()),
             body: json.encode(request.toProto3Json()),
         );
 
@@ -54,7 +55,7 @@ class ApiSvc {
     Future<Result<void, ApiError>> refresh() async {
         await setAuth();
         final resp = await http.post(
-            Uri.parse(Urls.refresh),
+            Uri.parse(Urls.refresh()),
             body: json.encode({"refresh_token": refreshToken}),
         );
 
@@ -66,4 +67,26 @@ class ApiSvc {
         return const Success(null);
     }
 
+    Future<Result<ListDrinkResponse, ApiError>> listDrinksByUser(String username) async {
+        await setAuth();
+        final resp = await http.get(Uri.parse(Urls.listByUser(username)));
+
+        if (resp.statusCode == 401) {
+            final refreshResp = await refresh();
+            return refreshResp.when(
+                (success) {
+                    return listDrinksByUser(username);
+                },
+                (error) {
+                    return Error(error);
+                },
+            );
+        }
+
+        var body = jsonDecode(resp.body);
+        if (resp.statusCode != 200) {
+            return Error(ApiError(status_code: resp.statusCode, message: body["message"]));
+        }
+        return Success(ListDrinkResponse.create()..mergeFromProto3Json(body));
+    }
 }

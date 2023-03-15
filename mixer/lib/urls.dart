@@ -7,6 +7,15 @@ class Urls {
     static final String base = Foundation.kReleaseMode ? liveBaseURL : localBaseURL;
     static final String apiv1 = base + "/api/v1";
 
-    static final String login = apiv1 + "/login";
-    static final String refresh = apiv1 + "/refresh";
+    static String login() {
+        return apiv1 + "/login";
+    }
+
+    static String refresh() {
+        return apiv1 + "/refresh";
+    }
+
+    static String listByUser(String username) {
+        return apiv1 + "/drink/user/" + username;
+    }
 }

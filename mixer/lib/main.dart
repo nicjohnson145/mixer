@@ -3,8 +3,9 @@ import 'package:mixer/foo.dart';
 import 'package:mixer/login.dart';
 import 'package:mixer/user_storage.dart';
 import 'package:mixer/api.dart';
-import 'package:mixer/loading_spinner.dart';
+import 'package:mixer/common.dart';
 import 'package:mixer/routes.dart';
+import 'package:mixer/user_drinks.dart';
 import 'package:multiple_result/multiple_result.dart';
 
 void main() {
@@ -30,10 +31,10 @@ class MyApp extends StatelessWidget {
                         return loadingSpinner(context);
                     }
 
-                    final result = snapshot.data as dynamic;
+                    final result = snapshot.data as Result;
                     final page = result.when(
-                        (success) {
-                            return FooPage();
+                        (username) {
+                            return UserDrinks(username: username);
                         },
                         (error) {
                             return LoginPage();
@@ -49,7 +50,7 @@ class MyApp extends StatelessWidget {
         );
     }
 
-    Future<Result<void, Exception>> rootFuture() async {
+    Future<Result<String, Exception>> rootFuture() async {
         var loginInfo = await Storage.getLogin();
         // If we didn't find anything
         if (loginInfo.username == "") {
@@ -60,7 +61,7 @@ class MyApp extends StatelessWidget {
         final refresh = await ApiMgr.getInstance().refresh();
         return refresh.when(
             (success) {
-                return const Success(null);
+                return Success(loginInfo.username);
             },
             (error) {
                 return Error(Exception("could not refresh"));
