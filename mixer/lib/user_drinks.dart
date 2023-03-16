@@ -54,7 +54,7 @@ class _UserDrinksState extends State<UserDrinks> {
                 final resp = snapshot.data as Result;
                 return resp.when(
                     (success) {
-                        return const Text("this is the drink page");
+                        return DrinkListView(drinks: success.drinks);
                     },
                     (error) {
                         return errorScreen(context, error.message);
@@ -79,7 +79,95 @@ class DrinkListView extends StatelessWidget {
             appBar: AppBar(
                 title: const Text("Drinks"),
             ),
-            body: const Text("this is where the drinks are"),
+            body: getBody(context),
+        );
+    }
+
+    Widget getBody(BuildContext context) {
+        // If you're looking at someone else's drinks
+        if (drinks.isEmpty) {
+            return Container(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 15.0,
+                    horizontal: 15.0,
+                ),
+                child: const Text("Such empty"),
+            );
+        }
+
+        var sortedDrinks = List<Drink>.from(drinks);
+        sortedDrinks.sort((a, b) => a.drinkData.name.compareTo(b.drinkData.name));
+        return ListView.builder(
+            itemCount: sortedDrinks.length,
+            itemBuilder: (BuildContext context, int i) {
+                return DrinkLineItem(
+                    drink: sortedDrinks[i],
+                    onTap: (Drink d) {
+                        print(d.drinkData.name);
+                    },
+                ).build(context);
+            },
+        );
+    }
+}
+
+class DrinkLineItem extends StatelessWidget {
+    final Drink drink;
+    final void Function(Drink) onTap;
+
+    const DrinkLineItem({
+        required this.drink,
+        required this.onTap,
+    });
+
+    Widget nameRow(BuildContext context) {
+        List<Widget> children = [
+            Text(
+                drink.drinkData.name,
+                style: Theme.of(context).textTheme.titleMedium,
+            ),
+        ];
+        if (drink.drinkData.underDevelopment) {
+            children.add(cardIcon(Icons.science_rounded));
+        }
+        if (drink.drinkData.favorite) {
+            children.add(cardIcon(Icons.star));
+        }
+        return Row(children: children);
+    }
+
+    Widget cardIcon(IconData i) {
+        return Row(
+            children:[
+                const SizedBox(width: 15),
+                Icon(i, size: 16),
+            ],
+        );
+    }
+
+    Widget build(BuildContext context) {
+        return Card(
+            child: InkWell(
+                onTap: () {
+                    onTap(drink);
+                },
+                child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 5.0,
+                        horizontal: 10.0,
+                    ),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                            nameRow(context),
+                            Text(
+                                drink.drinkData.primaryAlcohol,
+                                style: Theme.of(context).textTheme.titleSmall,
+                            ),
+                        ],
+                    ),
+                ),
+            ),
         );
     }
 }

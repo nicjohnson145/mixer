@@ -32,7 +32,7 @@ tasks:
     - sh: '[ -n "$TAG" ]'
       message: "TAG must be set"
     cmds:
-    - docker build . -t nicjohnson145/mixer:$TAG
+    - docker build . -t nicjohnson145/mixerserver:$TAG
 
   compose:
     desc: start services in docker-compose

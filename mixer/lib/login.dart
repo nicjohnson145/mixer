@@ -34,10 +34,9 @@ class _LoginPageState extends State<LoginPage> {
 
         var api = ApiMgr.getInstance();
         final result = await api.login(_username, _password);
-        result.when(
-            (success) async {
-                await Storage.saveLogin(success);
-                Navigator.pushReplacementNamed(context, Routes.foopage);
+        var loginResp = result.when(
+            (success) {
+                return success;
             },
             (error) {
                 Flushbar(
@@ -45,8 +44,13 @@ class _LoginPageState extends State<LoginPage> {
                     message: error.message,
                     duration: const Duration(seconds: 3),
                 ).show(context);
+                return null;
             },
         );
+        if (loginResp != null) {
+            await Storage.saveLogin(loginResp);
+            Navigator.pushReplacementNamed(context, Routes.drinksByUser);
+        }
     }
 
     @override

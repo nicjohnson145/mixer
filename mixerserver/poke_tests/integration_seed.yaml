@@ -1,0 +1,48 @@
+vars:
+  api_url: "http://localhost:8080/api/v1"
+
+calls:
+- name: create-foo
+  url: '{{ .api_url }}/register-user'
+  body:
+    username: foo
+    password: foopass
+- name: create-bar
+  url: '{{ .api_url }}/register-user'
+  body:
+    username: bar
+    password: barpass
+- name: login foo
+  url: '{{ .api_url }}/login'
+  body:
+    username: foo
+    password: foopass
+  exports:
+  - jq: '.accessToken'
+    as: 'foo_token'
+- name: Foo Daquiri
+  headers:
+    authorization: '{{ .foo_token }}'
+  url: '{{ .api_url }}/drink'
+  body:
+    drink_data:
+      name: Daquiri
+      primary_alcohol: Rum
+      ingredients:
+      - 2.5 oz white Rum
+      - 0.5 oz simple syrup
+      - 1 oz lime juice
+      publicity: 1
+- name: foo bees knees
+  headers:
+    authorization: '{{ .foo_token }}'
+  url: '{{ .api_url }}/drink'
+  body:
+    drink_data:
+      name: Bee's Knees
+      primary_alcohol: Gin
+      ingredients:
+      - 0.75 oz honey syrup
+      - 0.75 oz lemon juice
+      - 2 oz gin
+      publicity: 1

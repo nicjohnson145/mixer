@@ -29,6 +29,12 @@ class ApiSvc {
     String? accessToken;
     String? refreshToken;
 
+    Map<String, String> headers() {
+        return {
+            "authorization": accessToken!,
+        };
+    }
+
     Future<Result<LoginResponse, ApiError>> login(String username, String password) async {
         var request = LoginRequest.create();
         request.username = username;
@@ -69,7 +75,10 @@ class ApiSvc {
 
     Future<Result<ListDrinkResponse, ApiError>> listDrinksByUser(String username) async {
         await setAuth();
-        final resp = await http.get(Uri.parse(Urls.listByUser(username)));
+        final resp = await http.get(
+            Uri.parse(Urls.listByUser(username)),
+            headers: headers(),
+        );
 
         if (resp.statusCode == 401) {
             final refreshResp = await refresh();

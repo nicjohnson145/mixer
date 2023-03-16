@@ -46,6 +46,7 @@ class MyApp extends StatelessWidget {
             routes: {
                 Routes.login: (context) => LoginPage(),
                 Routes.foopage: (context) => FooPage(),
+                Routes.drinksByUser: (context) => UserDrinks(),
             },
         );
     }
