@@ -8,53 +8,50 @@ class StorageKeys {
     static const String accessToken = "access_token";
 }
 
-class Storage {
-    static saveLogin(LoginResponse resp) async {
-        const storage = FlutterSecureStorage();
-        await storage.write(key: StorageKeys.username, value: resp.username);
-        await storage.write(key: StorageKeys.accessToken, value: resp.accessToken);
-        await storage.write(key: StorageKeys.refreshToken, value: resp.refreshToken);
+abstract class Storage {
+    Future<LoginResponse> getLogin();
+    Future<void> saveLogin(LoginResponse resp);
+    Future<void> saveRefresh(RefreshTokenResponse resp);
+    Future<String> getUsername();
+}
+
+class SecureStorage implements Storage {
+    final FlutterSecureStorage _storage;
+
+    SecureStorage() : _storage = const FlutterSecureStorage();
+
+    @override
+    Future<void> saveLogin(LoginResponse resp) async {
+        await _storage.write(key: StorageKeys.username, value: resp.username);
+        await _storage.write(key: StorageKeys.accessToken, value: resp.accessToken);
+        await _storage.write(key: StorageKeys.refreshToken, value: resp.refreshToken);
     }
 
-    static Future<LoginResponse> getLogin() async {
-        const storage = FlutterSecureStorage();
+    @override
+    Future<LoginResponse> getLogin() async {
         var resp = LoginResponse.create();
-        resp.username = await getUsername();
-        resp.accessToken = await getAccessToken();
-        resp.refreshToken = await getRefreshToken();
+        resp.username = await _getString(StorageKeys.username);
+        resp.accessToken = await _getString(StorageKeys.accessToken);
+        resp.refreshToken = await _getString(StorageKeys.refreshToken);
         return resp;
     }
 
-    static saveRefresh(RefreshTokenResponse resp) async {
-        const storage = FlutterSecureStorage();
-        await storage.write(key: StorageKeys.accessToken, value: resp.accessToken);
-        await storage.write(key: StorageKeys.refreshToken, value: resp.refreshToken);
+    @override
+    Future<void> saveRefresh(RefreshTokenResponse resp) async {
+        await _storage.write(key: StorageKeys.accessToken, value: resp.accessToken);
+        await _storage.write(key: StorageKeys.refreshToken, value: resp.refreshToken);
     }
 
-    static Future<void> clear() async {
-        const storage = FlutterSecureStorage();
-        await storage.deleteAll();
+    @override
+    Future<String> getUsername() async {
+        return await _getString(StorageKeys.username);
     }
 
-    static Future<String> _getString(String key) async {
-        const storage = FlutterSecureStorage();
-        String? val = await storage.read(key: key);
+    Future<String> _getString(String key) async {
+        String? val = await _storage.read(key: key);
         if (val == null) {
             return "";
         }
         return val;
     }
-
-    static Future<String> getAccessToken() async {
-        return _getString(StorageKeys.accessToken);
-    }
-
-    static Future<String> getRefreshToken() async {
-        return _getString(StorageKeys.refreshToken);
-    }
-
-    static Future<String> getUsername() async {
-        return _getString(StorageKeys.username);
-    }
 }
-

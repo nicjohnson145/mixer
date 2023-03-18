@@ -1,33 +1,37 @@
 import 'package:mixer/protos/user.pb.dart';
 import 'package:mixer/protos/drink.pb.dart';
 import 'package:mixer/urls.dart';
+import 'package:mixer/services.dart';
 import 'package:mixer/user_storage.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:multiple_result/multiple_result.dart';
 
-class ApiMgr {
-    static ApiSvc? _instance;
-
-    static ApiSvc getInstance() {
-        _instance ??= ApiSvc();
-        return _instance!;
-    }
-}
-
 class ApiError {
-    int status_code;
+    int statusCode;
     String message;
 
     ApiError({
-        required this.status_code,
+        required this.statusCode,
         required this.message,
     });
 }
 
-class ApiSvc {
+abstract class API {
+    Future<Result<LoginResponse, ApiError>> login(String username, String password);
+    Future<Result<void, ApiError>> refresh();
+    Future<Result<ListDrinkResponse, ApiError>> listDrinksByUser(String username);
+}
+
+class HTTPAPI implements API {
+    http.Client client;
+
     String? accessToken;
     String? refreshToken;
+
+    HTTPAPI({
+        required this.client,
+    });
 
     Map<String, String> headers() {
         return {
@@ -35,6 +39,7 @@ class ApiSvc {
         };
     }
 
+    @override
     Future<Result<LoginResponse, ApiError>> login(String username, String password) async {
         var request = LoginRequest.create();
         request.username = username;
@@ -47,17 +52,19 @@ class ApiSvc {
 
         var body = jsonDecode(resp.body);
         if (resp.statusCode != 200) {
-            return Error(ApiError(status_code: resp.statusCode, message: body["message"]));
+            return Error(ApiError(statusCode: resp.statusCode, message: body["message"]));
         }
         return Success(LoginResponse.create()..mergeFromProto3Json(body));
     }
 
     Future<void> setAuth() async {
-        var resp = await Storage.getLogin();
+        var storage = getIt<Storage>();
+        var resp = await storage.getLogin();
         accessToken = resp.accessToken;
         refreshToken = resp.refreshToken;
     }
 
+    @override
     Future<Result<void, ApiError>> refresh() async {
         await setAuth();
         final resp = await http.post(
@@ -66,13 +73,15 @@ class ApiSvc {
         );
 
         if (resp.statusCode != 200) {
-            return Error(ApiError(status_code: resp.statusCode, message: "unable to refresh"));
+            return Error(ApiError(statusCode: resp.statusCode, message: "unable to refresh"));
         }
         var body = jsonDecode(resp.body);
-        await Storage.saveLogin(LoginResponse.create()..mergeFromProto3Json(body));
+        var storage = getIt<Storage>();
+        await storage.saveLogin(LoginResponse.create()..mergeFromProto3Json(body));
         return const Success(null);
     }
 
+    @override
     Future<Result<ListDrinkResponse, ApiError>> listDrinksByUser(String username) async {
         await setAuth();
         final resp = await http.get(
@@ -94,7 +103,7 @@ class ApiSvc {
 
         var body = jsonDecode(resp.body);
         if (resp.statusCode != 200) {
-            return Error(ApiError(status_code: resp.statusCode, message: body["message"]));
+            return Error(ApiError(statusCode: resp.statusCode, message: body["message"]));
         }
         return Success(ListDrinkResponse.create()..mergeFromProto3Json(body));
     }

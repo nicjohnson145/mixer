@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mixer/api.dart';
+import 'package:mixer/services.dart';
 import 'package:mixer/routes.dart';
 import 'package:mixer/user_storage.dart';
 import 'package:another_flushbar/flushbar.dart';
@@ -32,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
         }
         form.save();
 
-        var api = ApiMgr.getInstance();
+        var api = getIt<API>();
         final result = await api.login(_username, _password);
         var loginResp = result.when(
             (success) {
@@ -48,7 +49,8 @@ class _LoginPageState extends State<LoginPage> {
             },
         );
         if (loginResp != null) {
-            await Storage.saveLogin(loginResp);
+            var storage = getIt<Storage>();
+            await storage.saveLogin(loginResp);
             Navigator.pushReplacementNamed(context, Routes.drinksByUser);
         }
     }

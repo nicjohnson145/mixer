@@ -6,9 +6,11 @@ import 'package:mixer/api.dart';
 import 'package:mixer/common.dart';
 import 'package:mixer/routes.dart';
 import 'package:mixer/user_drinks.dart';
+import 'package:mixer/services.dart';
 import 'package:multiple_result/multiple_result.dart';
 
 void main() {
+  registerServices();
   runApp(const MyApp());
 }
 
@@ -52,14 +54,16 @@ class MyApp extends StatelessWidget {
     }
 
     Future<Result<String, Exception>> rootFuture() async {
-        var loginInfo = await Storage.getLogin();
+        var storage = getIt<Storage>();
+        var loginInfo = await storage.getLogin();
         // If we didn't find anything
         if (loginInfo.username == "") {
             return Error(Exception("no data found"));
         }
 
         // We found some info, see if the refresh token is still good
-        final refresh = await ApiMgr.getInstance().refresh();
+        var api = getIt<API>();
+        final refresh = await api.refresh();
         return refresh.when(
             (success) {
                 return Success(loginInfo.username);

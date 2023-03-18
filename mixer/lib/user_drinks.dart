@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mixer/user_storage.dart';
 import 'package:mixer/api.dart';
+import 'package:mixer/services.dart';
 import 'package:mixer/common.dart';
 import 'package:multiple_result/multiple_result.dart';
 import 'package:mixer/protos/drink.pb.dart';
@@ -22,7 +23,8 @@ class _UserDrinksState extends State<UserDrinks> {
     Future<Result<ListDrinkResponse, ShitsFuckedError>> getFuture() async {
         String username;
         if (widget.username == null) {
-            String name = await Storage.getUsername();
+            var storage = getIt<Storage>();
+            String name = await storage.getUsername();
             if (name == "") {
                 return Error(ShitsFuckedError(message: "no user found in storage"));
             }
@@ -31,7 +33,8 @@ class _UserDrinksState extends State<UserDrinks> {
             username = widget.username!;
         }
 
-        final apiResp = await ApiMgr.getInstance().listDrinksByUser(username);
+        var api = getIt<API>();
+        final apiResp = await api.listDrinksByUser(username);
         return apiResp.when(
             (success) {
                 return Success(success);
