@@ -2,6 +2,11 @@
 
 Unified client &amp; server repo for Mixer
 
+This is a unification and rewrite of [mixer_remote](https://github.com/nicjohnson145/mixer-remote) and
+[mixer-service](https://github.com/nicjohnson145/mixer-service). I wasn't proud of the backend, and
+we were on a _very_ old version of flutter. There were no tests on the frontend. So I tried again. For
+the third time.
+
 ## Flutter Bits
 
 ```
