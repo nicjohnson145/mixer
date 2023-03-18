@@ -60,7 +60,8 @@ class _UserDrinksState extends State<UserDrinks> {
                         return DrinkListView(drinks: success.drinks);
                     },
                     (error) {
-                        return errorScreen(context, error.message);
+                        throw Exception(error.message);
+                        //return errorScreen(context, error.message);
                     },
                 );
             }
