@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:mixer/foo.dart';
 import 'package:mixer/login.dart';
 import 'package:mixer/user_storage.dart';
 import 'package:mixer/api.dart';
 import 'package:mixer/common.dart';
 import 'package:mixer/routes.dart';
 import 'package:mixer/user_drinks.dart';
+import 'package:mixer/single_drink.dart';
 import 'package:mixer/services.dart';
 import 'package:multiple_result/multiple_result.dart';
 
@@ -33,6 +33,10 @@ class MyApp extends StatelessWidget {
                         return loadingSpinner(context);
                     }
 
+                    if (snapshot.hasError) {
+                        return LoginPage();
+                    }
+
                     final result = snapshot.data as Result;
                     final page = result.when(
                         (username) {
@@ -45,10 +49,28 @@ class MyApp extends StatelessWidget {
                     return page;
                 },
             ),
-            routes: {
-                Routes.login: (context) => LoginPage(),
-                Routes.foopage: (context) => FooPage(),
-                Routes.drinksByUser: (context) => UserDrinks(),
+            onGenerateRoute: (settings) {
+                switch (settings.name) {
+                    case Routes.singleDrink : {
+                        final args = settings.arguments as SingleDrinkArgs;
+                        return MaterialPageRoute(
+                            builder:  (context) {
+                                return DrinkDetails(
+                                    drink: args.drink,
+                                );
+                            },
+                        );
+                    }
+                    case Routes.login : {
+                        return MaterialPageRoute(builder: (_) => LoginPage());
+                    }
+                    case Routes.drinksByUser : {
+                        return MaterialPageRoute(builder: (_) => UserDrinks());
+                    }
+                    default : {
+                        assert(false, "Need to implement ${settings.name}");
+                    }
+                }
             },
         );
     }

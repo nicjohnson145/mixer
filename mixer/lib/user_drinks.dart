@@ -5,6 +5,7 @@ import 'package:mixer/services.dart';
 import 'package:mixer/common.dart';
 import 'package:multiple_result/multiple_result.dart';
 import 'package:mixer/protos/drink.pb.dart';
+import 'package:mixer/routes.dart';
 
 class UserDrinks extends StatefulWidget {
     String? username;
@@ -91,9 +92,10 @@ class DrinkListView extends StatelessWidget {
         // If you're looking at someone else's drinks
         if (drinks.isEmpty) {
             return Container(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 15.0,
-                    horizontal: 15.0,
+                padding: const EdgeInsets.only(
+                    top: 15.0,
+                    left: 15.0,
+                    right: 15.0,
                 ),
                 child: const Text("Such empty"),
             );
@@ -107,7 +109,10 @@ class DrinkListView extends StatelessWidget {
                 return DrinkLineItem(
                     drink: sortedDrinks[i],
                     onTap: (Drink d) {
-                        print(d.drinkData.name);
+                        Navigator.of(context).pushNamed(
+                            Routes.singleDrink,
+                            arguments: SingleDrinkArgs(drink: d),
+                        );
                     },
                 ).build(context);
             },
