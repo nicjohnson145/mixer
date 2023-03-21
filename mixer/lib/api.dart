@@ -6,6 +6,7 @@ import 'package:mixer/user_storage.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:multiple_result/multiple_result.dart';
+import 'package:fixnum/fixnum.dart';
 
 class ApiError {
     int statusCode;
@@ -21,6 +22,8 @@ abstract class API {
     Future<Result<LoginResponse, ApiError>> login(String username, String password);
     Future<Result<void, ApiError>> refresh();
     Future<Result<ListDrinkResponse, ApiError>> listDrinksByUser(String username);
+    Future<Result<void, ApiError>> createDrink(DrinkData data);
+    Future<Result<void, ApiError>> updateDrink(Int64 id, DrinkData data);
 }
 
 class HTTPAPI implements API {
@@ -107,4 +110,64 @@ class HTTPAPI implements API {
         }
         return Success(ListDrinkResponse.create()..mergeFromProto3Json(body));
     }
+
+    @override
+    Future<Result<Int64, ApiError>> createDrink(DrinkData data) async {
+        await setAuth();
+        var req = CreateDrinkRequest(drinkData: data);
+        final resp = await http.post(
+            Uri.parse(Urls.create()),
+            headers: headers(),
+            body: json.encode(req.toProto3Json()),
+        );
+
+        if (resp.statusCode == 401) {
+            final refreshResp = await refresh();
+            return refreshResp.when(
+                (success) {
+                    return createDrink(data);
+                },
+                (error) {
+                    return Error(error);
+                },
+            );
+        }
+
+        var body = jsonDecode(resp.body);
+        if (resp.statusCode != 200) {
+            return Error(ApiError(statusCode: resp.statusCode, message: body["message"]));
+        }
+        var createResp = CreateDrinkResponse()..mergeFromProto3Json(body);
+        return Success(createResp.id);
+    }
+
+    @override
+    Future<Result<void, ApiError>> updateDrink(Int64 id, DrinkData data) async {
+        await setAuth();
+        var req = UpdateDrinkRequest(id: id, drinkData: data);
+        final resp = await http.put(
+            Uri.parse(Urls.update()),
+            headers: headers(),
+            body: json.encode(req.toProto3Json()),
+        );
+
+        if (resp.statusCode == 401) {
+            final refreshResp = await refresh();
+            return refreshResp.when(
+                (success) {
+                    return updateDrink(id, data);
+                },
+                (error) {
+                    return Error(error);
+                },
+            );
+        }
+
+        var body = jsonDecode(resp.body);
+        if (resp.statusCode != 200) {
+            return Error(ApiError(statusCode: resp.statusCode, message: body["message"]));
+        }
+        return const Success(null);
+    }
+
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mixer/api.dart';
 import 'package:mixer/services.dart';
 import 'package:mixer/routes.dart';
+import 'package:mixer/keys.dart';
 import 'package:mixer/user_storage.dart';
 import 'package:another_flushbar/flushbar.dart';
 
@@ -58,17 +59,20 @@ class _LoginPageState extends State<LoginPage> {
     @override
     Widget build(BuildContext context) {
         final usernameField = TextFormField(
+            key: KeyName.loginUsernameInput.asKey(),
             onSaved: (val) => _username = val == null ? "" : val.toString(),
             decoration: const InputDecoration(labelText:  "Username"),
             validator: required("Username"),
         );
         final passwordField = TextFormField(
+            key: KeyName.loginPasswordInput.asKey(),
             obscureText: true,
             onSaved: (value) => _password = value == null ? "" : value.toString(),
             decoration: const InputDecoration(labelText: "Password"),
             validator: required("Password"),
         );
         final loginButton = ElevatedButton(
+            key: KeyName.loginLoginButton.asKey(),
             child: const Text("Login"),
             onPressed: () { login(context); }
         );

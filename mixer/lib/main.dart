@@ -6,16 +6,28 @@ import 'package:mixer/common.dart';
 import 'package:mixer/routes.dart';
 import 'package:mixer/user_drinks.dart';
 import 'package:mixer/single_drink.dart';
+import 'package:mixer/drink_add_edit.dart';
 import 'package:mixer/services.dart';
 import 'package:multiple_result/multiple_result.dart';
 
 void main() {
-  registerServices();
-  runApp(const MyApp());
+    mainWithObservers(null);
+}
+
+void mainWithObservers(NavigatorObserver? obs) {
+    registerServices();
+    runApp(MyApp(
+        observer: obs,
+    ));
 }
 
 class MyApp extends StatelessWidget {
-    const MyApp({super.key});
+    NavigatorObserver? observer;
+
+    MyApp({
+        super.key,
+        this.observer,
+    });
 
     // This widget is the root of your application.
     @override
@@ -26,6 +38,7 @@ class MyApp extends StatelessWidget {
               primarySwatch: Colors.blue,
               brightness: Brightness.dark,
             ),
+            navigatorObservers: observer == null ? [] : [observer!],
             home: FutureBuilder(
                 future: rootFuture(),
                 builder: (context, snapshot) {
@@ -66,6 +79,9 @@ class MyApp extends StatelessWidget {
                     }
                     case Routes.drinksByUser : {
                         return MaterialPageRoute(builder: (_) => UserDrinks());
+                    }
+                    case Routes.drinkAddEdit : {
+                        return MaterialPageRoute(builder: (_) => DrinkAddEdit());
                     }
                     default : {
                         assert(false, "Need to implement ${settings.name}");

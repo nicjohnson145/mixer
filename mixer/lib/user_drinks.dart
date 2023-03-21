@@ -72,6 +72,7 @@ class _UserDrinksState extends State<UserDrinks> {
 
 class DrinkListView extends StatelessWidget {
     List<Drink> drinks;
+    String? username;
 
     DrinkListView({
         Key? key,
@@ -85,6 +86,7 @@ class DrinkListView extends StatelessWidget {
                 title: const Text("Drinks"),
             ),
             body: getBody(context),
+            floatingActionButton: getFloatingActionButton(context),
         );
     }
 
@@ -116,6 +118,18 @@ class DrinkListView extends StatelessWidget {
                     },
                 ).build(context);
             },
+        );
+    }
+
+    Widget getFloatingActionButton(BuildContext context) {
+        if (username != null) {
+            return Container();
+        }
+        return FloatingActionButton(
+            onPressed: () {
+                Navigator.of(context).pushNamed(Routes.drinkAddEdit);
+            },
+            child: const Icon(Icons.add),
         );
     }
 }

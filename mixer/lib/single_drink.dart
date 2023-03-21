@@ -1,9 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mixer/user_storage.dart';
-import 'package:mixer/api.dart';
-import 'package:mixer/services.dart';
-import 'package:mixer/common.dart';
-import 'package:multiple_result/multiple_result.dart';
 import 'package:mixer/protos/drink.pb.dart';
 
 class DrinkDetails extends StatefulWidget {

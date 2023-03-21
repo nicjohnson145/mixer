@@ -18,4 +18,12 @@ class Urls {
     static String listByUser(String username) {
         return apiv1 + "/drink/user/" + username;
     }
+
+    static String create() {
+        return apiv1 + "/drink";
+    }
+
+    static String update() {
+        return apiv1 + "/drink";
+    }
 }
