@@ -81,7 +81,14 @@ class MyApp extends StatelessWidget {
                         return MaterialPageRoute(builder: (_) => UserDrinks());
                     }
                     case Routes.drinkAddEdit : {
-                        return MaterialPageRoute(builder: (_) => DrinkAddEdit());
+                        final args = settings.arguments as AddEditDrinkArgs;
+                        return MaterialPageRoute(
+                            builder: (context) {
+                                return DrinkAddEdit(
+                                    drink: args.drink,
+                                );
+                            },
+                        );
                     }
                     default : {
                         assert(false, "Need to implement ${settings.name}");

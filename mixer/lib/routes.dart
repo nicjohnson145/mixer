@@ -15,3 +15,11 @@ class SingleDrinkArgs {
         required this.drink,
     });
 }
+
+class AddEditDrinkArgs {
+    Drink? drink;
+
+    AddEditDrinkArgs({
+        this.drink,
+    });
+}

@@ -127,7 +127,10 @@ class DrinkListView extends StatelessWidget {
         }
         return FloatingActionButton(
             onPressed: () {
-                Navigator.of(context).pushNamed(Routes.drinkAddEdit);
+                Navigator.of(context).pushNamed(
+                    Routes.drinkAddEdit,
+                    arguments: AddEditDrinkArgs(),
+                );
             },
             child: const Icon(Icons.add),
         );

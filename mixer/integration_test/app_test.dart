@@ -3,6 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mixer/keys.dart';
 import 'package:mixer/main.dart' as app;
+import 'dart:developer';
+
 
 //typedef OnObservation = void Function(Route<dynamic> route, Route<dynamic>? previousRoute);
 //typedef OnReplace = void Function({Route<dynamic>? newRoute, Route<dynamic>? oldRoute});
@@ -67,6 +69,8 @@ void main() {
     IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
     const createdDrinkName = "Integration Test Drink";
+    const ingredientOne = "Integration Ingredient One";
+    const ingredientTwo = "Integration Ingredient Two";
 
     Finder expectFindKey(KeyName k) {
         var f = find.byKey(k.asKey());
@@ -78,6 +82,13 @@ void main() {
         var fab = find.byType(FloatingActionButton);
         expect(fab, findsOneWidget);
         return fab;
+    }
+
+    expectGoBack(tester) async {
+        var btn = find.byTooltip("Back");
+        expect(btn, findsOneWidget);
+        await tester.tap(btn);
+        await tester.pumpAndSettle();
     }
 
     login(tester) async {
@@ -92,6 +103,12 @@ void main() {
         await tester.pumpAndSettle();
     }
 
+    _addIngredient(tester, ingredient) async {
+        var ingredientField = expectFindKey(KeyName.addEditIngredientsInput);
+        await tester.enterText(ingredientField, ingredient);
+        await tester.testTextInput.receiveAction(TextInputAction.done);
+    }
+
     createDrink(tester) async {
         var nameField = expectFindKey(KeyName.addEditNameInput);
         await tester.enterText(nameField, createdDrinkName);
@@ -99,12 +116,41 @@ void main() {
         var primaryAlcoholField = expectFindKey(KeyName.addEditPrimaryAlcoholInput);
         await tester.enterText(primaryAlcoholField, "Integration Liquor");
 
-        var ingredientField = expectFindKey(KeyName.addEditIngredientsInput);
-        await tester.enterText(ingredientField, "Integration Ingredient One");
-        await tester.testTextInput.receiveAction(TextInputAction.done);
+        await _addIngredient(tester, ingredientOne);
 
         await tester.tap(expectFindFAB());
         await tester.pumpAndSettle();
+    }
+
+    navigateToIntegrationDrink(tester) async {
+        var integrationDrink = find.text(createdDrinkName);
+        expect(integrationDrink, findsOneWidget);
+        await tester.tap(integrationDrink);
+        await tester.pumpAndSettle();
+    }
+
+    updateDrink(tester) async {
+        await navigateToIntegrationDrink(tester);
+
+        var firstIngredient = find.text(ingredientOne);
+        expect(firstIngredient, findsOneWidget);
+        var seconedIngredient = find.text(ingredientTwo);
+        expect(seconedIngredient, findsNothing);
+
+        await tester.tap(expectFindFAB());
+        await tester.pumpAndSettle();
+
+        await _addIngredient(tester, ingredientTwo);
+
+        await tester.tap(expectFindFAB());
+        await tester.pumpAndSettle();
+
+        await navigateToIntegrationDrink(tester);
+
+        expect(firstIngredient, findsOneWidget);
+        expect(seconedIngredient, findsOneWidget);
+
+        await expectGoBack(tester);
     }
 
     testWidgets("end to end test", (tester) async {
@@ -118,7 +164,7 @@ void main() {
 
         await createDrink(tester);
 
-        expect(find.text(createdDrinkName), findsOneWidget);
+        await updateDrink(tester);
     });
 
 }

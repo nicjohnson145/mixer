@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mixer/protos/drink.pb.dart';
+import 'package:mixer/routes.dart';
 
 class DrinkDetails extends StatefulWidget {
     Drink drink;
@@ -102,6 +103,18 @@ class _DrinkDetailsState extends State<DrinkDetails> {
         );
     }
 
+    Widget getFloatingActionButton(BuildContext context) {
+        return FloatingActionButton(
+            onPressed: () {
+                Navigator.of(context).pushNamed(
+                    Routes.drinkAddEdit,
+                    arguments: AddEditDrinkArgs(drink: widget.drink),
+                );
+            },
+            child: const Icon(Icons.edit),
+        );
+    }
+
     @override
     Widget build(BuildContext context) {
         return Scaffold(
@@ -112,6 +125,7 @@ class _DrinkDetailsState extends State<DrinkDetails> {
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: getMainBody(),
             ),
+            floatingActionButton: getFloatingActionButton(context),
         );
     }
 }
