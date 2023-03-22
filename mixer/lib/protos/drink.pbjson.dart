@@ -8,6 +8,8 @@
 import 'dart:core' as $core;
 import 'dart:convert' as $convert;
 import 'dart:typed_data' as $typed_data;
+import 'metadata.pbjson.dart' as $0;
+
 @$core.Deprecated('Use drinkPublicityDescriptor instead')
 const DrinkPublicity$json = const {
   '1': 'DrinkPublicity',
@@ -65,12 +67,13 @@ final $typed_data.Uint8List createDrinkRequestDescriptor = $convert.base64Decode
 const CreateDrinkResponse$json = const {
   '1': 'CreateDrinkResponse',
   '2': const [
-    const {'1': 'id', '3': 1, '4': 1, '5': 3, '10': 'id'},
+    const {'1': 'metadata', '3': 1, '4': 1, '5': 11, '6': '.mixer.Metadata', '10': 'metadata'},
+    const {'1': 'id', '3': 2, '4': 1, '5': 3, '10': 'id'},
   ],
 };
 
 /// Descriptor for `CreateDrinkResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List createDrinkResponseDescriptor = $convert.base64Decode('ChNDcmVhdGVEcmlua1Jlc3BvbnNlEg4KAmlkGAEgASgDUgJpZA==');
+final $typed_data.Uint8List createDrinkResponseDescriptor = $convert.base64Decode('ChNDcmVhdGVEcmlua1Jlc3BvbnNlEisKCG1ldGFkYXRhGAEgASgLMg8ubWl4ZXIuTWV0YWRhdGFSCG1ldGFkYXRhEg4KAmlkGAIgASgDUgJpZA==');
 @$core.Deprecated('Use getDrinkRequestDescriptor instead')
 const GetDrinkRequest$json = const {
   '1': 'GetDrinkRequest',
@@ -85,22 +88,24 @@ final $typed_data.Uint8List getDrinkRequestDescriptor = $convert.base64Decode('C
 const GetDrinkResponse$json = const {
   '1': 'GetDrinkResponse',
   '2': const [
-    const {'1': 'drink', '3': 1, '4': 1, '5': 11, '6': '.mixer.Drink', '10': 'drink'},
+    const {'1': 'metadata', '3': 1, '4': 1, '5': 11, '6': '.mixer.Metadata', '10': 'metadata'},
+    const {'1': 'drink', '3': 2, '4': 1, '5': 11, '6': '.mixer.Drink', '10': 'drink'},
   ],
 };
 
 /// Descriptor for `GetDrinkResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getDrinkResponseDescriptor = $convert.base64Decode('ChBHZXREcmlua1Jlc3BvbnNlEiIKBWRyaW5rGAEgASgLMgwubWl4ZXIuRHJpbmtSBWRyaW5r');
+final $typed_data.Uint8List getDrinkResponseDescriptor = $convert.base64Decode('ChBHZXREcmlua1Jlc3BvbnNlEisKCG1ldGFkYXRhGAEgASgLMg8ubWl4ZXIuTWV0YWRhdGFSCG1ldGFkYXRhEiIKBWRyaW5rGAIgASgLMgwubWl4ZXIuRHJpbmtSBWRyaW5r');
 @$core.Deprecated('Use copyDrinkResponseDescriptor instead')
 const CopyDrinkResponse$json = const {
   '1': 'CopyDrinkResponse',
   '2': const [
-    const {'1': 'id', '3': 1, '4': 1, '5': 3, '10': 'id'},
+    const {'1': 'metadata', '3': 1, '4': 1, '5': 11, '6': '.mixer.Metadata', '10': 'metadata'},
+    const {'1': 'id', '3': 2, '4': 1, '5': 3, '10': 'id'},
   ],
 };
 
 /// Descriptor for `CopyDrinkResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List copyDrinkResponseDescriptor = $convert.base64Decode('ChFDb3B5RHJpbmtSZXNwb25zZRIOCgJpZBgBIAEoA1ICaWQ=');
+final $typed_data.Uint8List copyDrinkResponseDescriptor = $convert.base64Decode('ChFDb3B5RHJpbmtSZXNwb25zZRIrCghtZXRhZGF0YRgBIAEoCzIPLm1peGVyLk1ldGFkYXRhUghtZXRhZGF0YRIOCgJpZBgCIAEoA1ICaWQ=');
 @$core.Deprecated('Use deleteDrinkRequestDescriptor instead')
 const DeleteDrinkRequest$json = const {
   '1': 'DeleteDrinkRequest',
@@ -114,10 +119,13 @@ final $typed_data.Uint8List deleteDrinkRequestDescriptor = $convert.base64Decode
 @$core.Deprecated('Use deleteDrinkResponseDescriptor instead')
 const DeleteDrinkResponse$json = const {
   '1': 'DeleteDrinkResponse',
+  '2': const [
+    const {'1': 'metadata', '3': 1, '4': 1, '5': 11, '6': '.mixer.Metadata', '10': 'metadata'},
+  ],
 };
 
 /// Descriptor for `DeleteDrinkResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List deleteDrinkResponseDescriptor = $convert.base64Decode('ChNEZWxldGVEcmlua1Jlc3BvbnNl');
+final $typed_data.Uint8List deleteDrinkResponseDescriptor = $convert.base64Decode('ChNEZWxldGVEcmlua1Jlc3BvbnNlEisKCG1ldGFkYXRhGAEgASgLMg8ubWl4ZXIuTWV0YWRhdGFSCG1ldGFkYXRh');
 @$core.Deprecated('Use updateDrinkRequestDescriptor instead')
 const UpdateDrinkRequest$json = const {
   '1': 'UpdateDrinkRequest',
@@ -132,20 +140,13 @@ final $typed_data.Uint8List updateDrinkRequestDescriptor = $convert.base64Decode
 @$core.Deprecated('Use updateDrinkResponseDescriptor instead')
 const UpdateDrinkResponse$json = const {
   '1': 'UpdateDrinkResponse',
-};
-
-/// Descriptor for `UpdateDrinkResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List updateDrinkResponseDescriptor = $convert.base64Decode('ChNVcGRhdGVEcmlua1Jlc3BvbnNl');
-@$core.Deprecated('Use getDrinksByUserResponseDescriptor instead')
-const GetDrinksByUserResponse$json = const {
-  '1': 'GetDrinksByUserResponse',
   '2': const [
-    const {'1': 'drinks', '3': 1, '4': 3, '5': 11, '6': '.mixer.Drink', '10': 'drinks'},
+    const {'1': 'metadata', '3': 1, '4': 1, '5': 11, '6': '.mixer.Metadata', '10': 'metadata'},
   ],
 };
 
-/// Descriptor for `GetDrinksByUserResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getDrinksByUserResponseDescriptor = $convert.base64Decode('ChdHZXREcmlua3NCeVVzZXJSZXNwb25zZRIkCgZkcmlua3MYASADKAsyDC5taXhlci5Ecmlua1IGZHJpbmtz');
+/// Descriptor for `UpdateDrinkResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List updateDrinkResponseDescriptor = $convert.base64Decode('ChNVcGRhdGVEcmlua1Jlc3BvbnNlEisKCG1ldGFkYXRhGAEgASgLMg8ubWl4ZXIuTWV0YWRhdGFSCG1ldGFkYXRh');
 @$core.Deprecated('Use listDrinkRequestDescriptor instead')
 const ListDrinkRequest$json = const {
   '1': 'ListDrinkRequest',
@@ -160,12 +161,13 @@ final $typed_data.Uint8List listDrinkRequestDescriptor = $convert.base64Decode('
 const ListDrinkResponse$json = const {
   '1': 'ListDrinkResponse',
   '2': const [
-    const {'1': 'drinks', '3': 1, '4': 3, '5': 11, '6': '.mixer.Drink', '10': 'drinks'},
+    const {'1': 'metadata', '3': 1, '4': 1, '5': 11, '6': '.mixer.Metadata', '10': 'metadata'},
+    const {'1': 'drinks', '3': 2, '4': 3, '5': 11, '6': '.mixer.Drink', '10': 'drinks'},
   ],
 };
 
 /// Descriptor for `ListDrinkResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List listDrinkResponseDescriptor = $convert.base64Decode('ChFMaXN0RHJpbmtSZXNwb25zZRIkCgZkcmlua3MYASADKAsyDC5taXhlci5Ecmlua1IGZHJpbmtz');
+final $typed_data.Uint8List listDrinkResponseDescriptor = $convert.base64Decode('ChFMaXN0RHJpbmtSZXNwb25zZRIrCghtZXRhZGF0YRgBIAEoCzIPLm1peGVyLk1ldGFkYXRhUghtZXRhZGF0YRIkCgZkcmlua3MYAiADKAsyDC5taXhlci5Ecmlua1IGZHJpbmtz');
 const $core.Map<$core.String, $core.dynamic> DrinkServiceBase$json = const {
   '1': 'DrinkService',
   '2': const [
@@ -182,6 +184,7 @@ const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> DrinkServi
   '.mixer.CreateDrinkRequest': CreateDrinkRequest$json,
   '.mixer.DrinkData': DrinkData$json,
   '.mixer.CreateDrinkResponse': CreateDrinkResponse$json,
+  '.mixer.Metadata': $0.Metadata$json,
   '.mixer.GetDrinkRequest': GetDrinkRequest$json,
   '.mixer.GetDrinkResponse': GetDrinkResponse$json,
   '.mixer.Drink': Drink$json,

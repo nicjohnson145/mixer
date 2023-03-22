@@ -5,6 +5,7 @@ package mixer;
 option go_package = "github.com/nicjohnson145/mixer/mixerservice/protos";
 
 import "google/api/annotations.proto";
+import "metadata.proto";
 
 enum DrinkPublicity {
   DrinkPublicity_Unspecified = 0;
@@ -36,7 +37,8 @@ message CreateDrinkRequest {
 }
 
 message CreateDrinkResponse {
-  int64 id = 1;
+  Metadata metadata = 1;
+  int64 id = 2;
 }
 
 message GetDrinkRequest {
@@ -44,11 +46,13 @@ message GetDrinkRequest {
 }
 
 message GetDrinkResponse {
-  Drink drink = 1;
+  Metadata metadata = 1;
+  Drink drink = 2;
 }
 
 message CopyDrinkResponse {
-  int64 id = 1;
+  Metadata metadata = 1;
+  int64 id = 2;
 }
 
 message DeleteDrinkRequest {
@@ -56,7 +60,7 @@ message DeleteDrinkRequest {
 }
 
 message DeleteDrinkResponse {
-
+  Metadata metadata = 1;
 }
 
 message UpdateDrinkRequest {
@@ -65,11 +69,7 @@ message UpdateDrinkRequest {
 }
 
 message UpdateDrinkResponse {
-
-}
-
-message GetDrinksByUserResponse {
-  repeated Drink drinks = 1;
+  Metadata metadata = 1;
 }
 
 message ListDrinkRequest {
@@ -77,7 +77,8 @@ message ListDrinkRequest {
 }
 
 message ListDrinkResponse {
-  repeated Drink drinks = 1;
+  Metadata metadata = 1;
+  repeated Drink drinks = 2;
 }
 
 service DrinkService {

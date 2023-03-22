@@ -11,6 +11,8 @@ import 'dart:core' as $core;
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
+import 'metadata.pb.dart' as $0;
+
 import 'drink.pbenum.dart';
 
 export 'drink.pbenum.dart';
@@ -304,15 +306,20 @@ class CreateDrinkRequest extends $pb.GeneratedMessage {
 
 class CreateDrinkResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'CreateDrinkResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'mixer'), createEmptyInstance: create)
-    ..aInt64(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
+    ..aOM<$0.Metadata>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'metadata', subBuilder: $0.Metadata.create)
+    ..aInt64(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
     ..hasRequiredFields = false
   ;
 
   CreateDrinkResponse._() : super();
   factory CreateDrinkResponse({
+    $0.Metadata? metadata,
     $fixnum.Int64? id,
   }) {
     final _result = create();
+    if (metadata != null) {
+      _result.metadata = metadata;
+    }
     if (id != null) {
       _result.id = id;
     }
@@ -340,13 +347,24 @@ class CreateDrinkResponse extends $pb.GeneratedMessage {
   static CreateDrinkResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $fixnum.Int64 get id => $_getI64(0);
+  $0.Metadata get metadata => $_getN(0);
   @$pb.TagNumber(1)
-  set id($fixnum.Int64 v) { $_setInt64(0, v); }
+  set metadata($0.Metadata v) { setField(1, v); }
   @$pb.TagNumber(1)
-  $core.bool hasId() => $_has(0);
+  $core.bool hasMetadata() => $_has(0);
   @$pb.TagNumber(1)
-  void clearId() => clearField(1);
+  void clearMetadata() => clearField(1);
+  @$pb.TagNumber(1)
+  $0.Metadata ensureMetadata() => $_ensure(0);
+
+  @$pb.TagNumber(2)
+  $fixnum.Int64 get id => $_getI64(1);
+  @$pb.TagNumber(2)
+  set id($fixnum.Int64 v) { $_setInt64(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearId() => clearField(2);
 }
 
 class GetDrinkRequest extends $pb.GeneratedMessage {
@@ -398,15 +416,20 @@ class GetDrinkRequest extends $pb.GeneratedMessage {
 
 class GetDrinkResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetDrinkResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'mixer'), createEmptyInstance: create)
-    ..aOM<Drink>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'drink', subBuilder: Drink.create)
+    ..aOM<$0.Metadata>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'metadata', subBuilder: $0.Metadata.create)
+    ..aOM<Drink>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'drink', subBuilder: Drink.create)
     ..hasRequiredFields = false
   ;
 
   GetDrinkResponse._() : super();
   factory GetDrinkResponse({
+    $0.Metadata? metadata,
     Drink? drink,
   }) {
     final _result = create();
+    if (metadata != null) {
+      _result.metadata = metadata;
+    }
     if (drink != null) {
       _result.drink = drink;
     }
@@ -434,28 +457,44 @@ class GetDrinkResponse extends $pb.GeneratedMessage {
   static GetDrinkResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  Drink get drink => $_getN(0);
+  $0.Metadata get metadata => $_getN(0);
   @$pb.TagNumber(1)
-  set drink(Drink v) { setField(1, v); }
+  set metadata($0.Metadata v) { setField(1, v); }
   @$pb.TagNumber(1)
-  $core.bool hasDrink() => $_has(0);
+  $core.bool hasMetadata() => $_has(0);
   @$pb.TagNumber(1)
-  void clearDrink() => clearField(1);
+  void clearMetadata() => clearField(1);
   @$pb.TagNumber(1)
-  Drink ensureDrink() => $_ensure(0);
+  $0.Metadata ensureMetadata() => $_ensure(0);
+
+  @$pb.TagNumber(2)
+  Drink get drink => $_getN(1);
+  @$pb.TagNumber(2)
+  set drink(Drink v) { setField(2, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasDrink() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearDrink() => clearField(2);
+  @$pb.TagNumber(2)
+  Drink ensureDrink() => $_ensure(1);
 }
 
 class CopyDrinkResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'CopyDrinkResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'mixer'), createEmptyInstance: create)
-    ..aInt64(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
+    ..aOM<$0.Metadata>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'metadata', subBuilder: $0.Metadata.create)
+    ..aInt64(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
     ..hasRequiredFields = false
   ;
 
   CopyDrinkResponse._() : super();
   factory CopyDrinkResponse({
+    $0.Metadata? metadata,
     $fixnum.Int64? id,
   }) {
     final _result = create();
+    if (metadata != null) {
+      _result.metadata = metadata;
+    }
     if (id != null) {
       _result.id = id;
     }
@@ -483,13 +522,24 @@ class CopyDrinkResponse extends $pb.GeneratedMessage {
   static CopyDrinkResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $fixnum.Int64 get id => $_getI64(0);
+  $0.Metadata get metadata => $_getN(0);
   @$pb.TagNumber(1)
-  set id($fixnum.Int64 v) { $_setInt64(0, v); }
+  set metadata($0.Metadata v) { setField(1, v); }
   @$pb.TagNumber(1)
-  $core.bool hasId() => $_has(0);
+  $core.bool hasMetadata() => $_has(0);
   @$pb.TagNumber(1)
-  void clearId() => clearField(1);
+  void clearMetadata() => clearField(1);
+  @$pb.TagNumber(1)
+  $0.Metadata ensureMetadata() => $_ensure(0);
+
+  @$pb.TagNumber(2)
+  $fixnum.Int64 get id => $_getI64(1);
+  @$pb.TagNumber(2)
+  set id($fixnum.Int64 v) { $_setInt64(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearId() => clearField(2);
 }
 
 class DeleteDrinkRequest extends $pb.GeneratedMessage {
@@ -541,11 +591,20 @@ class DeleteDrinkRequest extends $pb.GeneratedMessage {
 
 class DeleteDrinkResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DeleteDrinkResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'mixer'), createEmptyInstance: create)
+    ..aOM<$0.Metadata>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'metadata', subBuilder: $0.Metadata.create)
     ..hasRequiredFields = false
   ;
 
   DeleteDrinkResponse._() : super();
-  factory DeleteDrinkResponse() => create();
+  factory DeleteDrinkResponse({
+    $0.Metadata? metadata,
+  }) {
+    final _result = create();
+    if (metadata != null) {
+      _result.metadata = metadata;
+    }
+    return _result;
+  }
   factory DeleteDrinkResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory DeleteDrinkResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
@@ -566,6 +625,17 @@ class DeleteDrinkResponse extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static DeleteDrinkResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DeleteDrinkResponse>(create);
   static DeleteDrinkResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $0.Metadata get metadata => $_getN(0);
+  @$pb.TagNumber(1)
+  set metadata($0.Metadata v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasMetadata() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearMetadata() => clearField(1);
+  @$pb.TagNumber(1)
+  $0.Metadata ensureMetadata() => $_ensure(0);
 }
 
 class UpdateDrinkRequest extends $pb.GeneratedMessage {
@@ -633,11 +703,20 @@ class UpdateDrinkRequest extends $pb.GeneratedMessage {
 
 class UpdateDrinkResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'UpdateDrinkResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'mixer'), createEmptyInstance: create)
+    ..aOM<$0.Metadata>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'metadata', subBuilder: $0.Metadata.create)
     ..hasRequiredFields = false
   ;
 
   UpdateDrinkResponse._() : super();
-  factory UpdateDrinkResponse() => create();
+  factory UpdateDrinkResponse({
+    $0.Metadata? metadata,
+  }) {
+    final _result = create();
+    if (metadata != null) {
+      _result.metadata = metadata;
+    }
+    return _result;
+  }
   factory UpdateDrinkResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory UpdateDrinkResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
@@ -658,47 +737,17 @@ class UpdateDrinkResponse extends $pb.GeneratedMessage {
   @$core.pragma('dart2js:noInline')
   static UpdateDrinkResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UpdateDrinkResponse>(create);
   static UpdateDrinkResponse? _defaultInstance;
-}
-
-class GetDrinksByUserResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GetDrinksByUserResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'mixer'), createEmptyInstance: create)
-    ..pc<Drink>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'drinks', $pb.PbFieldType.PM, subBuilder: Drink.create)
-    ..hasRequiredFields = false
-  ;
-
-  GetDrinksByUserResponse._() : super();
-  factory GetDrinksByUserResponse({
-    $core.Iterable<Drink>? drinks,
-  }) {
-    final _result = create();
-    if (drinks != null) {
-      _result.drinks.addAll(drinks);
-    }
-    return _result;
-  }
-  factory GetDrinksByUserResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetDrinksByUserResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  GetDrinksByUserResponse clone() => GetDrinksByUserResponse()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  GetDrinksByUserResponse copyWith(void Function(GetDrinksByUserResponse) updates) => super.copyWith((message) => updates(message as GetDrinksByUserResponse)) as GetDrinksByUserResponse; // ignore: deprecated_member_use
-  $pb.BuilderInfo get info_ => _i;
-  @$core.pragma('dart2js:noInline')
-  static GetDrinksByUserResponse create() => GetDrinksByUserResponse._();
-  GetDrinksByUserResponse createEmptyInstance() => create();
-  static $pb.PbList<GetDrinksByUserResponse> createRepeated() => $pb.PbList<GetDrinksByUserResponse>();
-  @$core.pragma('dart2js:noInline')
-  static GetDrinksByUserResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetDrinksByUserResponse>(create);
-  static GetDrinksByUserResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.List<Drink> get drinks => $_getList(0);
+  $0.Metadata get metadata => $_getN(0);
+  @$pb.TagNumber(1)
+  set metadata($0.Metadata v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasMetadata() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearMetadata() => clearField(1);
+  @$pb.TagNumber(1)
+  $0.Metadata ensureMetadata() => $_ensure(0);
 }
 
 class ListDrinkRequest extends $pb.GeneratedMessage {
@@ -750,15 +799,20 @@ class ListDrinkRequest extends $pb.GeneratedMessage {
 
 class ListDrinkResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ListDrinkResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'mixer'), createEmptyInstance: create)
-    ..pc<Drink>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'drinks', $pb.PbFieldType.PM, subBuilder: Drink.create)
+    ..aOM<$0.Metadata>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'metadata', subBuilder: $0.Metadata.create)
+    ..pc<Drink>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'drinks', $pb.PbFieldType.PM, subBuilder: Drink.create)
     ..hasRequiredFields = false
   ;
 
   ListDrinkResponse._() : super();
   factory ListDrinkResponse({
+    $0.Metadata? metadata,
     $core.Iterable<Drink>? drinks,
   }) {
     final _result = create();
+    if (metadata != null) {
+      _result.metadata = metadata;
+    }
     if (drinks != null) {
       _result.drinks.addAll(drinks);
     }
@@ -786,7 +840,18 @@ class ListDrinkResponse extends $pb.GeneratedMessage {
   static ListDrinkResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.List<Drink> get drinks => $_getList(0);
+  $0.Metadata get metadata => $_getN(0);
+  @$pb.TagNumber(1)
+  set metadata($0.Metadata v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasMetadata() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearMetadata() => clearField(1);
+  @$pb.TagNumber(1)
+  $0.Metadata ensureMetadata() => $_ensure(0);
+
+  @$pb.TagNumber(2)
+  $core.List<Drink> get drinks => $_getList(1);
 }
 
 class DrinkServiceApi {

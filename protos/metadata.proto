@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package mixer;
+
+option go_package = "github.com/nicjohnson145/mixer/mixerservice/protos";
+
+message Metadata {
+  string invoking_user = 1;
+}
