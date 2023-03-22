@@ -18,5 +18,5 @@ calls:
   - jq: '.users'
     expected:
     - bar
-    - baz
+    #- baz  # should not list self
     - foo

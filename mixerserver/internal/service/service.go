@@ -113,13 +113,21 @@ func (s *Service) generateTokens(u *storage.User) (*pb.LoginResponse, error) {
 }
 
 func (s *Service) ListUsers(ctx context.Context, req *pb.ListUsersRequest) (*pb.ListUsersResponse, error) {
+	claims, err := jwtClaimsFromCtx(ctx)
+	if err != nil {
+		s.log.Err(err).Msg("error pulling claims from context")
+		return nil, err
+	}
+
 	users, err := s.store.GetPublicUsers()
 	if err != nil {
 		s.log.Err(err).Msg("error getting users")
 		return nil, wrapStorageErrors(err)
 	}
 	return &pb.ListUsersResponse{
-		Users: users,
+		Users: lo.Filter(users, func(u string, _ int) bool {
+			return u != claims.Username
+		}),
 	}, nil
 }
 
