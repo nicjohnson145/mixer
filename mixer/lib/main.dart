@@ -8,6 +8,7 @@ import 'package:mixer/user_drinks.dart';
 import 'package:mixer/single_drink.dart';
 import 'package:mixer/drink_add_edit.dart';
 import 'package:mixer/services.dart';
+import 'package:mixer/user_list.dart';
 import 'package:multiple_result/multiple_result.dart';
 
 void main() {
@@ -90,6 +91,9 @@ class MyApp extends StatelessWidget {
                                 );
                             },
                         );
+                    }
+                    case Routes.userList : {
+                        return MaterialPageRoute(builder: (_) => UserList());
                     }
                     default : {
                         assert(false, "Need to implement ${settings.name}");

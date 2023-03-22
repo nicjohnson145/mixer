@@ -25,6 +25,7 @@ abstract class API {
     Future<Result<void, ApiError>> createDrink(DrinkData data);
     Future<Result<void, ApiError>> updateDrink(Int64 id, DrinkData data);
     Future<Result<void, ApiError>> deleteDrink(Int64 id);
+    Future<Result<ListUsersResponse, ApiError>> listUsers();
 }
 
 class HTTPAPI implements API {
@@ -198,6 +199,35 @@ class HTTPAPI implements API {
         }
 
         return const Success(null);
+    }
+
+    @override
+    Future<Result<ListUsersResponse, ApiError>> listUsers() async {
+        await setAuth();
+
+        final resp = await http.get(
+            Uri.parse(Urls.listUsers()),
+            headers: headers()
+        );
+
+        if (resp.statusCode == 401) {
+            final refreshResp = await refresh();
+            return refreshResp.when(
+                (success) {
+                    return listUsers();
+                },
+                (error) {
+                    return Error(error);
+                },
+            );
+        }
+
+        var body = jsonDecode(resp.body);
+        if (resp.statusCode != 200) {
+            return Error(ApiError(statusCode: resp.statusCode, message: body["message"]));
+        }
+
+        return Success(ListUsersResponse.create()..mergeFromProto3Json(body));
     }
 
 }

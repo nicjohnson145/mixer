@@ -56,7 +56,7 @@ class _UserDrinksState extends State<UserDrinks> {
                     return loadingSpinner(context);
                 }
 
-                final resp = snapshot.data as Result;
+                final resp = snapshot.data as Result<ListDrinkResponse, ShitsFuckedError>;
                 return resp.when(
                     (success) {
                         return DrinkListView(
@@ -65,8 +65,7 @@ class _UserDrinksState extends State<UserDrinks> {
                         );
                     },
                     (error) {
-                        throw Exception(error.message);
-                        //return errorScreen(context, error.message);
+                        return errorScreen(context, error.message);
                     },
                 );
             }

@@ -16,6 +16,10 @@ class Urls {
         return apiv1 + "/refresh";
     }
 
+    static String listUsers() {
+        return apiv1 + "/users";
+    }
+
     static String listByUser(String username) {
         return apiv1 + "/drink/user/" + username;
     }

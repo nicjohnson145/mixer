@@ -45,8 +45,7 @@ class Hamburger extends StatelessWidget {
                         Navigator.of(context).pushNamedAndRemoveUntil(Routes.login, (route) => false);
                         break;
                     case HamburgerAction.viewOtherUser:
-                        print("wooooooo");
-                        //Navigator.of(context).pushNamed(Routes.userList);
+                        Navigator.of(context).pushNamed(Routes.userList);
                         break;
                     //case HamburgerAction.changePassword:
                     //    Navigator.of(context).pushNamed(Routes.ChangePassword);
