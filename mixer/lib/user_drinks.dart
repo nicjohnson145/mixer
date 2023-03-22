@@ -58,7 +58,10 @@ class _UserDrinksState extends State<UserDrinks> {
                 final resp = snapshot.data as Result;
                 return resp.when(
                     (success) {
-                        return DrinkListView(drinks: success.drinks);
+                        return DrinkListView(
+                            drinks: success.drinks,
+                            username: widget.username,
+                        );
                     },
                     (error) {
                         throw Exception(error.message);
@@ -77,6 +80,7 @@ class DrinkListView extends StatelessWidget {
     DrinkListView({
         Key? key,
         required this.drinks,
+        this.username,
     }) : super(key: key);
 
     @override
@@ -92,7 +96,7 @@ class DrinkListView extends StatelessWidget {
 
     Widget getBody(BuildContext context) {
         // If you're looking at someone else's drinks
-        if (drinks.isEmpty) {
+        if (drinks.isEmpty && username != null) {
             return Container(
                 padding: const EdgeInsets.only(
                     top: 15.0,
@@ -142,9 +146,10 @@ class DrinkLineItem extends StatelessWidget {
     final void Function(Drink) onTap;
 
     const DrinkLineItem({
+        Key? key,
         required this.drink,
         required this.onTap,
-    });
+    }) : super(key: key);
 
     Widget nameRow(BuildContext context) {
         List<Widget> children = [
@@ -171,6 +176,7 @@ class DrinkLineItem extends StatelessWidget {
         );
     }
 
+    @override
     Widget build(BuildContext context) {
         return Card(
             child: InkWell(
