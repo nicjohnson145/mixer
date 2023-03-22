@@ -13,6 +13,7 @@ abstract class Storage {
     Future<void> saveLogin(LoginResponse resp);
     Future<void> saveRefresh(RefreshTokenResponse resp);
     Future<String> getUsername();
+    Future<void> clear();
 }
 
 class SecureStorage implements Storage {
@@ -53,5 +54,10 @@ class SecureStorage implements Storage {
             return "";
         }
         return val;
+    }
+
+    @override
+    Future<void> clear() async {
+        await _storage.deleteAll();
     }
 }

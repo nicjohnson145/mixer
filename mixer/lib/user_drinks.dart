@@ -3,6 +3,7 @@ import 'package:mixer/user_storage.dart';
 import 'package:mixer/api.dart';
 import 'package:mixer/services.dart';
 import 'package:mixer/common.dart';
+import 'package:mixer/hamburger.dart';
 import 'package:multiple_result/multiple_result.dart';
 import 'package:mixer/protos/drink.pb.dart';
 import 'package:mixer/routes.dart';
@@ -88,6 +89,7 @@ class DrinkListView extends StatelessWidget {
         return Scaffold(
             appBar: AppBar(
                 title: const Text("Drinks"),
+                actions: const [Hamburger()],
             ),
             body: getBody(context),
             floatingActionButton: getFloatingActionButton(context),

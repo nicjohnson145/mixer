@@ -4,6 +4,7 @@ import 'package:mixer/api.dart';
 import 'package:mixer/common.dart';
 import 'package:mixer/protos/drink.pb.dart';
 import 'package:mixer/keys.dart';
+import 'package:mixer/hamburger.dart';
 import 'package:mixer/routes.dart';
 import 'package:mixer/services.dart';
 
@@ -69,6 +70,7 @@ class _DrinkAddEditState extends State<DrinkAddEdit> {
         return Scaffold(
             appBar: AppBar(
                 title: Text(titleText()),
+                actions: const [Hamburger()],
                 backgroundColor: Colors.black87,
             ),
             body: Padding(

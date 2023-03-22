@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mixer/protos/drink.pb.dart';
 import 'package:mixer/routes.dart';
+import 'package:mixer/hamburger.dart';
 import 'package:mixer/services.dart';
 import 'package:mixer/api.dart';
 import 'package:mixer/common.dart';
@@ -167,6 +168,7 @@ class _DrinkDetailsState extends State<DrinkDetails> {
                 )
             );
         }
+        widgets.add(const Hamburger());
         return widgets;
     }
 
