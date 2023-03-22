@@ -117,7 +117,10 @@ class DrinkListView extends StatelessWidget {
                     onTap: (Drink d) {
                         Navigator.of(context).pushNamed(
                             Routes.singleDrink,
-                            arguments: SingleDrinkArgs(drink: d),
+                            arguments: SingleDrinkArgs(
+                                drink: d,
+                                username: username == null ? d.username : username!,
+                            ),
                         );
                     },
                 ).build(context);

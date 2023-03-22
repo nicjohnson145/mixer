@@ -24,6 +24,7 @@ abstract class API {
     Future<Result<ListDrinkResponse, ApiError>> listDrinksByUser(String username);
     Future<Result<void, ApiError>> createDrink(DrinkData data);
     Future<Result<void, ApiError>> updateDrink(Int64 id, DrinkData data);
+    Future<Result<void, ApiError>> deleteDrink(Int64 id);
 }
 
 class HTTPAPI implements API {
@@ -163,10 +164,39 @@ class HTTPAPI implements API {
             );
         }
 
-        var body = jsonDecode(resp.body);
         if (resp.statusCode != 200) {
+            var body = jsonDecode(resp.body);
             return Error(ApiError(statusCode: resp.statusCode, message: body["message"]));
         }
+        return const Success(null);
+    }
+
+    @override
+    Future<Result<void, ApiError>> deleteDrink(Int64 id) async {
+        await setAuth();
+
+        final resp = await http.delete(
+            Uri.parse(Urls.delete(id)),
+            headers: headers()
+        );
+
+        if (resp.statusCode == 401) {
+            final refreshResp = await refresh();
+            return refreshResp.when(
+                (success) {
+                    return deleteDrink(id);
+                },
+                (error) {
+                    return Error(error);
+                },
+            );
+        }
+
+        if (resp.statusCode != 200) {
+            var body = jsonDecode(resp.body);
+            return Error(ApiError(statusCode: resp.statusCode, message: body["message"]));
+        }
+
         return const Success(null);
     }
 

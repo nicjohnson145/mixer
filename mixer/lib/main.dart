@@ -70,6 +70,7 @@ class MyApp extends StatelessWidget {
                             builder:  (context) {
                                 return DrinkDetails(
                                     drink: args.drink,
+                                    username: args.username,
                                 );
                             },
                         );

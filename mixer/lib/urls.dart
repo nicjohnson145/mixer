@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart' as Foundation;
 import 'dart:io' show Platform;
+import 'package:fixnum/fixnum.dart';
 
 class Urls {
     static const String liveBaseURL = "https://mixer.nicjohnson.info";
@@ -25,5 +26,9 @@ class Urls {
 
     static String update() {
         return apiv1 + "/drink";
+    }
+
+    static String delete(Int64 id) {
+        return apiv1 + "/drink/" + id.toString();
     }
 }

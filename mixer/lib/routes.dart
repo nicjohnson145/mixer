@@ -10,9 +10,11 @@ class Routes {
 
 class SingleDrinkArgs {
     Drink drink;
+    String username;
 
     SingleDrinkArgs({
         required this.drink,
+        required this.username,
     });
 }
 
