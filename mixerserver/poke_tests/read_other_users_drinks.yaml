@@ -56,6 +56,8 @@ calls:
   asserts:
   - jq: '.drink.drinkData.name'
     expected: Public Drink
+  - jq: '.metadata.invokingUser'
+    expected: foo
 
 - name: read private drink
   headers:

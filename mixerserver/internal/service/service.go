@@ -177,7 +177,12 @@ func (s *Service) CreateDrink(ctx context.Context, req *pb.CreateDrinkRequest) (
 		return nil, wrapStorageErrors(err)
 	}
 
-	return &pb.CreateDrinkResponse{Id: int64(id)}, nil
+	return &pb.CreateDrinkResponse{
+		Metadata: &pb.Metadata{
+			InvokingUser: claims.Username,
+		},
+		Id: int64(id),
+	}, nil
 }
 
 func (s *Service) ReadDrink(ctx context.Context, req *pb.GetDrinkRequest) (*pb.GetDrinkResponse, error) {
@@ -200,7 +205,12 @@ func (s *Service) ReadDrink(ctx context.Context, req *pb.GetDrinkRequest) (*pb.G
 		return nil, status.Error(codes.NotFound, "not found")
 	}
 
-	return &pb.GetDrinkResponse{Drink: data}, nil
+	return &pb.GetDrinkResponse{
+		Metadata: &pb.Metadata{
+			InvokingUser: claims.Username,
+		},
+		Drink: data,
+	}, nil
 }
 
 func (s *Service) UpdateDrink(ctx context.Context, req *pb.UpdateDrinkRequest) (*pb.UpdateDrinkResponse, error) {
@@ -225,7 +235,11 @@ func (s *Service) UpdateDrink(ctx context.Context, req *pb.UpdateDrinkRequest) (
 		return nil, wrapStorageErrors(err)
 	}
 
-	return &pb.UpdateDrinkResponse{}, nil
+	return &pb.UpdateDrinkResponse{
+		Metadata: &pb.Metadata{
+			InvokingUser: claims.Username,
+		},
+	}, nil
 }
 
 func (s *Service) ListDrinks(ctx context.Context, req *pb.ListDrinkRequest) (*pb.ListDrinkResponse, error) {
@@ -250,6 +264,9 @@ func (s *Service) ListDrinks(ctx context.Context, req *pb.ListDrinkRequest) (*pb
 	})
 
 	return &pb.ListDrinkResponse{
+		Metadata: &pb.Metadata{
+			InvokingUser: claims.Username,
+		},
 		Drinks: filteredDrinks,
 	}, nil
 }
@@ -279,5 +296,9 @@ func (s *Service) DeleteDrink(ctx context.Context, req *pb.DeleteDrinkRequest) (
 		return nil, wrapStorageErrors(err)
 	}
 
-	return &pb.DeleteDrinkResponse{}, nil
+	return &pb.DeleteDrinkResponse{
+		Metadata: &pb.Metadata{
+			InvokingUser: claims.Username,
+		},
+	}, nil
 }
