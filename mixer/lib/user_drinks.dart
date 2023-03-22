@@ -10,10 +10,12 @@ import 'package:mixer/routes.dart';
 
 class UserDrinks extends StatefulWidget {
     String? username;
+    String? viewingUsername;
 
     UserDrinks({
         Key? key,
         this.username,
+        this.viewingUsername,
     }) : super(key: key);
 
     @override
@@ -61,7 +63,7 @@ class _UserDrinksState extends State<UserDrinks> {
                     (success) {
                         return DrinkListView(
                             drinks: success.drinks,
-                            username: widget.username,
+                            username: widget.viewingUsername,
                         );
                     },
                     (error) {
