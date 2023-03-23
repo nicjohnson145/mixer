@@ -302,3 +302,42 @@ func (s *Service) DeleteDrink(ctx context.Context, req *pb.DeleteDrinkRequest) (
 		},
 	}, nil
 }
+
+func (s *Service) CopyDrink(ctx context.Context, req *pb.CopyDrinkRequest) (*pb.CopyDrinkResponse, error) {
+	if req.Id == 0 {
+		return nil, singleFieldViolation("id", "id is required")
+	}
+
+	claims, err := jwtClaimsFromCtx(ctx)
+	if err != nil {
+		s.log.Err(err).Msg("error pulling claims from context")
+		return nil, err
+	}
+
+	drink, err := s.store.GetDrink(req.Id)
+	if err != nil {
+		s.log.Err(err).Msg("error fetching drink")
+		return nil, wrapStorageErrors(err)
+	}
+
+	if drink.DrinkData.Publicity != pb.DrinkPublicity_DrinkPublicity_Public {
+		return nil, status.Error(codes.NotFound, "not found")
+	}
+
+	if req.NewName != "" {
+		drink.DrinkData.Name = req.NewName
+	}
+
+	newId, err := s.store.CreateDrink(claims.Username, drink.DrinkData)
+	if err != nil {
+		s.log.Err(err).Msg("error creating drink")
+		return nil, wrapStorageErrors(err)
+	}
+
+	return &pb.CopyDrinkResponse{
+		Metadata: &pb.Metadata{
+			InvokingUser: claims.Username,
+		},
+		Id: newId,
+	}, nil
+}

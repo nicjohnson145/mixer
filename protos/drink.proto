@@ -50,11 +50,6 @@ message GetDrinkResponse {
   Drink drink = 2;
 }
 
-message CopyDrinkResponse {
-  Metadata metadata = 1;
-  int64 id = 2;
-}
-
 message DeleteDrinkRequest {
   int64 id = 1;
 }
@@ -80,6 +75,17 @@ message ListDrinkResponse {
   Metadata metadata = 1;
   repeated Drink drinks = 2;
 }
+
+message CopyDrinkRequest {
+  int64 id = 1;
+  string new_name = 2;
+}
+
+message CopyDrinkResponse {
+  Metadata metadata = 1;
+  int64 id = 2;
+}
+
 
 service DrinkService {
   rpc CreateDrink(CreateDrinkRequest) returns (CreateDrinkResponse) {
@@ -107,6 +113,12 @@ service DrinkService {
   rpc ListDrinks(ListDrinkRequest) returns (ListDrinkResponse) {
     option (google.api.http) = {
       get: "/api/v1/drink/user/{username}"
+    };
+  };
+  rpc CopyDrink(CopyDrinkRequest) returns (CopyDrinkResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/drink/{id}/copy"
+      body: "*"
     };
   };
 }

@@ -479,69 +479,6 @@ class GetDrinkResponse extends $pb.GeneratedMessage {
   Drink ensureDrink() => $_ensure(1);
 }
 
-class CopyDrinkResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'CopyDrinkResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'mixer'), createEmptyInstance: create)
-    ..aOM<$0.Metadata>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'metadata', subBuilder: $0.Metadata.create)
-    ..aInt64(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
-    ..hasRequiredFields = false
-  ;
-
-  CopyDrinkResponse._() : super();
-  factory CopyDrinkResponse({
-    $0.Metadata? metadata,
-    $fixnum.Int64? id,
-  }) {
-    final _result = create();
-    if (metadata != null) {
-      _result.metadata = metadata;
-    }
-    if (id != null) {
-      _result.id = id;
-    }
-    return _result;
-  }
-  factory CopyDrinkResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory CopyDrinkResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  CopyDrinkResponse clone() => CopyDrinkResponse()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  CopyDrinkResponse copyWith(void Function(CopyDrinkResponse) updates) => super.copyWith((message) => updates(message as CopyDrinkResponse)) as CopyDrinkResponse; // ignore: deprecated_member_use
-  $pb.BuilderInfo get info_ => _i;
-  @$core.pragma('dart2js:noInline')
-  static CopyDrinkResponse create() => CopyDrinkResponse._();
-  CopyDrinkResponse createEmptyInstance() => create();
-  static $pb.PbList<CopyDrinkResponse> createRepeated() => $pb.PbList<CopyDrinkResponse>();
-  @$core.pragma('dart2js:noInline')
-  static CopyDrinkResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CopyDrinkResponse>(create);
-  static CopyDrinkResponse? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $0.Metadata get metadata => $_getN(0);
-  @$pb.TagNumber(1)
-  set metadata($0.Metadata v) { setField(1, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasMetadata() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearMetadata() => clearField(1);
-  @$pb.TagNumber(1)
-  $0.Metadata ensureMetadata() => $_ensure(0);
-
-  @$pb.TagNumber(2)
-  $fixnum.Int64 get id => $_getI64(1);
-  @$pb.TagNumber(2)
-  set id($fixnum.Int64 v) { $_setInt64(1, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasId() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearId() => clearField(2);
-}
-
 class DeleteDrinkRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DeleteDrinkRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'mixer'), createEmptyInstance: create)
     ..aInt64(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
@@ -854,6 +791,130 @@ class ListDrinkResponse extends $pb.GeneratedMessage {
   $core.List<Drink> get drinks => $_getList(1);
 }
 
+class CopyDrinkRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'CopyDrinkRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'mixer'), createEmptyInstance: create)
+    ..aInt64(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'newName')
+    ..hasRequiredFields = false
+  ;
+
+  CopyDrinkRequest._() : super();
+  factory CopyDrinkRequest({
+    $fixnum.Int64? id,
+    $core.String? newName,
+  }) {
+    final _result = create();
+    if (id != null) {
+      _result.id = id;
+    }
+    if (newName != null) {
+      _result.newName = newName;
+    }
+    return _result;
+  }
+  factory CopyDrinkRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory CopyDrinkRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  CopyDrinkRequest clone() => CopyDrinkRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  CopyDrinkRequest copyWith(void Function(CopyDrinkRequest) updates) => super.copyWith((message) => updates(message as CopyDrinkRequest)) as CopyDrinkRequest; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static CopyDrinkRequest create() => CopyDrinkRequest._();
+  CopyDrinkRequest createEmptyInstance() => create();
+  static $pb.PbList<CopyDrinkRequest> createRepeated() => $pb.PbList<CopyDrinkRequest>();
+  @$core.pragma('dart2js:noInline')
+  static CopyDrinkRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CopyDrinkRequest>(create);
+  static CopyDrinkRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $fixnum.Int64 get id => $_getI64(0);
+  @$pb.TagNumber(1)
+  set id($fixnum.Int64 v) { $_setInt64(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get newName => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set newName($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasNewName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearNewName() => clearField(2);
+}
+
+class CopyDrinkResponse extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'CopyDrinkResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'mixer'), createEmptyInstance: create)
+    ..aOM<$0.Metadata>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'metadata', subBuilder: $0.Metadata.create)
+    ..aInt64(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
+    ..hasRequiredFields = false
+  ;
+
+  CopyDrinkResponse._() : super();
+  factory CopyDrinkResponse({
+    $0.Metadata? metadata,
+    $fixnum.Int64? id,
+  }) {
+    final _result = create();
+    if (metadata != null) {
+      _result.metadata = metadata;
+    }
+    if (id != null) {
+      _result.id = id;
+    }
+    return _result;
+  }
+  factory CopyDrinkResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory CopyDrinkResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  CopyDrinkResponse clone() => CopyDrinkResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  CopyDrinkResponse copyWith(void Function(CopyDrinkResponse) updates) => super.copyWith((message) => updates(message as CopyDrinkResponse)) as CopyDrinkResponse; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static CopyDrinkResponse create() => CopyDrinkResponse._();
+  CopyDrinkResponse createEmptyInstance() => create();
+  static $pb.PbList<CopyDrinkResponse> createRepeated() => $pb.PbList<CopyDrinkResponse>();
+  @$core.pragma('dart2js:noInline')
+  static CopyDrinkResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CopyDrinkResponse>(create);
+  static CopyDrinkResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $0.Metadata get metadata => $_getN(0);
+  @$pb.TagNumber(1)
+  set metadata($0.Metadata v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasMetadata() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearMetadata() => clearField(1);
+  @$pb.TagNumber(1)
+  $0.Metadata ensureMetadata() => $_ensure(0);
+
+  @$pb.TagNumber(2)
+  $fixnum.Int64 get id => $_getI64(1);
+  @$pb.TagNumber(2)
+  set id($fixnum.Int64 v) { $_setInt64(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearId() => clearField(2);
+}
+
 class DrinkServiceApi {
   $pb.RpcClient _client;
   DrinkServiceApi(this._client);
@@ -877,6 +938,10 @@ class DrinkServiceApi {
   $async.Future<ListDrinkResponse> listDrinks($pb.ClientContext? ctx, ListDrinkRequest request) {
     var emptyResponse = ListDrinkResponse();
     return _client.invoke<ListDrinkResponse>(ctx, 'DrinkService', 'ListDrinks', request, emptyResponse);
+  }
+  $async.Future<CopyDrinkResponse> copyDrink($pb.ClientContext? ctx, CopyDrinkRequest request) {
+    var emptyResponse = CopyDrinkResponse();
+    return _client.invoke<CopyDrinkResponse>(ctx, 'DrinkService', 'CopyDrink', request, emptyResponse);
   }
 }
 

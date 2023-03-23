@@ -95,17 +95,6 @@ const GetDrinkResponse$json = const {
 
 /// Descriptor for `GetDrinkResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getDrinkResponseDescriptor = $convert.base64Decode('ChBHZXREcmlua1Jlc3BvbnNlEisKCG1ldGFkYXRhGAEgASgLMg8ubWl4ZXIuTWV0YWRhdGFSCG1ldGFkYXRhEiIKBWRyaW5rGAIgASgLMgwubWl4ZXIuRHJpbmtSBWRyaW5r');
-@$core.Deprecated('Use copyDrinkResponseDescriptor instead')
-const CopyDrinkResponse$json = const {
-  '1': 'CopyDrinkResponse',
-  '2': const [
-    const {'1': 'metadata', '3': 1, '4': 1, '5': 11, '6': '.mixer.Metadata', '10': 'metadata'},
-    const {'1': 'id', '3': 2, '4': 1, '5': 3, '10': 'id'},
-  ],
-};
-
-/// Descriptor for `CopyDrinkResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List copyDrinkResponseDescriptor = $convert.base64Decode('ChFDb3B5RHJpbmtSZXNwb25zZRIrCghtZXRhZGF0YRgBIAEoCzIPLm1peGVyLk1ldGFkYXRhUghtZXRhZGF0YRIOCgJpZBgCIAEoA1ICaWQ=');
 @$core.Deprecated('Use deleteDrinkRequestDescriptor instead')
 const DeleteDrinkRequest$json = const {
   '1': 'DeleteDrinkRequest',
@@ -168,6 +157,28 @@ const ListDrinkResponse$json = const {
 
 /// Descriptor for `ListDrinkResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List listDrinkResponseDescriptor = $convert.base64Decode('ChFMaXN0RHJpbmtSZXNwb25zZRIrCghtZXRhZGF0YRgBIAEoCzIPLm1peGVyLk1ldGFkYXRhUghtZXRhZGF0YRIkCgZkcmlua3MYAiADKAsyDC5taXhlci5Ecmlua1IGZHJpbmtz');
+@$core.Deprecated('Use copyDrinkRequestDescriptor instead')
+const CopyDrinkRequest$json = const {
+  '1': 'CopyDrinkRequest',
+  '2': const [
+    const {'1': 'id', '3': 1, '4': 1, '5': 3, '10': 'id'},
+    const {'1': 'new_name', '3': 2, '4': 1, '5': 9, '10': 'newName'},
+  ],
+};
+
+/// Descriptor for `CopyDrinkRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List copyDrinkRequestDescriptor = $convert.base64Decode('ChBDb3B5RHJpbmtSZXF1ZXN0Eg4KAmlkGAEgASgDUgJpZBIZCghuZXdfbmFtZRgCIAEoCVIHbmV3TmFtZQ==');
+@$core.Deprecated('Use copyDrinkResponseDescriptor instead')
+const CopyDrinkResponse$json = const {
+  '1': 'CopyDrinkResponse',
+  '2': const [
+    const {'1': 'metadata', '3': 1, '4': 1, '5': 11, '6': '.mixer.Metadata', '10': 'metadata'},
+    const {'1': 'id', '3': 2, '4': 1, '5': 3, '10': 'id'},
+  ],
+};
+
+/// Descriptor for `CopyDrinkResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List copyDrinkResponseDescriptor = $convert.base64Decode('ChFDb3B5RHJpbmtSZXNwb25zZRIrCghtZXRhZGF0YRgBIAEoCzIPLm1peGVyLk1ldGFkYXRhUghtZXRhZGF0YRIOCgJpZBgCIAEoA1ICaWQ=');
 const $core.Map<$core.String, $core.dynamic> DrinkServiceBase$json = const {
   '1': 'DrinkService',
   '2': const [
@@ -176,6 +187,7 @@ const $core.Map<$core.String, $core.dynamic> DrinkServiceBase$json = const {
     const {'1': 'UpdateDrink', '2': '.mixer.UpdateDrinkRequest', '3': '.mixer.UpdateDrinkResponse', '4': const {}},
     const {'1': 'DeleteDrink', '2': '.mixer.DeleteDrinkRequest', '3': '.mixer.DeleteDrinkResponse', '4': const {}},
     const {'1': 'ListDrinks', '2': '.mixer.ListDrinkRequest', '3': '.mixer.ListDrinkResponse', '4': const {}},
+    const {'1': 'CopyDrink', '2': '.mixer.CopyDrinkRequest', '3': '.mixer.CopyDrinkResponse', '4': const {}},
   ],
 };
 
@@ -194,7 +206,9 @@ const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> DrinkServi
   '.mixer.DeleteDrinkResponse': DeleteDrinkResponse$json,
   '.mixer.ListDrinkRequest': ListDrinkRequest$json,
   '.mixer.ListDrinkResponse': ListDrinkResponse$json,
+  '.mixer.CopyDrinkRequest': CopyDrinkRequest$json,
+  '.mixer.CopyDrinkResponse': CopyDrinkResponse$json,
 };
 
 /// Descriptor for `DrinkService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
-final $typed_data.Uint8List drinkServiceDescriptor = $convert.base64Decode('CgxEcmlua1NlcnZpY2USXgoLQ3JlYXRlRHJpbmsSGS5taXhlci5DcmVhdGVEcmlua1JlcXVlc3QaGi5taXhlci5DcmVhdGVEcmlua1Jlc3BvbnNlIhiC0+STAhIiDS9hcGkvdjEvZHJpbms6ASoSWAoJUmVhZERyaW5rEhYubWl4ZXIuR2V0RHJpbmtSZXF1ZXN0GhcubWl4ZXIuR2V0RHJpbmtSZXNwb25zZSIagtPkkwIUEhIvYXBpL3YxL2RyaW5rL3tpZH0SXgoLVXBkYXRlRHJpbmsSGS5taXhlci5VcGRhdGVEcmlua1JlcXVlc3QaGi5taXhlci5VcGRhdGVEcmlua1Jlc3BvbnNlIhiC0+STAhIaDS9hcGkvdjEvZHJpbms6ASoSYAoLRGVsZXRlRHJpbmsSGS5taXhlci5EZWxldGVEcmlua1JlcXVlc3QaGi5taXhlci5EZWxldGVEcmlua1Jlc3BvbnNlIhqC0+STAhQqEi9hcGkvdjEvZHJpbmsve2lkfRJmCgpMaXN0RHJpbmtzEhcubWl4ZXIuTGlzdERyaW5rUmVxdWVzdBoYLm1peGVyLkxpc3REcmlua1Jlc3BvbnNlIiWC0+STAh8SHS9hcGkvdjEvZHJpbmsvdXNlci97dXNlcm5hbWV9');
+final $typed_data.Uint8List drinkServiceDescriptor = $convert.base64Decode('CgxEcmlua1NlcnZpY2USXgoLQ3JlYXRlRHJpbmsSGS5taXhlci5DcmVhdGVEcmlua1JlcXVlc3QaGi5taXhlci5DcmVhdGVEcmlua1Jlc3BvbnNlIhiC0+STAhIiDS9hcGkvdjEvZHJpbms6ASoSWAoJUmVhZERyaW5rEhYubWl4ZXIuR2V0RHJpbmtSZXF1ZXN0GhcubWl4ZXIuR2V0RHJpbmtSZXNwb25zZSIagtPkkwIUEhIvYXBpL3YxL2RyaW5rL3tpZH0SXgoLVXBkYXRlRHJpbmsSGS5taXhlci5VcGRhdGVEcmlua1JlcXVlc3QaGi5taXhlci5VcGRhdGVEcmlua1Jlc3BvbnNlIhiC0+STAhIaDS9hcGkvdjEvZHJpbms6ASoSYAoLRGVsZXRlRHJpbmsSGS5taXhlci5EZWxldGVEcmlua1JlcXVlc3QaGi5taXhlci5EZWxldGVEcmlua1Jlc3BvbnNlIhqC0+STAhQqEi9hcGkvdjEvZHJpbmsve2lkfRJmCgpMaXN0RHJpbmtzEhcubWl4ZXIuTGlzdERyaW5rUmVxdWVzdBoYLm1peGVyLkxpc3REcmlua1Jlc3BvbnNlIiWC0+STAh8SHS9hcGkvdjEvZHJpbmsvdXNlci97dXNlcm5hbWV9EmIKCUNvcHlEcmluaxIXLm1peGVyLkNvcHlEcmlua1JlcXVlc3QaGC5taXhlci5Db3B5RHJpbmtSZXNwb25zZSIigtPkkwIcIhcvYXBpL3YxL2RyaW5rL3tpZH0vY29weToBKg==');

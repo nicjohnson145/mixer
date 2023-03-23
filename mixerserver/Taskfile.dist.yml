@@ -110,5 +110,7 @@ tasks:
     - task: remove-drinks
     - poke poke_tests/list_drink_filtering.yaml
     - task: remove-drinks
+    - poke poke_tests/copy_drink.yaml
+    - task: remove-drinks
     - poke poke_tests/list_users.yaml
     - poke poke_tests/refresh.yaml

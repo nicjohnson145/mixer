@@ -27,6 +27,7 @@ type DrinkServiceClient interface {
 	UpdateDrink(ctx context.Context, in *UpdateDrinkRequest, opts ...grpc.CallOption) (*UpdateDrinkResponse, error)
 	DeleteDrink(ctx context.Context, in *DeleteDrinkRequest, opts ...grpc.CallOption) (*DeleteDrinkResponse, error)
 	ListDrinks(ctx context.Context, in *ListDrinkRequest, opts ...grpc.CallOption) (*ListDrinkResponse, error)
+	CopyDrink(ctx context.Context, in *CopyDrinkRequest, opts ...grpc.CallOption) (*CopyDrinkResponse, error)
 }
 
 type drinkServiceClient struct {
@@ -82,6 +83,15 @@ func (c *drinkServiceClient) ListDrinks(ctx context.Context, in *ListDrinkReques
 	return out, nil
 }
 
+func (c *drinkServiceClient) CopyDrink(ctx context.Context, in *CopyDrinkRequest, opts ...grpc.CallOption) (*CopyDrinkResponse, error) {
+	out := new(CopyDrinkResponse)
+	err := c.cc.Invoke(ctx, "/mixer.DrinkService/CopyDrink", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // DrinkServiceServer is the server API for DrinkService service.
 // All implementations must embed UnimplementedDrinkServiceServer
 // for forward compatibility
@@ -91,6 +101,7 @@ type DrinkServiceServer interface {
 	UpdateDrink(context.Context, *UpdateDrinkRequest) (*UpdateDrinkResponse, error)
 	DeleteDrink(context.Context, *DeleteDrinkRequest) (*DeleteDrinkResponse, error)
 	ListDrinks(context.Context, *ListDrinkRequest) (*ListDrinkResponse, error)
+	CopyDrink(context.Context, *CopyDrinkRequest) (*CopyDrinkResponse, error)
 	mustEmbedUnimplementedDrinkServiceServer()
 }
 
@@ -112,6 +123,9 @@ func (UnimplementedDrinkServiceServer) DeleteDrink(context.Context, *DeleteDrink
 }
 func (UnimplementedDrinkServiceServer) ListDrinks(context.Context, *ListDrinkRequest) (*ListDrinkResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListDrinks not implemented")
+}
+func (UnimplementedDrinkServiceServer) CopyDrink(context.Context, *CopyDrinkRequest) (*CopyDrinkResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CopyDrink not implemented")
 }
 func (UnimplementedDrinkServiceServer) mustEmbedUnimplementedDrinkServiceServer() {}
 
@@ -216,6 +230,24 @@ func _DrinkService_ListDrinks_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _DrinkService_CopyDrink_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CopyDrinkRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DrinkServiceServer).CopyDrink(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/mixer.DrinkService/CopyDrink",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DrinkServiceServer).CopyDrink(ctx, req.(*CopyDrinkRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // DrinkService_ServiceDesc is the grpc.ServiceDesc for DrinkService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -242,6 +274,10 @@ var DrinkService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListDrinks",
 			Handler:    _DrinkService_ListDrinks_Handler,
+		},
+		{
+			MethodName: "CopyDrink",
+			Handler:    _DrinkService_CopyDrink_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
