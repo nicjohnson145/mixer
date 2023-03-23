@@ -35,4 +35,8 @@ class Urls {
     static String delete(Int64 id) {
         return apiv1 + "/drink/" + id.toString();
     }
+
+    static String copy(Int64 id) {
+        return apiv1 + "/drink/" + id.toString() + "/copy";
+    }
 }
