@@ -48,3 +48,20 @@ flutter emulator --launch <your-device-id>
 cd mixer
 flutter run
 ```
+
+## Running Tests
+
+Backend tests are done through [poke](https://github.com/nicjohnson145/poke/releases)
+
+```
+cd mixerserver
+task poke-tests
+```
+
+Frontend tests require the backend be running in some capacity, and seeded with data
+```
+poke mixerserver/poke_tests/integration_seed.yaml
+cd mixer
+flutter test integration_test/app_test.dart -d '<your-emulator-of-choice>'
+```
+

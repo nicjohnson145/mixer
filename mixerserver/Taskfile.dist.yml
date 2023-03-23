@@ -22,6 +22,7 @@ tasks:
     - migrate create -ext sql {{ .CLI_ARGS }}
 
   build-server-binary:
+    internal: true
     desc: build the mixerserver binary locally
     cmds:
     - go build -o mixerserver
