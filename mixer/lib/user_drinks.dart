@@ -7,32 +7,41 @@ import 'package:mixer/hamburger.dart';
 import 'package:multiple_result/multiple_result.dart';
 import 'package:mixer/protos/drink.pb.dart';
 import 'package:mixer/routes.dart';
+import 'package:provider/provider.dart';
+import 'package:mixer/user_change_notifier.dart';
 
 class UserDrinks extends StatefulWidget {
     String? username;
-    String? viewingUsername;
 
     UserDrinks({
         Key? key,
         this.username,
-        this.viewingUsername,
     }) : super(key: key);
 
     @override
     State<UserDrinks> createState() => _UserDrinksState();
 }
 
+class DrinkListInfo {
+    final List<Drink> drinks;
+    final String username;
+
+    DrinkListInfo({
+        required this.drinks,
+        required this.username,
+    });
+}
+
 class _UserDrinksState extends State<UserDrinks> {
 
-    Future<Result<ListDrinkResponse, ShitsFuckedError>> getFuture() async {
+    Future<Result<DrinkListInfo, ShitsFuckedError>> getFuture(BuildContext context) async {
         String username;
         if (widget.username == null) {
-            var storage = getIt<Storage>();
-            String name = await storage.getUsername();
-            if (name == "") {
+            var usr = Provider.of<UsernameProvider>(context, listen: false).get();
+            if (usr == null) {
                 return Error(ShitsFuckedError(message: "no user found in storage"));
             }
-            username = name;
+            username = usr;
         } else {
             username = widget.username!;
         }
@@ -41,7 +50,7 @@ class _UserDrinksState extends State<UserDrinks> {
         final apiResp = await api.listDrinksByUser(username);
         return apiResp.when(
             (success) {
-                return Success(success);
+                return Success(DrinkListInfo(username: username, drinks: success.drinks));
             },
             (error) {
                 return Error(ShitsFuckedError(message: error.message));
@@ -52,18 +61,22 @@ class _UserDrinksState extends State<UserDrinks> {
     @override
     Widget build(BuildContext context) {
         return FutureBuilder(
-            future: getFuture(),
+            future: getFuture(context),
             builder: (context, snapshot) {
                 if (snapshot.connectionState != ConnectionState.done) {
                     return loadingSpinner(context);
                 }
 
-                final resp = snapshot.data as Result<ListDrinkResponse, ShitsFuckedError>;
+                if (snapshot.hasError) {
+                    return errorScreen(context, snapshot.error.toString());
+                }
+
+                final resp = snapshot.data as Result<DrinkListInfo, ShitsFuckedError>;
                 return resp.when(
                     (success) {
                         return DrinkListView(
                             drinks: success.drinks,
-                            username: widget.viewingUsername,
+                            username: success.username,
                         );
                     },
                     (error) {
@@ -132,7 +145,13 @@ class DrinkListView extends StatelessWidget {
     }
 
     Widget getFloatingActionButton(BuildContext context) {
-        if (username != null) {
+        var usr = Provider.of<UsernameProvider>(context, listen: false).get();
+        if (usr == null) {
+            throw Exception("no user found in storage");
+        }
+        print(username);
+        print(usr);
+        if (username != null && usr != username) {
             return Container();
         }
         return FloatingActionButton(

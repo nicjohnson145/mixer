@@ -10,6 +10,8 @@ import 'package:mixer/drink_add_edit.dart';
 import 'package:mixer/services.dart';
 import 'package:mixer/user_list.dart';
 import 'package:multiple_result/multiple_result.dart';
+import 'package:provider/provider.dart';
+import 'package:mixer/user_change_notifier.dart';
 
 void main() {
     mainWithObservers(null);
@@ -17,9 +19,12 @@ void main() {
 
 void mainWithObservers(NavigatorObserver? obs) {
     registerServices();
-    runApp(MyApp(
-        observer: obs,
-    ));
+    runApp(
+        ChangeNotifierProvider(
+            create: (context) => UsernameProvider(),
+            child: MyApp(observer: obs),
+        ),
+    );
 }
 
 class MyApp extends StatelessWidget {
@@ -51,10 +56,13 @@ class MyApp extends StatelessWidget {
                         return LoginPage();
                     }
 
-                    final result = snapshot.data as Result;
+                    final result = snapshot.data as Result<String, Exception>;
                     final page = result.when(
                         (username) {
-                            return UserDrinks(username: username);
+                            Provider.of<UsernameProvider>(context, listen: false).set(username);
+                            return UserDrinks(
+                                username: username,
+                            );
                         },
                         (error) {
                             return LoginPage();
@@ -71,7 +79,6 @@ class MyApp extends StatelessWidget {
                             builder:  (context) {
                                 return DrinkDetails(
                                     drink: args.drink,
-                                    username: args.username,
                                 );
                             },
                         );

@@ -5,15 +5,15 @@ import 'package:mixer/hamburger.dart';
 import 'package:mixer/services.dart';
 import 'package:mixer/api.dart';
 import 'package:mixer/common.dart';
+import 'package:provider/provider.dart';
+import 'package:mixer/user_change_notifier.dart';
 
 class DrinkDetails extends StatefulWidget {
     Drink drink;
-    String username;
 
     DrinkDetails({
         Key? key,
         required this.drink,
-        required this.username,
     }) : super(key: key);
 
     @override
@@ -109,21 +109,32 @@ class _DrinkDetailsState extends State<DrinkDetails> {
         );
     }
 
+    bool isSameUser() {
+        var username = Provider.of<UsernameProvider>(context, listen: false).get();
+        if (username == null) {
+            throw Exception("no user found in storage");
+        }
+        return username == widget.drink.username;
+    }
+
     Widget getFloatingActionButton(BuildContext context) {
-        return FloatingActionButton(
-            onPressed: () {
-                Navigator.of(context).pushNamed(
-                    Routes.drinkAddEdit,
-                    arguments: AddEditDrinkArgs(drink: widget.drink),
-                );
-            },
-            child: const Icon(Icons.edit),
-        );
+        if (isSameUser()) {
+            return FloatingActionButton(
+                onPressed: () {
+                    Navigator.of(context).pushNamed(
+                        Routes.drinkAddEdit,
+                        arguments: AddEditDrinkArgs(drink: widget.drink),
+                    );
+                },
+                child: const Icon(Icons.edit),
+            );
+        }
+        return Container();
     }
 
     List<Widget> appBarItems(BuildContext context) {
         var widgets = <Widget>[];
-        if (widget.username == widget.drink.username) {
+        if (isSameUser()) {
             widgets.add(
                 IconButton(
                     icon: const Icon(Icons.delete_forever),
