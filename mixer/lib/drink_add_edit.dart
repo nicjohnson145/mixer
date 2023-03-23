@@ -288,7 +288,10 @@ class _DrinkAddEditState extends State<DrinkAddEdit> {
                         Navigator.of(context).pushNamedAndRemoveUntil(Routes.drinksByUser, (route) => false);
                     },
                     (error) {
-                        return errorScreen(context, error.message);
+                        setState(() {
+                            showSpinner = false;
+                        });
+                        return showErrorSnackbar(context, error.message);
                     },
                 );
             } else {
@@ -298,7 +301,10 @@ class _DrinkAddEditState extends State<DrinkAddEdit> {
                         Navigator.of(context).pushNamedAndRemoveUntil(Routes.drinksByUser, (route) => false);
                     },
                     (error) {
-                        return errorScreen(context, error.message);
+                        setState(() {
+                            showSpinner = false;
+                        });
+                        return showErrorSnackbar(context, error.message);
                     },
                 );
             }
