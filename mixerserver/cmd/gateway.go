@@ -41,6 +41,7 @@ func Gateway() *cobra.Command {
 			}
 
 			if viper.GetBool(config.EnablePurge) {
+				logger.Warn().Msg("DB purging endpoint enabled")
 				err = pb.RegisterPurgeServiceHandlerFromEndpoint(ctx, mux, grpcEndpoint, opts)
 				if err != nil {
 					logger.Err(err).Msg("error registering purge service gateway")

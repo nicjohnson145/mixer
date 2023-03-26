@@ -86,6 +86,7 @@ func Root() *cobra.Command {
 			pb.RegisterUserServiceServer(grpcServer, svc)
 			pb.RegisterDrinkServiceServer(grpcServer, svc)
 			if viper.GetBool(config.EnablePurge) {
+				logger.Warn().Msg("DB purging endpoint enabled")
 				pb.RegisterPurgeServiceServer(grpcServer, svc)
 			}
 			reflection.Register(grpcServer)
