@@ -175,6 +175,9 @@ func (p *PostgresStore) UpdateDrink(username string, id int64, d *pb.DrinkData) 
 	update := p.db.Update("drink").Set(data).Where(goqu.C("id").Eq(id))
 	result, err := update.Executor().Exec()
 	if err != nil {
+		if p.isDuplicateNameError(err) {
+			return fmt.Errorf("%w: %v", ErrDuplicateNameError, d.Name)
+		}
 		return fmt.Errorf("error updating drink: %w", err)
 	}
 	numRows, err := result.RowsAffected()

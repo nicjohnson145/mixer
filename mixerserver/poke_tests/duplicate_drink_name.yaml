@@ -70,6 +70,23 @@ calls:
   - jq: '.id'
     as: "bar_daquiri_id"
 
+- name: create bar daquiri2
+  headers:
+    authorization: '{{ .bar_token }}'
+  url: '{{ .api_url }}/drink'
+  body:
+    drink_data:
+      name: Daquiri2
+      primary_alcohol: Rum
+      ingredients:
+      - 2.5 oz white Rum
+      - 0.5 oz simple syrup
+      - 1 oz lime juice
+      publicity: "DrinkPublicity_Public"
+  exports:
+  - jq: '.id'
+    as: "bar_daquiri2_id"
+
 - name: try create dupe drink
   headers:
     authorization: '{{ .bar_token }}'
@@ -93,6 +110,26 @@ calls:
     authorization: '{{ .bar_token }}'
   url: '{{ .api_url }}/drink/{{ .baz_daquiri_id }}/copy'
   method: POST
+  want-status: 409
+  asserts:
+  - jq: ".message"
+    expected: "duplicate drink name: Daquiri"
+
+- name: try dupe drink in update
+  headers:
+    authorization: '{{ .bar_token }}'
+  url: '{{ .api_url }}/drink'
+  method: PUT
+  body:
+    id: '{{ .bar_daquiri2_id }}'
+    drink_data:
+      name: Daquiri
+      primary_alcohol: Rum
+      ingredients:
+      - 2.5 oz white Rum
+      - 0.5 oz simple syrup
+      - 1 oz lime juice
+      publicity: "DrinkPublicity_Public"
   want-status: 409
   asserts:
   - jq: ".message"
