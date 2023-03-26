@@ -10,33 +10,33 @@ import 'dart:async' as $async;
 import 'package:protobuf/protobuf.dart' as $pb;
 
 import 'dart:core' as $core;
-import 'user.pb.dart' as $2;
+import 'user.pb.dart' as $3;
 import 'user.pbjson.dart';
 
 export 'user.pb.dart';
 
 abstract class UserServiceBase extends $pb.GeneratedService {
-  $async.Future<$2.RegisterNewUserResponse> registerNewUser($pb.ServerContext ctx, $2.RegisterNewUserRequest request);
-  $async.Future<$2.LoginResponse> login($pb.ServerContext ctx, $2.LoginRequest request);
-  $async.Future<$2.ListUsersResponse> listUsers($pb.ServerContext ctx, $2.ListUsersRequest request);
-  $async.Future<$2.LoginResponse> refreshToken($pb.ServerContext ctx, $2.RefreshTokenRequest request);
+  $async.Future<$3.RegisterNewUserResponse> registerNewUser($pb.ServerContext ctx, $3.RegisterNewUserRequest request);
+  $async.Future<$3.LoginResponse> login($pb.ServerContext ctx, $3.LoginRequest request);
+  $async.Future<$3.ListUsersResponse> listUsers($pb.ServerContext ctx, $3.ListUsersRequest request);
+  $async.Future<$3.LoginResponse> refreshToken($pb.ServerContext ctx, $3.RefreshTokenRequest request);
 
   $pb.GeneratedMessage createRequest($core.String method) {
     switch (method) {
-      case 'RegisterNewUser': return $2.RegisterNewUserRequest();
-      case 'Login': return $2.LoginRequest();
-      case 'ListUsers': return $2.ListUsersRequest();
-      case 'RefreshToken': return $2.RefreshTokenRequest();
+      case 'RegisterNewUser': return $3.RegisterNewUserRequest();
+      case 'Login': return $3.LoginRequest();
+      case 'ListUsers': return $3.ListUsersRequest();
+      case 'RefreshToken': return $3.RefreshTokenRequest();
       default: throw $core.ArgumentError('Unknown method: $method');
     }
   }
 
   $async.Future<$pb.GeneratedMessage> handleCall($pb.ServerContext ctx, $core.String method, $pb.GeneratedMessage request) {
     switch (method) {
-      case 'RegisterNewUser': return this.registerNewUser(ctx, request as $2.RegisterNewUserRequest);
-      case 'Login': return this.login(ctx, request as $2.LoginRequest);
-      case 'ListUsers': return this.listUsers(ctx, request as $2.ListUsersRequest);
-      case 'RefreshToken': return this.refreshToken(ctx, request as $2.RefreshTokenRequest);
+      case 'RegisterNewUser': return this.registerNewUser(ctx, request as $3.RegisterNewUserRequest);
+      case 'Login': return this.login(ctx, request as $3.LoginRequest);
+      case 'ListUsers': return this.listUsers(ctx, request as $3.ListUsersRequest);
+      case 'RefreshToken': return this.refreshToken(ctx, request as $3.RefreshTokenRequest);
       default: throw $core.ArgumentError('Unknown method: $method');
     }
   }

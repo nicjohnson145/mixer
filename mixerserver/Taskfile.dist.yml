@@ -70,6 +70,7 @@ tasks:
     env:
       JWT_SIGNINGKEY: OI69i6tf6AHWOVI7du58ZOoQCYXJjrPYT58
       PROTECT_REGISTER: "false"
+      ENABLE_PURGE: "true"
     cmds:
     - task: build-server-binary
     - echo "using signing key $JWT_SIGNINGKEY"
@@ -77,6 +78,8 @@ tasks:
 
   local-gateway:
     desc: run mixer gateway locally
+    env:
+      ENABLE_PURGE: "true"
     cmds:
     - task: build-server-binary
     - ./mixerserver gateway
@@ -104,14 +107,9 @@ tasks:
     desc: run functional tests locally with poke
     cmds:
     - task: clean-db
-    - poke poke_tests/register_users.yaml
     - poke poke_tests/drink_crud.yaml
-    - task: remove-drinks
     - poke poke_tests/read_other_users_drinks.yaml
-    - task: remove-drinks
     - poke poke_tests/list_drink_filtering.yaml
-    - task: remove-drinks
     - poke poke_tests/copy_drink.yaml
-    - task: remove-drinks
     - poke poke_tests/list_users.yaml
     - poke poke_tests/refresh.yaml

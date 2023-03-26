@@ -70,6 +70,7 @@ func Root() *cobra.Command {
 			jwtExemptions := mapset.NewSet[string]()
 			jwtExemptions.Add("/mixer.UserService/Login")
 			jwtExemptions.Add("/mixer.UserService/RefreshToken")
+			jwtExemptions.Add("/mixer.PurgeService/Purge")
 			if !viper.GetBool(config.ProtectRegister) {
 				jwtExemptions.Add("/mixer.UserService/RegisterNewUser")
 			}
@@ -84,6 +85,9 @@ func Root() *cobra.Command {
 
 			pb.RegisterUserServiceServer(grpcServer, svc)
 			pb.RegisterDrinkServiceServer(grpcServer, svc)
+			if viper.GetBool(config.EnablePurge) {
+				pb.RegisterPurgeServiceServer(grpcServer, svc)
+			}
 			reflection.Register(grpcServer)
 
 			port := ":" + viper.GetString(config.GRPCPort)

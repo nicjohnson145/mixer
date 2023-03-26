@@ -26,6 +26,8 @@ const (
 	DatabaseUsername = "database-username"
 	DatabasePassword = "database-password"
 	DatabaseName     = "database-name"
+
+	EnablePurge = "enable-purge"
 )
 
 func InitializeConfig(cmd *cobra.Command) error {
@@ -46,6 +48,8 @@ func InitializeConfig(cmd *cobra.Command) error {
 	viper.SetDefault(DatabasePort, 5432)
 	viper.SetDefault(DatabaseUsername, "mixer_usr")
 	viper.SetDefault(DatabasePassword, "mixer_pass")
+
+	viper.SetDefault(EnablePurge, false)
 
 	viper.AutomaticEnv()
 	viper.SetEnvKeyReplacer(strings.NewReplacer("-", "_", ".", "_"))

@@ -40,6 +40,14 @@ func Gateway() *cobra.Command {
 				return err
 			}
 
+			if viper.GetBool(config.EnablePurge) {
+				err = pb.RegisterPurgeServiceHandlerFromEndpoint(ctx, mux, grpcEndpoint, opts)
+				if err != nil {
+					logger.Err(err).Msg("error registering purge service gateway")
+					return err
+				}
+			}
+
 			gatewayEndpoint := fmt.Sprintf(":%d", viper.GetInt(config.GatewayPort))
 			logger.Info().Str("addr", gatewayEndpoint).Msg("starting gateway")
 			return http.ListenAndServe(gatewayEndpoint, mux)

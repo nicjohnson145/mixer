@@ -34,6 +34,32 @@ type PostgresStore struct {
 	db  *goqu.Database
 }
 
+func (p *PostgresStore) Purge() error {
+	tx, err := p.db.Begin()
+	if err != nil {
+		return fmt.Errorf("unable to begin transaction: %w", err)
+	}
+
+	tables := []string{
+		"usr_setting",
+		"drink",
+		"usr",
+	}
+	err = tx.Wrap(func() error {
+		for _, tbl := range tables {
+			p.log.Debug().Str("table", tbl).Msg("deleting table")
+			if _, err := p.db.Delete(tbl).Executor().Exec(); err != nil {
+				return fmt.Errorf("unable to delete table %v: %w", tbl, err)
+			}
+		}
+		return nil
+	})
+	if err != nil {
+		return fmt.Errorf("unable to purge: %w", err)
+	}
+	return nil
+}
+
 func (p *PostgresStore) CreateUser(user User) error {
 	insert := p.db.Insert("usr").Rows(usr{
 		Username: user.Username,

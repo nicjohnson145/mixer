@@ -37,6 +37,15 @@ type Service struct {
 	parseFunc        ParseFunc
 	pb.UnimplementedUserServiceServer
 	pb.UnimplementedDrinkServiceServer
+	pb.UnimplementedPurgeServiceServer
+}
+
+func (s *Service) Purge(ctx context.Context, req *pb.PurgeRequest) (*pb.PurgeResponse, error) {
+	if err := s.store.Purge(); err != nil {
+		return nil, wrapStorageErrors(err)
+	}
+
+	return &pb.PurgeResponse{}, nil
 }
 
 func (s *Service) RegisterNewUser(ctx context.Context, req *pb.RegisterNewUserRequest) (*pb.RegisterNewUserResponse, error) {

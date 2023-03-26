@@ -10,6 +10,8 @@ type User struct {
 }
 
 type Storage interface {
+	Purge() error
+
 	CreateUser(u User) error
 	ReadUser(username string) (*User, error)
 	GetPublicUsers() ([]string, error)

@@ -1,0 +1,4 @@
+calls:
+- name: purge-db
+  url: '{{ .api_url }}/purge'
+  method: POST
