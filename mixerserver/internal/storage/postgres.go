@@ -5,6 +5,8 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/lib/pq"
+
 	"github.com/doug-martin/goqu/v9"
 	_ "github.com/doug-martin/goqu/v9/dialect/postgres" // import postgres dialect
 	pb "github.com/nicjohnson145/mixer/mixerserver/protos"
@@ -13,7 +15,11 @@ import (
 	"github.com/samber/lo"
 )
 
-var ErrNotFoundError = errors.New("not found")
+var (
+	ErrNotFoundError = errors.New("not found")
+	ErrDuplicateNameError = errors.New("duplicate drink name")
+	uniqueViolationError = pq.ErrorCode("23505")
+)
 
 type PostgresStoreConfig struct {
 	Logger zerolog.Logger
@@ -129,10 +135,22 @@ func (p *PostgresStore) CreateDrink(username string, d *pb.DrinkData) (int64, er
 	var id int64
 	_, err := insert.Executor().ScanVal(&id)
 	if err != nil {
+		if p.isDuplicateNameError(err) {
+			return 0, fmt.Errorf("%w: %v", ErrDuplicateNameError, d.Name)
+		}
 		return 0, fmt.Errorf("error inserting drink: %w", err)
 	}
 
 	return id, nil
+}
+
+func (p *PostgresStore) isDuplicateNameError(err error) bool {
+	if pgerr, ok := err.(*pq.Error); ok {
+		if pgerr.Code == "23505" && pgerr.Constraint == "drink_name_username_key" {
+			return true
+		}
+	}
+	return false
 }
 
 func (p *PostgresStore) GetDrink(id int64) (*pb.Drink, error) {

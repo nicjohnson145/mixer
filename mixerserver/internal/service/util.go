@@ -88,6 +88,8 @@ func wrapStorageErrors(err error) error {
 	switch true {
 	case errors.Is(err, storage.ErrNotFoundError):
 		return status.Error(codes.NotFound, "not found")
+	case errors.Is(err, storage.ErrDuplicateNameError):
+		return status.Error(codes.AlreadyExists, err.Error())
 	default:
 		return err
 	}

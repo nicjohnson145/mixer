@@ -8,6 +8,7 @@ require (
 	github.com/golang-jwt/jwt/v4 v4.1.0
 	github.com/golang-migrate/migrate/v4 v4.15.2
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.15.2
+	github.com/lib/pq v1.10.7
 	github.com/rs/zerolog v1.29.0
 	github.com/samber/lo v1.37.0
 	github.com/spf13/cobra v1.6.1
@@ -25,7 +26,6 @@ require (
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/inconshreveable/mousetrap v1.0.1 // indirect
-	github.com/lib/pq v1.10.7 // indirect
 	github.com/magiconair/properties v1.8.7 // indirect
 	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/mattn/go-isatty v0.0.16 // indirect

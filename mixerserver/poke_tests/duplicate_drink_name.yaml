@@ -1,0 +1,99 @@
+vars:
+  api_url: "http://localhost:8080/api/v1"
+
+imports:
+  register_users: register_users.yaml
+  purge: purge.yaml
+
+calls:
+- from-import:
+    name: purge
+    call: purge-db
+
+- from-import:
+    name: register_users
+    call: create-baz
+
+- from-import:
+    name: register_users
+    call: create-bar
+
+- name: login baz
+  url: '{{ .api_url }}/login'
+  body:
+    username: baz
+    password: bazpass
+  exports:
+  - jq: '.accessToken'
+    as: 'baz_token'
+
+- name: login bar
+  url: '{{ .api_url }}/login'
+  body:
+    username: bar
+    password: barpass
+  exports:
+  - jq: '.accessToken'
+    as: 'bar_token'
+
+- name: create baz daquiri
+  headers:
+    authorization: '{{ .baz_token }}'
+  url: '{{ .api_url }}/drink'
+  body:
+    drink_data:
+      name: Daquiri
+      primary_alcohol: Rum
+      ingredients:
+      - 2.5 oz white Rum
+      - 0.5 oz simple syrup
+      - 1 oz lime juice
+      publicity: "DrinkPublicity_Public"
+  exports:
+  - jq: '.id'
+    as: "baz_daquiri_id"
+
+- name: create bar daquiri
+  headers:
+    authorization: '{{ .bar_token }}'
+  url: '{{ .api_url }}/drink'
+  body:
+    drink_data:
+      name: Daquiri
+      primary_alcohol: Rum
+      ingredients:
+      - 2.5 oz white Rum
+      - 0.5 oz simple syrup
+      - 1 oz lime juice
+      publicity: "DrinkPublicity_Public"
+  exports:
+  - jq: '.id'
+    as: "bar_daquiri_id"
+
+- name: try create dupe drink
+  headers:
+    authorization: '{{ .bar_token }}'
+  url: '{{ .api_url }}/drink'
+  body:
+    drink_data:
+      name: Daquiri
+      primary_alcohol: Rum
+      ingredients:
+      - 2.5 oz white Rum
+      - 0.5 oz simple syrup
+      - 1 oz lime juice
+      publicity: "DrinkPublicity_Public"
+  want-status: 409
+  asserts:
+  - jq: ".message"
+    expected: "duplicate drink name: Daquiri"
+
+- name: try copy dupe drink
+  headers:
+    authorization: '{{ .bar_token }}'
+  url: '{{ .api_url }}/drink/{{ .baz_daquiri_id }}/copy'
+  method: POST
+  want-status: 409
+  asserts:
+  - jq: ".message"
+    expected: "duplicate drink name: Daquiri"
