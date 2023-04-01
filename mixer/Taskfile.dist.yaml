@@ -5,3 +5,8 @@ tasks:
     desc: run tests
     cmds:
     - flutter test
+
+  integration-test:
+    desc: run integration tests
+    cmds:
+    - flutter test integration_test/app_test.dart

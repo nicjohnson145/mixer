@@ -72,16 +72,21 @@ void main() {
     const ingredientOne = "Integration Ingredient One";
     const ingredientTwo = "Integration Ingredient Two";
 
-    Finder expectFindKey(KeyName k) {
-        var f = find.byKey(k.asKey());
+    Finder expectFindsOne(Finder f) {
         expect(f, findsOneWidget);
         return f;
     }
 
+    Finder expectFindText(String s) {
+        return expectFindsOne(find.text(s));
+    }
+
+    Finder expectFindKey(KeyName k) {
+        return expectFindsOne(find.byKey(k.asKey()));
+    }
+
     Finder expectFindFAB() {
-        var fab = find.byType(FloatingActionButton);
-        expect(fab, findsOneWidget);
-        return fab;
+        return expectFindsOne(find.byType(FloatingActionButton));
     }
 
     expectGoBack(tester) async {
@@ -153,6 +158,30 @@ void main() {
         await expectGoBack(tester);
     }
 
+    copyOtherUsersDrink(tester) async {
+        await tester.tap(expectFindKey(KeyName.hamburger));
+        await tester.pumpAndSettle();
+        await tester.tap(expectFindKey(KeyName.viewUserMenuItem));
+        await tester.pumpAndSettle();
+        await tester.tap(expectFindText("bar"));
+        await tester.pumpAndSettle();
+        await tester.tap(expectFindText("Jack Rose"));
+        await tester.pumpAndSettle();
+
+        // Open copy dialog
+        await tester.tap(expectFindFAB());
+        await tester.pumpAndSettle();
+
+        // Copy Drink as is
+        await tester.tap(expectFindKey(KeyName.copyDrinkOkButton));
+        await tester.pumpAndSettle();
+
+        // Until navigation works, just make sure we can find both the integration drink & the jack
+        // rose, i.e that we're back on the home screen
+        expectFindText(createdDrinkName);
+        expectFindText("Jack Rose");
+    }
+
     testWidgets("end to end test", (tester) async {
         app.main();
         await tester.pumpAndSettle();
@@ -165,6 +194,7 @@ void main() {
         await createDrink(tester);
 
         await updateDrink(tester);
+        await copyOtherUsersDrink(tester);
     });
 
 }

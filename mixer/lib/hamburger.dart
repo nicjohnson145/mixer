@@ -2,12 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:mixer/services.dart';
 import 'package:mixer/user_storage.dart';
 import 'package:mixer/routes.dart';
+import 'package:mixer/keys.dart';
 
 enum HamburgerAction {
     logout,
     viewOtherUser,
     //changePassword,
     //settings,
+}
+
+Hamburger newHamburger() {
+    return Hamburger(key: KeyName.hamburger.asKey());
 }
 
 class Hamburger extends StatelessWidget {
@@ -23,9 +28,10 @@ class Hamburger extends StatelessWidget {
                         value: HamburgerAction.logout,
                         child: Text("Logout"),
                     ),
-                    const PopupMenuItem<HamburgerAction>(
+                    PopupMenuItem<HamburgerAction>(
+                        key: KeyName.viewUserMenuItem.asKey(),
                         value: HamburgerAction.viewOtherUser,
-                        child: Text("View Other User"),
+                        child: const Text("View Other User"),
                     ),
                     //const PopupMenuItem<HamburgerAction>(
                     //    value: HamburgerAction.changePassword,

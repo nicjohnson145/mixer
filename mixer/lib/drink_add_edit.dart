@@ -70,7 +70,7 @@ class _DrinkAddEditState extends State<DrinkAddEdit> {
         return Scaffold(
             appBar: AppBar(
                 title: Text(titleText()),
-                actions: const [Hamburger()],
+                actions: [newHamburger()],
                 backgroundColor: Colors.black87,
             ),
             body: Padding(

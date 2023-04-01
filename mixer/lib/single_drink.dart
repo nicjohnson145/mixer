@@ -7,6 +7,7 @@ import 'package:mixer/api.dart';
 import 'package:mixer/common.dart';
 import 'package:provider/provider.dart';
 import 'package:mixer/user_change_notifier.dart';
+import 'package:mixer/keys.dart';
 
 class DrinkDetails extends StatefulWidget {
     Drink drink;
@@ -211,7 +212,7 @@ class _DrinkDetailsState extends State<DrinkDetails> {
                 )
             );
         }
-        widgets.add(const Hamburger());
+        widgets.add(newHamburger());
         return widgets;
     }
 
@@ -306,6 +307,7 @@ class _CopyDrinkDialogState extends State<CopyDrinkDialog> {
                         },
                     ),
                     ElevatedButton(
+                        key: KeyName.copyDrinkOkButton.asKey(),
                         child: const Text("Copy"),
                         onPressed: () {
                             Navigator.of(context).pop(_controller.text);

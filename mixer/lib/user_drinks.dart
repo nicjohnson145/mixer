@@ -103,7 +103,7 @@ class DrinkListView extends StatelessWidget {
         return Scaffold(
             appBar: AppBar(
                 title: const Text("Drinks"),
-                actions: const [Hamburger()],
+                actions: [newHamburger()],
             ),
             body: getBody(context),
             floatingActionButton: getFloatingActionButton(context),
@@ -149,8 +149,6 @@ class DrinkListView extends StatelessWidget {
         if (usr == null) {
             throw Exception("no user found in storage");
         }
-        print(username);
-        print(usr);
         if (username != null && usr != username) {
             return Container();
         }

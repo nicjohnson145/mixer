@@ -69,7 +69,7 @@ class UserListView extends StatelessWidget {
         return Scaffold(
             appBar: AppBar(
                 title: const Text("Users"),
-                actions: const [Hamburger()],
+                actions: [newHamburger()],
             ),
             body: ListView.builder(
                 itemCount: users.length,

@@ -1,10 +1,12 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:mixer/api.dart';
-import 'package:mixer/services.dart';
-import 'package:mixer/routes.dart';
 import 'package:mixer/keys.dart';
+import 'package:mixer/routes.dart';
+import 'package:mixer/services.dart';
 import 'package:mixer/user_storage.dart';
-import 'package:another_flushbar/flushbar.dart';
+import 'package:provider/provider.dart';
+import 'package:mixer/user_change_notifier.dart';
 
 
 class LoginPage extends StatefulWidget {
@@ -52,6 +54,7 @@ class _LoginPageState extends State<LoginPage> {
         if (loginResp != null) {
             var storage = getIt<Storage>();
             await storage.saveLogin(loginResp);
+            Provider.of<UsernameProvider>(context, listen: false).set(loginResp.username);
             Navigator.pushReplacementNamed(context, Routes.drinksByUser);
         }
     }

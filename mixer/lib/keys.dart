@@ -9,6 +9,11 @@ enum KeyName {
     addEditNameInput,
     addEditPrimaryAlcoholInput,
     addEditIngredientsInput,
+
+    hamburger,
+    viewUserMenuItem,
+
+    copyDrinkOkButton,
 }
 
 extension KeyNameExtension on KeyName {
