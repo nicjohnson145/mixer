@@ -49,6 +49,10 @@ func singleFieldViolation(fieldName string, desc string) error {
 func validateDrinkWriteRequest(data *pb.DrinkData) error {
 	violations := []*errdetails.BadRequest_FieldViolation{}
 
+	if data == nil {
+		return singleFieldViolation("drink_data", "no drink data given")
+	}
+
 	if data.Name == "" {
 		violations = append(violations, &errdetails.BadRequest_FieldViolation{
 			Field:       "name",
