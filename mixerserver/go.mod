@@ -7,6 +7,7 @@ require (
 	github.com/doug-martin/goqu/v9 v9.18.0
 	github.com/golang-jwt/jwt/v4 v4.1.0
 	github.com/golang-migrate/migrate/v4 v4.15.2
+	github.com/google/uuid v1.3.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.15.2
 	github.com/lib/pq v1.10.7
 	github.com/rs/zerolog v1.29.0

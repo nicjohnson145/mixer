@@ -16,6 +16,7 @@ import (
 	"github.com/spf13/viper"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
+	"github.com/google/uuid"
 )
 
 func Root() *cobra.Command {
@@ -78,8 +79,8 @@ func Root() *cobra.Command {
 
 			grpcServer := grpc.NewServer(
 				grpc.ChainUnaryInterceptor(
-					methodLoggingInterceptor(svcLogger),
 					service.DefaultJWTInterceptor(signingKey, jwtExemptions, "/mixer.UserService/Refresh"),
+					methodLoggingInterceptor(config.WithComponent(logger, "middleware")),
 				),
 			)
 
@@ -118,8 +119,30 @@ func Root() *cobra.Command {
 
 func methodLoggingInterceptor(logger zerolog.Logger) grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
-		logger.Info().Str("path", info.FullMethod).Msg("request recieved")
-		return handler(ctx, req)
+		hasId := true
+		id, err := uuid.NewRandom()
+		if err != nil {
+			logger.Err(err).Msg("error generating request UUID")
+			hasId = false
+		}
+		entry := logger.Info().Str("path", info.FullMethod)
+
+		claims, _ := service.JwtClaimsFromCtx(ctx)
+		if claims != nil {
+			entry = entry.Str("user", claims.Username)
+		}
+
+		if hasId {
+			entry = entry.Str("reqID", id.String())
+		}
+		
+		entry.Msg("request recieved")
+
+		resp, err := handler(ctx, req)
+		if err != nil && hasId {
+			logger.Err(err).Str("reqID", id.String()).Msg("request resulted in error")
+		}
+		return resp, err
 	}
 }
 

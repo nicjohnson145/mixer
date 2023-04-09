@@ -122,7 +122,7 @@ func (s *Service) generateTokens(u *storage.User) (*pb.LoginResponse, error) {
 }
 
 func (s *Service) ListUsers(ctx context.Context, req *pb.ListUsersRequest) (*pb.ListUsersResponse, error) {
-	claims, err := jwtClaimsFromCtx(ctx)
+	claims, err := JwtClaimsFromCtx(ctx)
 	if err != nil {
 		s.log.Err(err).Msg("error pulling claims from context")
 		return nil, err
@@ -174,7 +174,7 @@ func (s *Service) CreateDrink(ctx context.Context, req *pb.CreateDrinkRequest) (
 		return nil, err
 	}
 
-	claims, err := jwtClaimsFromCtx(ctx)
+	claims, err := JwtClaimsFromCtx(ctx)
 	if err != nil {
 		s.log.Err(err).Msg("error pulling claims from context")
 		return nil, err
@@ -204,7 +204,7 @@ func (s *Service) ReadDrink(ctx context.Context, req *pb.GetDrinkRequest) (*pb.G
 		return nil, wrapStorageErrors(err)
 	}
 
-	claims, err := jwtClaimsFromCtx(ctx)
+	claims, err := JwtClaimsFromCtx(ctx)
 	if err != nil {
 		s.log.Err(err).Msg("error pulling claims from context")
 		return nil, err
@@ -232,7 +232,7 @@ func (s *Service) UpdateDrink(ctx context.Context, req *pb.UpdateDrinkRequest) (
 		return nil, singleFieldViolation("id", "id required for update")
 	}
 
-	claims, err := jwtClaimsFromCtx(ctx)
+	claims, err := JwtClaimsFromCtx(ctx)
 	if err != nil {
 		s.log.Err(err).Msg("error pulling claims from context")
 		return nil, err
@@ -262,7 +262,7 @@ func (s *Service) ListDrinks(ctx context.Context, req *pb.ListDrinkRequest) (*pb
 		return nil, wrapStorageErrors(err)
 	}
 
-	claims, err := jwtClaimsFromCtx(ctx)
+	claims, err := JwtClaimsFromCtx(ctx)
 	if err != nil {
 		s.log.Err(err).Msg("error pulling claims from context")
 		return nil, err
@@ -285,7 +285,7 @@ func (s *Service) DeleteDrink(ctx context.Context, req *pb.DeleteDrinkRequest) (
 		return nil, singleFieldViolation("id", "id is required")
 	}
 
-	claims, err := jwtClaimsFromCtx(ctx)
+	claims, err := JwtClaimsFromCtx(ctx)
 	if err != nil {
 		s.log.Err(err).Msg("error pulling claims from context")
 		return nil, err
@@ -317,7 +317,7 @@ func (s *Service) CopyDrink(ctx context.Context, req *pb.CopyDrinkRequest) (*pb.
 		return nil, singleFieldViolation("id", "id is required")
 	}
 
-	claims, err := jwtClaimsFromCtx(ctx)
+	claims, err := JwtClaimsFromCtx(ctx)
 	if err != nil {
 		s.log.Err(err).Msg("error pulling claims from context")
 		return nil, err

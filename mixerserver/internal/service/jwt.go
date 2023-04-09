@@ -104,7 +104,7 @@ func appendClaimsToCtx(ctx context.Context, claims *JWTClaims) context.Context {
 	return context.WithValue(ctx, "authorization", claims)
 }
 
-func jwtClaimsFromCtx(ctx context.Context) (*JWTClaims, error) {
+func JwtClaimsFromCtx(ctx context.Context) (*JWTClaims, error) {
 	val := ctx.Value("authorization")
 	if val == nil {
 		return nil, status.Error(codes.Unauthenticated, "jwt claims not present in context")
