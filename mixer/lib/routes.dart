@@ -7,6 +7,7 @@ class Routes {
     static const String singleDrink = "/single-drink";
     static const String drinkAddEdit = "/drink-add-edit";
     static const String userList = "/user-list";
+    static const String drinkFilter = "/drink-filter";
 }
 
 class SingleDrinkArgs {
@@ -24,5 +25,15 @@ class AddEditDrinkArgs {
 
     AddEditDrinkArgs({
         this.drink,
+    });
+}
+
+class DrinkFilterArgs {
+    List<Drink> drinks;
+    Function(bool Function(Drink)?) setFilter;
+
+    DrinkFilterArgs({
+        required this.drinks,
+        required this.setFilter,
     });
 }

@@ -12,6 +12,7 @@ import 'package:mixer/user_list.dart';
 import 'package:multiple_result/multiple_result.dart';
 import 'package:provider/provider.dart';
 import 'package:mixer/user_change_notifier.dart';
+import 'package:mixer/drink_filter.dart';
 
 void main() {
     mainWithObservers(null);
@@ -101,6 +102,15 @@ class MyApp extends StatelessWidget {
                     }
                     case Routes.userList : {
                         return MaterialPageRoute(builder: (_) => UserList());
+                    }
+                    case Routes.drinkFilter : {
+                        final args = settings.arguments as DrinkFilterArgs;
+                        return MaterialPageRoute(
+                            builder: (_) => DrinkFilterScreen(
+                                drinks: args.drinks,
+                                setFilter: args.setFilter,
+                            ),
+                        );
                     }
                     default : {
                         assert(false, "Need to implement ${settings.name}");

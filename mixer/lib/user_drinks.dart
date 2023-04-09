@@ -88,9 +88,10 @@ class _UserDrinksState extends State<UserDrinks> {
     }
 }
 
-class DrinkListView extends StatelessWidget {
+class DrinkListView extends StatefulWidget {
     List<Drink> drinks;
     String? username;
+    bool Function(Drink)? filter;
 
     DrinkListView({
         Key? key,
@@ -99,11 +100,59 @@ class DrinkListView extends StatelessWidget {
     }) : super(key: key);
 
     @override
+    _DrinkListViewState createState() => _DrinkListViewState();
+}
+
+class _DrinkListViewState extends State<DrinkListView> {
+    @override
+    void initState() {
+        super.initState();
+    }
+
+    @override
     Widget build(BuildContext context) {
+        var title = "Drinks";
+        if (widget.filter != null) {
+            title = "Drinks (filtered)";
+        }
+
+        var actions = [
+            IconButton(
+                icon: const Icon(Icons.search_sharp),
+                onPressed: () {
+                    Navigator.of(context).pushNamed(
+                        Routes.drinkFilter,
+                        arguments: DrinkFilterArgs(
+                            drinks: widget.drinks,
+                            setFilter: (func) {
+                                setState(() {
+                                    widget.filter = func;
+                                });
+                                Navigator.of(context).pop();
+                            },
+                        ),
+                    );
+                },
+            ),
+            newHamburger(),
+        ];
+        if (widget.filter != null) {
+            actions.insert(
+                0,
+                IconButton(
+                    icon: const Icon(Icons.clear),
+                    onPressed: () {
+                        setState(() {
+                            widget.filter = null;
+                        });
+                    },
+                ),
+            );
+        }
         return Scaffold(
             appBar: AppBar(
-                title: const Text("Drinks"),
-                actions: [newHamburger()],
+                title: Text(title),
+                actions: actions,
             ),
             body: getBody(context),
             floatingActionButton: getFloatingActionButton(context),
@@ -112,7 +161,7 @@ class DrinkListView extends StatelessWidget {
 
     Widget getBody(BuildContext context) {
         // If you're looking at someone else's drinks
-        if (drinks.isEmpty && username != null) {
+        if (widget.drinks.isEmpty && widget.username != null) {
             return Container(
                 padding: const EdgeInsets.only(
                     top: 15.0,
@@ -123,8 +172,11 @@ class DrinkListView extends StatelessWidget {
             );
         }
 
-        var sortedDrinks = List<Drink>.from(drinks);
+        var sortedDrinks = List<Drink>.from(widget.drinks);
         sortedDrinks.sort((a, b) => a.drinkData.name.compareTo(b.drinkData.name));
+        if (widget.filter != null) {
+            sortedDrinks.retainWhere(widget.filter!);
+        }
         return ListView.builder(
             itemCount: sortedDrinks.length,
             itemBuilder: (BuildContext context, int i) {
@@ -135,7 +187,7 @@ class DrinkListView extends StatelessWidget {
                             Routes.singleDrink,
                             arguments: SingleDrinkArgs(
                                 drink: d,
-                                username: username == null ? d.username : username!,
+                                username: widget.username == null ? d.username : widget.username!,
                             ),
                         );
                     },
@@ -149,7 +201,7 @@ class DrinkListView extends StatelessWidget {
         if (usr == null) {
             throw Exception("no user found in storage");
         }
-        if (username != null && usr != username) {
+        if (widget.username != null && usr != widget.username) {
             return Container();
         }
         return FloatingActionButton(
