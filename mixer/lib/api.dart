@@ -45,6 +45,10 @@ class HTTPAPI implements API {
         };
     }
 
+    bool canReauth(http.Response resp) {
+        return resp.statusCode == 401 || resp.statusCode == 403;
+    }
+
     @override
     Future<Result<LoginResponse, ApiError>> login(String username, String password) async {
         var request = LoginRequest.create();
@@ -95,7 +99,7 @@ class HTTPAPI implements API {
             headers: headers(),
         );
 
-        if (resp.statusCode == 401) {
+        if (canReauth(resp)) {
             final refreshResp = await refresh();
             return refreshResp.when(
                 (success) {
@@ -154,7 +158,7 @@ class HTTPAPI implements API {
             body: json.encode(req.toProto3Json()),
         );
 
-        if (resp.statusCode == 401) {
+        if (canReauth(resp)) {
             final refreshResp = await refresh();
             return refreshResp.when(
                 (success) {
@@ -211,7 +215,7 @@ class HTTPAPI implements API {
             headers: headers()
         );
 
-        if (resp.statusCode == 401) {
+        if (canReauth(resp)) {
             final refreshResp = await refresh();
             return refreshResp.when(
                 (success) {
@@ -242,7 +246,7 @@ class HTTPAPI implements API {
             body: json.encode(req.toProto3Json()),
         );
 
-        if (resp.statusCode == 401) {
+        if (canReauth(resp)) {
             final refreshResp = await refresh();
             return refreshResp.when(
                 (success) {
