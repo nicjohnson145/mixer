@@ -749,5 +749,9 @@ class UserServiceApi {
     var emptyResponse = LoginResponse();
     return _client.invoke<LoginResponse>(ctx, 'UserService', 'RefreshToken', request, emptyResponse);
   }
+  $async.Future<ChangePasswordResponse> changePassword($pb.ClientContext? ctx, ChangePasswordRequest request) {
+    var emptyResponse = ChangePasswordResponse();
+    return _client.invoke<ChangePasswordResponse>(ctx, 'UserService', 'ChangePassword', request, emptyResponse);
+  }
 }
 

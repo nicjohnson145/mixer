@@ -104,4 +104,11 @@ service UserService {
       body: "*"
     };
   };
+
+  rpc ChangePassword(ChangePasswordRequest) returns (ChangePasswordResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/change-password"
+      body: "*"
+    };
+  };
 }

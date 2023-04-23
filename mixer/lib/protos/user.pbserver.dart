@@ -20,6 +20,7 @@ abstract class UserServiceBase extends $pb.GeneratedService {
   $async.Future<$3.LoginResponse> login($pb.ServerContext ctx, $3.LoginRequest request);
   $async.Future<$3.ListUsersResponse> listUsers($pb.ServerContext ctx, $3.ListUsersRequest request);
   $async.Future<$3.LoginResponse> refreshToken($pb.ServerContext ctx, $3.RefreshTokenRequest request);
+  $async.Future<$3.ChangePasswordResponse> changePassword($pb.ServerContext ctx, $3.ChangePasswordRequest request);
 
   $pb.GeneratedMessage createRequest($core.String method) {
     switch (method) {
@@ -27,6 +28,7 @@ abstract class UserServiceBase extends $pb.GeneratedService {
       case 'Login': return $3.LoginRequest();
       case 'ListUsers': return $3.ListUsersRequest();
       case 'RefreshToken': return $3.RefreshTokenRequest();
+      case 'ChangePassword': return $3.ChangePasswordRequest();
       default: throw $core.ArgumentError('Unknown method: $method');
     }
   }
@@ -37,6 +39,7 @@ abstract class UserServiceBase extends $pb.GeneratedService {
       case 'Login': return this.login(ctx, request as $3.LoginRequest);
       case 'ListUsers': return this.listUsers(ctx, request as $3.ListUsersRequest);
       case 'RefreshToken': return this.refreshToken(ctx, request as $3.RefreshTokenRequest);
+      case 'ChangePassword': return this.changePassword(ctx, request as $3.ChangePasswordRequest);
       default: throw $core.ArgumentError('Unknown method: $method');
     }
   }

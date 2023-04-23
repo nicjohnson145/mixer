@@ -171,6 +171,7 @@ const $core.Map<$core.String, $core.dynamic> UserServiceBase$json = const {
     const {'1': 'Login', '2': '.mixer.LoginRequest', '3': '.mixer.LoginResponse', '4': const {}},
     const {'1': 'ListUsers', '2': '.mixer.ListUsersRequest', '3': '.mixer.ListUsersResponse', '4': const {}},
     const {'1': 'RefreshToken', '2': '.mixer.RefreshTokenRequest', '3': '.mixer.LoginResponse', '4': const {}},
+    const {'1': 'ChangePassword', '2': '.mixer.ChangePasswordRequest', '3': '.mixer.ChangePasswordResponse', '4': const {}},
   ],
 };
 
@@ -183,7 +184,9 @@ const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> UserServic
   '.mixer.ListUsersRequest': ListUsersRequest$json,
   '.mixer.ListUsersResponse': ListUsersResponse$json,
   '.mixer.RefreshTokenRequest': RefreshTokenRequest$json,
+  '.mixer.ChangePasswordRequest': ChangePasswordRequest$json,
+  '.mixer.ChangePasswordResponse': ChangePasswordResponse$json,
 };
 
 /// Descriptor for `UserService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
-final $typed_data.Uint8List userServiceDescriptor = $convert.base64Decode('CgtVc2VyU2VydmljZRJyCg9SZWdpc3Rlck5ld1VzZXISHS5taXhlci5SZWdpc3Rlck5ld1VzZXJSZXF1ZXN0Gh4ubWl4ZXIuUmVnaXN0ZXJOZXdVc2VyUmVzcG9uc2UiIILT5JMCGiIVL2FwaS92MS9yZWdpc3Rlci11c2VyOgEqEkwKBUxvZ2luEhMubWl4ZXIuTG9naW5SZXF1ZXN0GhQubWl4ZXIuTG9naW5SZXNwb25zZSIYgtPkkwISIg0vYXBpL3YxL2xvZ2luOgEqElUKCUxpc3RVc2VycxIXLm1peGVyLkxpc3RVc2Vyc1JlcXVlc3QaGC5taXhlci5MaXN0VXNlcnNSZXNwb25zZSIVgtPkkwIPEg0vYXBpL3YxL3VzZXJzElwKDFJlZnJlc2hUb2tlbhIaLm1peGVyLlJlZnJlc2hUb2tlblJlcXVlc3QaFC5taXhlci5Mb2dpblJlc3BvbnNlIhqC0+STAhQiDy9hcGkvdjEvcmVmcmVzaDoBKg==');
+final $typed_data.Uint8List userServiceDescriptor = $convert.base64Decode('CgtVc2VyU2VydmljZRJyCg9SZWdpc3Rlck5ld1VzZXISHS5taXhlci5SZWdpc3Rlck5ld1VzZXJSZXF1ZXN0Gh4ubWl4ZXIuUmVnaXN0ZXJOZXdVc2VyUmVzcG9uc2UiIILT5JMCGiIVL2FwaS92MS9yZWdpc3Rlci11c2VyOgEqEkwKBUxvZ2luEhMubWl4ZXIuTG9naW5SZXF1ZXN0GhQubWl4ZXIuTG9naW5SZXNwb25zZSIYgtPkkwISIg0vYXBpL3YxL2xvZ2luOgEqElUKCUxpc3RVc2VycxIXLm1peGVyLkxpc3RVc2Vyc1JlcXVlc3QaGC5taXhlci5MaXN0VXNlcnNSZXNwb25zZSIVgtPkkwIPEg0vYXBpL3YxL3VzZXJzElwKDFJlZnJlc2hUb2tlbhIaLm1peGVyLlJlZnJlc2hUb2tlblJlcXVlc3QaFC5taXhlci5Mb2dpblJlc3BvbnNlIhqC0+STAhQiDy9hcGkvdjEvcmVmcmVzaDoBKhJxCg5DaGFuZ2VQYXNzd29yZBIcLm1peGVyLkNoYW5nZVBhc3N3b3JkUmVxdWVzdBodLm1peGVyLkNoYW5nZVBhc3N3b3JkUmVzcG9uc2UiIoLT5JMCHCIXL2FwaS92MS9jaGFuZ2UtcGFzc3dvcmQ6ASo=');
