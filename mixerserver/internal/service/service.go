@@ -168,6 +168,35 @@ func (s *Service) RefreshToken(ctx context.Context, req *pb.RefreshTokenRequest)
 	return resp, nil
 }
 
+func (s *Service) ChangePassword(ctx context.Context, req *pb.ChangePasswordRequest) (*pb.ChangePasswordResponse, error) {
+	claims, err := JwtClaimsFromCtx(ctx)
+	if err != nil {
+		s.log.Err(err).Msg("error pulling claims from context")
+		return nil, err
+	}
+
+	user, err := s.store.ReadUser(claims.Username)
+	if err != nil {
+		s.log.Err(err).Msg("error reading user")
+		return nil, status.Error(codes.PermissionDenied, "permission denied")
+	}
+
+	hashedPw, err := hashPassword(req.NewPassword)
+	if err != nil {
+		s.log.Err(err).Msg("error hashing password")
+		return nil, status.Errorf(codes.Internal, "error hashing password")
+	}
+
+	user.Password = hashedPw
+
+	if err := s.store.UpdateUser(*user); err != nil {
+		s.log.Err(err).Msg("error persisting updated user")
+		return nil, err
+	}
+
+	return &pb.ChangePasswordResponse{}, nil
+}
+
 func (s *Service) CreateDrink(ctx context.Context, req *pb.CreateDrinkRequest) (*pb.CreateDrinkResponse, error) {
 	if err := validateDrinkWriteRequest(req.DrinkData); err != nil {
 		s.log.Err(err).Msg("error validating create request")

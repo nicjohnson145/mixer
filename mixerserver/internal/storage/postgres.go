@@ -116,8 +116,6 @@ func (p *PostgresStore) GetPublicUsers() ([]string, error) {
 
 	var users []usr
 	if err := query.Executor().ScanStructs(&users); err != nil {
-		sql, _, _ := query.ToSQL()
-		fmt.Println(sql)
 		p.log.Err(err).Msg("error executing public users query")
 		return nil, fmt.Errorf("error fetching public users: %w", err)
 	}
@@ -125,6 +123,15 @@ func (p *PostgresStore) GetPublicUsers() ([]string, error) {
 	return lo.Map(users, func(u usr, _ int) string {
 		return u.Username
 	}), nil
+}
+
+func (p *PostgresStore) UpdateUser(u User) error {
+	query := p.db.Update("usr").Set(u).Where(goqu.C("username").Eq(u.Username))
+	if _, err := query.Executor().Exec(); err != nil {
+		p.log.Err(err).Msg("error executing user update")
+		return fmt.Errorf("error updating user: %w", err)
+	}
+	return nil
 }
 
 func (p *PostgresStore) CreateDrink(username string, d *pb.DrinkData) (int64, error) {

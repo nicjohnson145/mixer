@@ -113,3 +113,4 @@ tasks:
     - poke poke_tests/copy_drink.yaml
     - poke poke_tests/list_users.yaml
     - poke poke_tests/refresh.yaml
+    - poke poke_tests/change_password.yaml
