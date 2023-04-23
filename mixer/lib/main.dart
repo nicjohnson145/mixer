@@ -12,6 +12,7 @@ import 'package:mixer/user_list.dart';
 import 'package:multiple_result/multiple_result.dart';
 import 'package:provider/provider.dart';
 import 'package:mixer/user_change_notifier.dart';
+import 'package:mixer/change_password.dart';
 import 'package:mixer/drink_filter.dart';
 
 void main() {
@@ -111,6 +112,9 @@ class MyApp extends StatelessWidget {
                                 setFilter: args.setFilter,
                             ),
                         );
+                    }
+                    case Routes.changePassword : {
+                        return MaterialPageRoute(builder: (_) => ChangePassword());
                     }
                     default : {
                         assert(false, "Need to implement ${settings.name}");

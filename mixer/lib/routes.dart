@@ -8,6 +8,7 @@ class Routes {
     static const String drinkAddEdit = "/drink-add-edit";
     static const String userList = "/user-list";
     static const String drinkFilter = "/drink-filter";
+    static const String changePassword = "/change-password";
 }
 
 class SingleDrinkArgs {

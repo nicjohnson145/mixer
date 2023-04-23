@@ -27,6 +27,7 @@ abstract class API {
     Future<Result<void, ApiError>> deleteDrink(Int64 id);
     Future<Result<void, ApiError>> copyDrink(Int64 id, String name);
     Future<Result<ListUsersResponse, ApiError>> listUsers();
+    Future<Result<void, ApiError>> changePassword(String newPassword);
 }
 
 class HTTPAPI implements API {
@@ -251,6 +252,37 @@ class HTTPAPI implements API {
             return refreshResp.when(
                 (success) {
                     return copyDrink(id, name);
+                },
+                (error) {
+                    return Error(error);
+                },
+            );
+        }
+
+        if (resp.statusCode != 200) {
+            var body = jsonDecode(resp.body);
+            return Error(ApiError(statusCode: resp.statusCode, message: body["message"]));
+        }
+        return const Success(null);
+    }
+
+    @override
+    Future<Result<void, ApiError>> changePassword(String newPassword) async {
+        await setAuth();
+
+        var req = ChangePasswordRequest(newPassword: newPassword);
+
+        final resp = await http.post(
+            Uri.parse(Urls.changePassword()),
+            headers: headers(),
+            body: json.encode(req.toProto3Json()),
+        );
+
+        if (canReauth(resp)) {
+            final refreshResp = await refresh();
+            return refreshResp.when(
+                (success) {
+                    return changePassword(newPassword);
                 },
                 (error) {
                     return Error(error);

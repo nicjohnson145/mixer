@@ -39,4 +39,8 @@ class Urls {
     static String copy(Int64 id) {
         return apiv1 + "/drink/" + id.toString() + "/copy";
     }
+
+    static String changePassword() {
+        return apiv1 + "/change-password";
+    }
 }

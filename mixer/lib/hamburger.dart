@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:mixer/services.dart';
 import 'package:mixer/user_storage.dart';
+import 'package:mixer/change_password.dart';
 import 'package:mixer/routes.dart';
 import 'package:mixer/keys.dart';
 
 enum HamburgerAction {
     logout,
     viewOtherUser,
-    //changePassword,
+    changePassword,
     //settings,
 }
 
@@ -33,10 +34,10 @@ class Hamburger extends StatelessWidget {
                         value: HamburgerAction.viewOtherUser,
                         child: const Text("View Other User"),
                     ),
-                    //const PopupMenuItem<HamburgerAction>(
-                    //    value: HamburgerAction.changePassword,
-                    //    child: Text("Change Password"),
-                    //),
+                    const PopupMenuItem<HamburgerAction>(
+                        value: HamburgerAction.changePassword,
+                        child: Text("Change Password"),
+                    ),
                     //const PopupMenuItem<HamburgerAction>(
                     //    value: HamburgerAction.settings,
                     //    child: Text("Settings"),
@@ -53,9 +54,9 @@ class Hamburger extends StatelessWidget {
                     case HamburgerAction.viewOtherUser:
                         Navigator.of(context).pushNamed(Routes.userList);
                         break;
-                    //case HamburgerAction.changePassword:
-                    //    Navigator.of(context).pushNamed(Routes.ChangePassword);
-                    //    break;
+                    case HamburgerAction.changePassword:
+                        Navigator.of(context).pushNamed(Routes.changePassword);
+                        break;
                     //case HamburgerAction.settings:
                     //    Navigator.of(context).pushNamed(Routes.Settings);
                     //    break;

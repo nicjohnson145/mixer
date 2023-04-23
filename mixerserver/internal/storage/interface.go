@@ -15,6 +15,7 @@ type Storage interface {
 	CreateUser(u User) error
 	ReadUser(username string) (*User, error)
 	GetPublicUsers() ([]string, error)
+	UpdateUser(u User) error
 
 	CreateDrink(username string, d *pb.DrinkData) (int64, error)
 	GetDrink(id int64) (*pb.Drink, error)
