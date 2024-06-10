@@ -26,6 +26,7 @@ const (
 	DatabaseUsername = "database-username"
 	DatabasePassword = "database-password"
 	DatabaseName     = "database-name"
+	DatabaseSSL      = "database-ssl"
 
 	EnablePurge = "enable-purge"
 )
@@ -48,6 +49,7 @@ func InitializeConfig(cmd *cobra.Command) error {
 	viper.SetDefault(DatabasePort, 5432)
 	viper.SetDefault(DatabaseUsername, "mixer_usr")
 	viper.SetDefault(DatabasePassword, "mixer_pass")
+	viper.SetDefault(DatabaseSSL, false)
 
 	viper.SetDefault(EnablePurge, false)
 

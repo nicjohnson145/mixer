@@ -11,12 +11,18 @@ import (
 )
 
 func connectDB() (*sql.DB, error) {
-	dsn := fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=disable",
+	sslMode := "disable"
+	if viper.GetBool(config.DatabaseSSL) {
+		sslMode = "require"
+	}
+
+	dsn := fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=%v",
 		viper.GetString(config.DatabaseUsername),
 		viper.GetString(config.DatabasePassword),
 		viper.GetString(config.DatabaseHost),
 		viper.GetInt(config.DatabasePort),
 		viper.GetString(config.DatabaseName),
+		sslMode,
 	)
 
 	db, err := sql.Open("postgres", dsn)
